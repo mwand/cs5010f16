@@ -1,0 +1,261 @@
+Skeleton Rubric
+CS 5010, Fall 2014
+Time-stamp: "2014-10-22 15:48:36 MWand"
+
+This is the public version of the master rubric for CS 5010.  The
+actual rubrics for each week will vary a little bit, depending on the
+particular problem, but the changes will not be significant.
+
+Point values for the different sections may vary from week to week,
+but they will be weighted approximately as shown here.
+
+Our goal, as always, is to get you to write well-designed,
+well-documented programs.   The rubric is designed to detect flaws in
+the design that manifest themselves through elements that are missing,
+incorrect, inconsistent, or just plain messy.  The various deductions
+below are typical places where such flaws appear.
+
+When you do pair work, students in a pair receive the same marks for
+correctness and design.  Students will receive individual marks for
+presentation. 
+
+================================================================
+
+Pair number:_______ Time on Task Q1 ______ Q2 _____ Q3 _____
+
+Student1 Name: ________________ Student2 Name: ______________	
+
+Student1: __/15 Correctness + __/25 Design + __/10 Presentation
+
+          = ___/50 Total
+
+
+Student2: __/15 Correctness + __/25 Design + __/10 Presentation
+
+          = ___/50 Total
+ 
+================================================================
+
+Section I: CORRECTNESS [__/15 points, subtractive, min 0]
+
+In addition to deductions for failed tests in our test suite:
+
+[-1] each fix the TA has to make to get the tests running
+
+================================================================
+
+Section II: DESIGN [__/25 points]
+
+================
+
+Section IIA: Conformance to coding standards 
+	[__/5 points, subtractive, min 0]
+
+ // file names //
+ [-2, increases to -4 after ps01] Incorrect file names; must be:
+      setNN/{notebook.txt,\d.rkt}.  This includes files in wrong folder. 
+ [-2, increases to -4 after ps01] Insufficient git commits (must have
+      one git commit for each work session reported in the notebook).
+ [-1, increases to -5 after ps01] Missing/broken notebook
+ [-1] Total Time on Task missing, in wrong format, or not reported in hours
+
+ // formatting.  For PS01, these will be warnings. //
+ [-2] Messy indentation
+ [-1] Other non-idiomatic formatting, e.g. ( + a b ), (if(zero? x) ...)
+ [-1] Many lines longer than 80 columns
+ [-2] Many lines longer than 90 columns
+ [-1] Messy comments (contracts, data definitions, etc.)
+
+ // names //
+ [-2] Function names changed from assignment
+ [-3] Does not provide assigned functions
+      (mutually exclusive w/ "function names changed"; repeatable for
+       each assigned function not provided, max -5)
+ [-1] Non-descriptive variable or function names ("lame names",
+      repeatable, max -5, includes names of quantities in tests)
+
+ // misc //
+ [-3] Excessive misspelling or bad grammar.  (It is important for all
+      your work products to be professional!)
+ [-3] Does not follow the restrictions on languages/libraries
+      (e.g. used the wrong language, or libraries like racket/list)
+ [-1] Magic constants
+ [-2] Using big-bang when not needed/required for the problem
+ [-1] .rkt file starts animation by itself 
+      (Your .rkt file should run the unit tests, but nothing else)
+ [-1] Anything else especially weird
+
+================
+
+Section IIB: Code Review [___/15 points, subtractive, min -10]
+
+The grader says: 
+
+     "Please explain how you designed the function ______.
+      Follow the design recipe."
+
+As you go through your code, the grader will typically ask you
+questions about the problem set, based either on issues that come up
+during your explanation, or on a set of questions that are specific to
+the problem.
+
+In addition to these deductions, there may be specific design points
+for specific problems.
+
+Deductions: 
+
+// Data Definitions //
+ [-2] Each missing necessary data definition
+ [-2] Each poorly designed data definition (captures just enough
+      information; all combinations are meaningful or else documented
+      by an invariant; easy to write predicates and selectors)
+ [-1] Each field missing an interpretation that the grader judges to
+      be necessary 
+ [-1] Each wrong/missing "An Xxx is a (make-xxx Type Type Type)" line
+ [-2] Each missing template
+ [-2] Each incorrect template
+ [-2] Missing necessary Invariant
+
+// Functions Follow the Recipe ("Free Fire Zone") //
+
+Start with the function to be codewalked, and check any related
+functions that you see.
+
+Functions must have contract, purpose statement, examples (may refer
+to tests), strategy. Purpose must be clear, correct, and add at least
+some information beyond the contract. Function definition must match
+template/strategy, and produce correct answer if its helpers do.
+
+Deductions for:
+
+ [-1] Missing or incorrect contract, purpose statement, examples, strategy
+      (repeatable for each missing element) 
+ [-1] Inadequate purpose statement
+ [-2] Function does not match template/strategy
+ [-1] Excessively complex or repeated code that should have been put
+      in a help function
+ [-2] Design that the grader judges to be overly complex. (Criterion:
+      the TA can't follow the logic based on the purpose statements)
+
+// Starting with ps03:
+
+ [-2] Function could be replaced by map, foldr, filter or some easy
+      combination (repeatable). 
+
+// The following elements apply only for problems involving
+// invariants or general recursion
+
+ [-2] missing invariant where purpose depends on it.
+      [-1] invariant attempted but deficient
+ [-2] missing termination argument in function using generative recursion 
+      [-1] termination argument attempted but deficient
+
+
+// The following deductions are relevant only for problems involving
+// objects and classes:
+
+ [-1] Argument types in contracts must be interfaces, not
+      classes. (repeatable per contract, max -4)
+ [-1] Must have interface for each itemization data type (repeatable
+      per data type)
+ [-1] Interface must have contract and purpose statement for each
+      method. Purpose must be clear, correct, and add at least some information
+      beyond the contract (repeatable per method)
+ [-2] Objects with same/similar sets of methods didn't use same interface
+ [-1] Method in an implementation missing contract
+ [-1] If method in an implementation refines the purpose statement, it
+      should have its own purpose statement
+ [-4] Implemented most functionality in a single class and models other
+      objects as data without significant methods ("god object")
+ [-3] Uses some form of explicit dynamic type-checking for objects
+      (like instanceof)
+ [-3] Failed to use inheritance where appropriate
+ [-4] Failed to use pub/sub ("push") model when appropriate
+ [-1] Failed to document the events that are published (repeatable per
+      undocumented event)
+ [-3] UML diagram is missing 
+ [-2] UML diagram is seriously flawed (but don't nitpick UML details)
+
+
+================
+
+Section IIC: Test Coverage  [__/5 points, subtractive, minimum 0]
+
+We expect your tests to achieve 100% expression coverage, as measured
+by our test coverage tools, except for functions that call big-bang
+the like.
+
+[-1] each function that does not have 100% test coverage
+[-1] Tests do not include the examples in the problem set
+[-2] Tests without explanations (can use comments or error message)
+
+
+================================================================
+
+Section III: Presentation [__/10 points total, min 0]
+============================================
+
+Presentation score includes all aspects of the presentation, not just
+answering the given questions. Issues such as not being able to explain code, 
+find tests, or speak at an understandable volume are all fair game.
+
+"Answering Questions" includes your questions during the presentation
+
+When your partner is answering questions, we expect you to be
+following along, taking notes on a paper copy of your submission.
+
+Partner 1: Name:____________________
+
+ - Design recipe		[repeatable, subtractive]
+     [-1] needs prompting to follow design recipe (repeatable up 3x)
+
+ - Speech
+     [-0.5] every time you have to ask the student to speak up.
+     [-0.5] every time you have to ask the student to repeat a word
+
+ - Unclear explanation          [repeatable, subtractive]
+     [-1] every time you have to ask the student to explain what
+     he/she means (mutually exclusive with "Speech" above)
+     [-3] for each thing the student says that you never do get a
+     clear explanation of.
+
+ - Answering questions		[repeatable, subtractive]
+     [-2] for each question not answered satisfactorily on the first
+          try
+     [-4] for each question not answered satisfactorily, even after
+          discussion. 
+
+ - Partner participation:       [subtractive]
+     [-2] observed not taking notes on partner's presentation.  If the
+     student does not appear to be taking notes on paper, ask to see
+     his/her notes.  
+ 
+
+
+Partner 2: Name:____________________
+
+ - Design recipe		[repeatable, subtractive]
+     [-1] needs prompting to follow design recipe (repeatable up 3x)
+
+ - Speech
+     [-0.5] every time you have to ask the student to speak up.
+     [-0.5] every time you have to ask the student to repeat a word
+
+ - Unclear explanation          [repeatable, subtractive]
+     [-1] every time you have to ask the student to explain what
+     he/she means (mutually exclusive with "Speech" above)
+     [-3] for each thing the student says that you never do get a
+     clear explanation of.
+
+ - Answering questions		[repeatable, subtractive]
+     [-2] for each question not answered satisfactorily on the first
+          try
+     [-4] for each question not answered satisfactorily, even after
+          discussion. 
+
+  - Partner participation:       [subtractive]
+     [-2] observed not taking notes on partner's presentation.  If the
+     student does not appear to be taking notes on paper, ask to see
+     his/her notes.  
+ 
+

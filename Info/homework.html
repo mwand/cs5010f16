@@ -1,0 +1,223 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html> <head>
+<title>Deliverables for the Design Recipe</title>
+<link type="text/css" rel="stylesheet" href="course.css">
+</head>
+
+<body>
+<h1>Homework Policies</h1>
+
+<div id="menu">
+
+<table>
+  <tr><td><a href="../index.html">Home</a></td></tr>
+  <tr><td><a href="git.html" >Git and Github</a> </td></tr>
+  <tr><td> <a href="laboratory-notebook.html"> Notebook</a>  </td></tr>
+  <tr><td><a href="coding-conventions.html" >Coding Conventions</a>  </td></tr>
+  <tr><td><a href="master-rubric-public.txt" >Rubric</a>  </td></tr>
+</table>
+</div>
+
+
+<div id="content">
+
+<ul>
+
+<li>The deliverables for each problem are listed <a href="#perquestion"
+>below</a>.</li> 
+
+<li> You must also turn in a laboratory notebook that records the time
+ you spent on each question.  The notebook should be in a file named
+ <kbd>notebook.txt</kbd> The exact format of the laboratry notebook is
+ specified <a href="laboratory-notebook.html" >here</a>.  </li>
+
+<li> At the end of each work session, you must commit your work
+ (including your laboratory notebook) to
+ your <a href="git.html" >github</a> repository.  We will assign a
+ repository to each student.  Initially, this repository will be
+ located at
+ <kbd>https://github.com/cs5010f14/pdp-YOUR-CCIS-LOGIN-NAME</kbd> .
+ You will receive notification of the exact name of your repository.
+ Later on, we will be creating private repositories for each
+ pair.</li>
+
+<li>You must also show this commit as an entry in your <xa
+href="laboratory-notebook.html" >laboratory notebook</a>.</li>
+
+<li>If you do not check in your assignments nightly, we will
+assume that you are not working on the assignment.  Checking in your
+partially-completed assignments also serves to prove that you actually
+did the assignment yourself. If you only check in the final version of
+your assignment, we will assume that you probably stole the code from
+somewhere.  </li>
+
+<li> Nightly check-ins mean that you will always have a backup of your
+work.  If you screw things up, you can always revert to an earlier
+version.  </li>
+
+<li>You must commit your solutions for problem set JJ to your
+ repository, in a folder named <kbd>setJJ</kbd>.  Each question should
+ be submitted as a single file in that folder, in a file named
+ <kbd>NAME.rkt</kbd>, where <kbd>NAME.rkt</kbd> is the filename
+ specified in the question.  If the question does not specify a
+ filename, then use <kbd>K.rkt</kbd> for question K.  Thus, if problem
+ set 1, question 2 does not specify a filename, then the answer should
+ be in a file named exactly <kbd>set01/2.rkt</kbd>, not
+ <kbd>set1/2.rkt</kbd>, <kbd>Set01/2.rkt</kbd>, <kbd>set
+ 1/question2.rkt</kbd>, or anything else.  Here I've used the Unix
+ convention of using <kbd>/</kbd> to separate the components of a path
+ name.  If you do not use the proper folder and filenames for your
+ solutions, you will break our scripts and you <em>will</em> be
+ penalized.  </li>
+
+<li>Your homework will be collected automatically from your <a
+href="git.html" >github</a> repository at the date and time listed on
+ the problem set (usually 6pm local time on Monday). </li>
+
+<li>Your submission will be graded according to <a
+href="master-rubric-public.txt" >this rubric</a>. The rubric will change
+somewhat from week to week, but this shows the general outline. </li>
+
+<li>We have <a href="coding-conventions.html" >coding conventions</a>.
+If you follow them, you will make your life and the TA's life easier.</li>
+
+
+
+
+<a name="perquestion">
+<h2>Design Recipe Deliverables</h2>
+
+<p>Here are the items you need to include for each question:
+</p>
+
+
+<ul>
+  <li>
+  <strong>For Each Data Definition:</Strong>
+  <p/>
+
+  <ol>
+    <li>A set of <kbd>struct</kbd> definitions, if necessary.</li>
+    
+    <li>A specification of how to build values for this data definition.</li>
+
+    <li>An interpretation, explaining
+    the meaning of each element in the data in terms of the information it
+    represents.
+    </li>
+
+    <li>A template for using structural decomposition on this kind of
+    data.</li>
+
+    <li>Examples if they will be helpful in understanding the
+    interpretation, or for use in tests.  If the examples are
+    primarily for use in tests, you may put them near the tests.
+    </li>
+    
+  </ol>
+  <p/>
+</li>
+
+  <li><strong>For Each Function:</strong>
+  <p/>
+
+  <ol>
+    
+    <li>Contract: a specification of data definitions for the
+    arguments and the result.  If you write
+
+    <pre>
+    list-numbered : ListOf&lt;Number> Number -> ListOf&lt;Number>
+</pre>
+
+    then your function must take <em>any</em> list of numbers and
+    <em>any</em> number and produce the output that is described by
+    the purpose statement, unless the contract is qualified by an
+    invariant (WHERE-clause).  We will talk about WHERE-clauses in
+    module 7.
+
+</li>
+
+    <a name="purpose-statement">
+    <li>Purpose Statement:</li> A short noun phrase describing
+    <em>what</em> the function is supposed to return. Typically
+    phrased in terms of information, not data.  Generally takes the
+    form GIVEN/WHERE/RETURNS, where each of these keywords is followed
+    by a short noun phrase.  Examples:
+
+    <pre>
+    GIVEN: a temperature in Fahrenheit
+    RETURNS: the corresponding temperature in Celsius
+
+    GIVEN: a Cat c and a Scene s
+    RETURNS: A scene like s, except that the cat c has been painted on it.
+
+    GIVEN: a list of numbers lon and a number n
+    WHERE: n = (length lon)
+    RETURNS: a list of numbers like lon, except that each number is
+    multiplied by its distance from the end of the list.
+    </pre>
+
+    <p>You may omit the GIVEN clause by referring to the givens in the
+    RETURNS clause. Sometimes this is easier than writing a GIVENS
+    clause, sometimes it is harder.  Examples:
+
+     <pre>
+    RETURNS: the temperature in Celsius that corresponds to the given
+    Fahrenheit temperature.
+
+    RETURNS: A scene like the given one, except that the given cat has
+    been painted on it.
+    </pre>
+
+</p>
+
+    <li>Examples</li>
+
+    <li>Design Strategy: the name of the design strategy used for this
+    function. If the strategy is "structural decomposition", specify
+    which argument and which data definition you are using. Example:
+
+<pre>
+      ;; bombs-after-tick : ListOf&lt;Bomb&gt; Number -&gt; ListOf&lt;Bomb&gt;
+      ;; ...[purpose statement and examples omitted]...
+      ;; Strategy: structural decomposition on bombs : ListOf&lt;Bomb&gt;
+      (define (bombs-after-tick bombs amt)
+        (cond
+          [(empty? bombs) empty]
+          [else (cons (bomb-after-tick (first bombs) amt)
+                      (bombs-after-tick (rest bombs) amt))])) 
+</pre>
+    </li>
+
+    <li>The function definition.  If your strategy is "structural
+    decomposition", then your code must match the template for the
+    appropriate data definition. </li>
+
+    <li>The tests.  Generally, you will define a test suite for each
+    function by writing
+  <pre>
+(begin-for-test
+  (check-equal?
+    (length lobs-1)
+    (length (bombs-after-tick lobs-1))
+    "bombs-after-tick did not return a list the same length as its input")
+    ...)
+</pre>
+
+    <p>Tests created with <kbd>begin-for-test</kbd> will be run at the
+    end of the file.</p>
+
+    </li>
+
+  </ol>
+
+</li>
+</ul>
+<hr>
+<address></address>
+<font size=-1>
+<p align=right>
+<!-- hhmts start -->
+Last modified: Mon Jul 14 22:29:34 Pacific Daylight Time 2014 <!-- hhmts end -->
+</body> </html>

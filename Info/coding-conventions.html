@@ -1,0 +1,203 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html> <head>
+<title>Coding Conventions</title>
+<link type="text/css" rel="stylesheet" href="course.css">
+</head>
+
+<body>
+<h1>Coding Conventions</h1>
+
+<p>In addition to following the design recipe, we would like you to
+observe basic style guidelines for your programs.  Not observing these
+very basic guidelines leads to unreadable code and to loss of points.
+</p>
+
+<ul>
+  <li>Use consistent indenting.  The Racket indenter does a very good
+  job.</li>
+
+  <li>No line should span more than 80-90 characters.  The position of
+  the cursor, including its position on the line, is shown in the
+  bottom right of the Racket definitions window. (A few long lines are
+  OK, but don't make a habit of it.)
+  </li>
+
+  <li>No functional combination should span more than 3-4 lines for
+  now. If it does, reconsider your interpretation of the "one task,
+  one function" guideline.  Use help functions to clarify the meaning
+  of pieces of code.  See <a href="#help-functions" >Help
+  Functions</a> below.</li>
+
+  <li>Use function names and variable names that make sense with
+  respect to the problem and the purpose statement.  See the section
+  on <a href="#naming-conventions" >Naming Conventions</a> below.
+  </li>
+
+  <li>Start the file with the a purpose statement for the file, the
+  requires, and a comment describing how to run the program.  </li>
+
+  <li>Then put constant definitions and data definitions.</li>
+
+  <li>Then put your functions and tests.  Organize your functions into
+  meaningful groups.  Put help functions near the functions that they
+  help.   If your tests are short, put them near the function they
+  test.  Long test suites can be put at the end of the file.</li>
+
+<!--   <li>If you have multiple test suites, label them in the file so the -->
+<!--   output shows which test suites are being run. Example: -->
+
+<!--   <pre> -->
+<!-- "ball-tests" -->
+<!-- (run-tests ball-tests) -->
+<!-- </pre> -->
+
+</li>
+
+  <li>Separate distinct sections of your program with visually
+  distinctive separators.  I tend to use lines consisting of many
+  semicolons, but you may use asterisks, dashes, or whatever pleases
+  you.  If you have sections and subsections, you can use 2 lines of
+  separators between major sections and one line of separators between
+  minor sections.  </li>
+
+</ul>
+
+<a name="naming-conventions">
+<h2>Naming Conventions</h2>
+
+<p>In general, we use the following conventions:</p>
+
+<ul>
+
+  <li>  Global constants are in upper-case:  eg. <kbd>HEIGHT</kbd>, <kbd>WIDTH</kbd>, <kbd>BALL-SPEED</kbd>
+  </li>
+  
+  <li>Names of data definitions are in <a
+  href="http://en.wikipedia.org/wiki/CamelCase" >CamelCase</a>:
+  e.g. <kbd>ListOfNumbers</kbd>, <kbd>World</kbd>,
+  <kbd>FallingCatKeyEvent</kbd> .  This also goes for things like
+  <kbd>ListOf<...></kbd>.</li>
+
+  <li>Everything else is in lower case, including names of structs and
+  procedures.  We use a minus sign ("<kbd>-</kbd>")  to separate words in procedure
+  names, e.g.  <kbd>cat-speed</kbd>, <kbd>world-after-tick</kbd>.</li>
+
+  <li>Choose function names carefully. When a function is used in some
+  other piece of code, the reader (that is, someone other than you!)
+  should be able to tell roughly what a function computes just by
+  looking at its name.  If further detail is needed, then the reader
+  can refer to the purpose statement of the function.  If the function
+  name is chosen well and the purpose statement is written well, the
+  reader should rarely, if ever, need to refer to the function
+  definition.  </li>
+
+  <li>Function names should almost always be nouns.  The function name
+  should usually describe the <em>result</em> of the function, not
+  what the function does. (e.g. <kbd>area</kbd>, not
+  <kbd>compute-area</kbd>)  Use the first component of the name to
+  distinguish similar functions with different arguments, e.g.:
+
+  <ul class="condensed">
+    <li> circle-area, ring-area </li>
+    <li> book-price, total-order-price</li>
+  </ul>
+  </li>
+
+  <li>Predicates should end in ? : e.g., <kbd>square?</kbd>
+  (pronounced "square-huh?") </li>
+
+  <li>We generally use short names for arguments e.g.,
+
+  <ul class="condensed">
+
+    <li><kbd>b</kbd>  for a <kbd>Ball</kbd></li>
+    <li><kbd>lob</kbd> for a <kbd>ListOfBall</kbd></li>
+
+  </ul></li>
+
+  <li> You can also use mnemonic names, like <kbd>cost</kbd> or
+  <kbd>price</kbd>, or qualified names, like <kbd>mouse-x</kbd> or
+  <kbd>bomb-x</kbd> to distinguish which x we are talking about.</li>
+
+  <li>Sometimes I'll use plural names or abbreviations for lists, such as
+    <kbd>balls</kbd> or <kbd>bs</kbd> for a <kbd>ListOfBall</kbd></li>
+
+
+
+  </li>  
+
+  <li>I sometimes use mnemonic names that remind me of
+  the information represented by the variable, such as
+  <kbd>mouse-x</kbd> or <kbd>other-ball</kbd>.  </li>
+
+</ul>
+
+
+<a name="help-functions">
+
+<h2>Use Help Functions to Simplify Your Code</h2>
+
+<p>Use help functions to clarify your intentions in a piece of code.
+That messy junk you just wrote in your function must have had some
+purpose.  Turn it into a help function so you can document its
+purpose, and give it independent tests.</p>
+
+<p><strong>Short is good.  Long is bad. Period.</strong></p>
+
+
+<p>Here are two radically different versions of the same function.</p>
+
+<table border=1>
+  <tr>
+    <th>bad</th>
+    <th>good</th>
+  </tr>
+
+  <tr>
+    <td>
+      <pre>
+; ball-after-tick : Ball -> Ball
+(define (ball-after-tick b)
+  (cond
+    [(and (<= YUP (where b) YLO)
+       (or (<= (ball-x b) XWALL
+             (+ (ball-x b)
+               (ball-dx b)))
+         (>= (ball-x b) XWALL
+           (+ (ball-x b)
+             (ball-dx b)))))
+     (make-ball
+       (- (* 2 XWALL)
+         (ball-x (straight b 1.)))
+       (ball-y (straight b 1.))
+       (- (ball-dx (straight b 1.)))
+       (ball-dy (straight b 1.)))]
+    [else (straight b 1.)])) 
+      </pre>
+    </td>
+
+    <td valign="top" style="background-color: #eeeed0">
+      <pre>
+; ball-after-tick : Ball -> Ball
+(define (ball-after-tick b)
+  (cond
+   [(would-hit-wall? b) (ball-at-wall-reversed b)]
+   [else (ball-after-straight-move b 1.)]))
+      </pre>
+    </td>
+  </tr>
+</table>
+
+
+<p>Both always return the same answer.  But which one do you understand
+immediately? Which programming style makes sense? Which solution will
+lose points in the next code walk?  </p>
+
+
+<hr>
+<address></address>
+<font size=-1>
+<p align=right>
+<!-- hhmts start -->
+Last modified: Fri Jul  4 17:56:16 Eastern Daylight Time 2014 <!-- hhmts end -->
+</body> </html>
