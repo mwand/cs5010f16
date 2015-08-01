@@ -366,28 +366,15 @@ value of </p>
 <em>condition</em>
 </pre>
 
-<p>instead.</p>
-
-
-<p>A better example might have been</p>
-
-<PRE><CODE>      &gt; (cond 
-          [(&lt; (sqrt 5) (/ 5 2)) 27)
-          [else 42])
-</CODE></PRE>
-
-<p>This expression is also bad because it's a two-way cond with an
-else-clause. This should have been written
+<p>instead.  Of course, if the expression had been</p>
 
 <PRE>
-     > (if (< (sqrt 5) (/ 5 2))
-           27
-           42)
+     (if (< (sqrt 5) (/ 5 2))
+         27
+         42)
 </PRE>
 
-<p>In this course, you will write a cond expression only as part of
-the template for a structural decomposition.  Templates will be
-discussed in Lesson 1.4 </p>
+<p>then this issue would not have come up.</p>
 
 <DIV class="exercise"> <P>Ex 1: Write an expression whose value is the
 number of seconds in a leap year (a leap year has 366 days).  Next,
@@ -397,7 +384,7 @@ write 2 more expressions that have the same value.</P></DIV>
 <kbd>true</kbd> if the result of 100/3 is greater than the result of
 (100 + 3) / (3 + 3) and <kbd>false</kbd> otherwise. </P></DIV>
 
-
+<!-- ;;;;;;;;;;;;;;;; -->
 
 <H2>Defining Functions</H2>
 
@@ -407,15 +394,19 @@ nice if we were able to define our own operators on numbers and booleans and
 extend the functionality of our calculator. Racket has a special syntax for 
 doing just that:</P>
 
-<PRE><CODE>    (define (fcn-name arg-1 arg-2 ...) expr)
+<PRE><CODE>    (define (<em>fcn-name arg-1 arg-2 ...</em>) <em>expr</em>)
 </CODE></PRE>
 
 <P>With this syntax we can define a new function called
-<CODE>fcn-name</CODE>.  This new function takes a number of arguments
-<CODE>arg-1</CODE>, <CODE>arg-2</CODE>, etc., and when applied
-evaluates the expression <CODE>expr</CODE> and returns the result.
-<CODE>expr</CODE> can <EM>refer</EM> to the arguments, to produce its
-resulting value. For example let's define the Boolean operation
+<CODE><em>fcn-name</em></CODE>.  This new function takes a number of arguments
+<CODE><em>arg-1</em></CODE>, <CODE><em>arg-2</em></CODE>, etc., and when applied
+evaluates the expression <CODE><em>expr</em></CODE> and returns the
+result.  We call <kbd><em>expr</em></kbd> the "body" of the function.</p>
+
+<p>Note: in this lesson, we use <em>slanted font</em> to indicate a
+pattern to be filled in.</p>
+
+<p>For example let's define the Boolean operation
 'nand', using 'and' and 'not':</P>
 
 <PRE><CODE>    ; nand : Boolean Boolean -&gt; Boolean
@@ -428,9 +419,22 @@ resulting value. For example let's define the Boolean operation
     false
 </CODE></PRE>
 
+<p>In this example, we see that <CODE><em>expr</em></CODE> can refer
+to the arguments to produce its resulting value.  </p>
+
+<p>This example also shows that we should always equip our functions
+with a contract, like those we wrote for the basic operators, and with
+a <em>purpose statement</em> that describes what value the function
+returns.  Contracts and purpose statements are a key part of our
+design method, and we will see much more about them in subsequent lessons.</p>
+
 <P>Next, let's define a function that returns the average of two
  numbers:</P>
-<PRE><CODE>    ; average : Number Number -&gt; Number
+
+
+<code>
+<PRE>
+    ; average : Number Number -&gt; Number
     ; RETURNS: the average of its arguments
     ; usage:
     ; (average 3 5)    =&gt;  4
@@ -438,19 +442,31 @@ resulting value. For example let's define the Boolean operation
 
     (define (average x y)
       (/ (+ x y) 2))
-</CODE></PRE>
-<P>Let's also define <CODE>abs</CODE> using <CODE>cond</CODE>:</P>
-<PRE><CODE>    (define (abs x)
-      (cond 
-        [(&lt; x 0) (- 0 x)]
-        [else x]))
-</CODE></PRE>
+</PRE>
+</code>
+
+<P>We can use conditionals in a function definition.  For example, we can define the absolute-value function <kbd>abs</kbd>:</p>
+
+<PRE>
+; abs : Real -> Real
+; RETURNS: the absolute value of the given real number.
+(define (abs x)
+  (if (< x 0)
+      (- 0 x)
+      x))
+</PRE>
+
+<p>Here we wrote the contract as <kbd>Real -> Real</kbd> rather
+than <kbd>Number -> Number</kbd> because Racket has complex numbers,
+and this function definition doesn't give the right answer if
+<samp>x</samp> is complex.
+</p>
 
 <DIV class="exercise">
 <P>Ex 3: Write the definition of a function that converts a temperature from
  degrees Fahrenheit to degrees Celsius. The formula for the conversion is C = 
 (F-32) * (5/9) . The contract, purpose statement and examples for this function are: 
-<PRE><CODE>    ; f-&gt;c : Number -&gt; Number
+<PRE><CODE>    ; f-&gt;c : Real -&gt; Real
     ; GIVEN: a temperature in degrees Fahrenheit as an argument
     ; RETURNS: the equivalent temperature in degrees Celsius.
     ; Examples:
@@ -458,9 +474,10 @@ resulting value. For example let's define the Boolean operation
     ; (f-&gt;c 100) =&gt; 37.77777777777777....
 </CODE></PRE>
 <P>Test your function with <EM>at least</EM> the given examples.  How
-is the value of (f->c 100) displayed?</P>
+is the value of (f->c 100) displayed?</p>
 </DIV>
 
+<p/>
 
 <DIV class="exercise">
 <P>Ex 4: Define a function called <CODE>tip</CODE> that takes two arguments, a
@@ -469,7 +486,7 @@ between 0.0 and 1.0, representing the percentage of tip one wants to give (e.g.
 0.15 = 15%). <CODE>tip</CODE> should return the amount of the tip in dollars. 
 The contract, purpose statement, and examples of <CODE>tip</CODE> are the 
 following:</P>
-<PRE><CODE>    ; tip : NonNegNumber Number[0.0,1.0] -&gt; Number
+<PRE><CODE>    ; tip : Real Real[0.0,1.0] -&gt; Number
     ; GIVEN: the amount of the bill in dollars and the
     ; percentage of tip
     ; RETURNS: the amount of the tip in dollars.
@@ -498,7 +515,7 @@ function <CODE>quadratic-root</CODE> that takes as arguments <CODE>a</CODE>,
 <P>Ex 7: Define a function called <CODE>circumference</CODE> that computes the
  circumference of a circle.  The contract, purpose statement, and usage of 
 <CODE>circumference</CODE> are:</P>
-<PRE><CODE>    ; circumference : Number -&gt; Number
+<PRE><CODE>    ; circumference : Real -&gt; Real
     ; GIVEN: the radius r of a circle 
     ; RETURNS: its circumference, using the formula 2 * pi * r.
     ; Examples:
@@ -543,23 +560,29 @@ returns the sum of the two larger numbers. As always, write down
 contract, purpose statement, and examples. </P></DIV>
 
 
-<H2>Complex Data Types: Structs</H2>
+<H2>Data Structures I: Structs</H2>
 
-<P>Number and Boolean are <EM>primitive data types</EM> in Racket. It
-is often useful to have more complex data types. Racket provides the
-possibility to create those as we need them. The general scheme
-is:</P>
+<p>Like other programming languages, Racket has many kinds of data
+structures.  In this course, we will primarily use two built-in data
+structures: <em>structs</em> and <em>lists</em>.  Let's first talk
+about structs.</p>
 
-<PRE><CODE> (define-struct data-type-name (field-1 field-2 ...))  </CODE></PRE>
+<P>In Racket, we define a struct type by writing:
+</P>
+
+<PRE><CODE> (define-struct <em>data-type-name</em> (<em>field-1</em> <em>field-2</em> ...))  </CODE></PRE>
 
 <P>The above code tells racket to introduce a
-type with a certain name that has certain named fields. Racket then
+type with a certain name that has certain named fields. (As before, we
+write <em>data-type-name</em> to indicate a place where you should
+write the name of your desired data type, etc.)
+Racket then
 creates some functions for us:
 
 <ul class="condensed">
   
-  <li><code>make-data-type-name : T1
-T2 ... -&gt; Data-Type-Name</code>
+  <li><code>make-<em>data-type-name</em> : T1
+T2 ... -&gt; <Em>Data-Type-Name</Em></code>
 
   <p>This function takes as many arguments as there are fields in our
 type definition. Note that the contract here says <code>T1</code> and
@@ -573,21 +596,21 @@ that you defined yourself!</p>
 
   </li>
 
-  <li><code>data-type-name? : Any -&gt;
+  <li><code><em>data-type-name</em>? : Any -&gt;
 Boolean</code>
 
   <p>This predicate takes any value as an argument and
 returns <code>true</code> if that argument has the type that we just
-defined (i.e. if it was created by <code>make-data-type-name</code>
+defined (i.e. if it was created by <code>make-<em>data-type-name</em></code>
 (and of course <code>false</code> in any other case).</p>
 
   </li>
 
 
-  <li><code>data-type-name-field-1 : Data-Type-Name -&gt; T1</code><br/>
-<code>data-type-name-field-2 : Data-Type-Name -&gt; T2</code><br/> ...
+  <li><code><em>data-type-name-field-1</em> : <Em>Data-Type-Name</Em> -&gt; T1</code><br/>
+<code><em>data-type-name-field-2</em> : <Em>Data-Type-Name</Em> -&gt; T2</code><br/> ...
 <p>These functions can be used to extract the values that were given
-as arguments to <code>make-data-type-name</code>.
+as arguments to <code>make-<em>data-type-name</em></code>.
   </p>
   </li>
 
@@ -673,8 +696,8 @@ other quantity that that is represented as a number.  </p>
 
 <p> Racket does not generate the correct contracts of the point-functions, nor do they appear 
 out of thin air. We have to write  down some information for other programs to know what
-contracts to follow. That is, somewhere we have to state the
-following:
+contracts to follow. That is, somewhere we have to specify the
+following information:
 
 <ul class="condensed">
 <li>What actual types do the fields of the struct have (instead of T1, T2, etc.)?</li>
@@ -708,48 +731,73 @@ definition of the type Student from Ex14 that define the types of the
 fields and their interpretation.</p></DIV>
 
 <H2>Images</H2>
-<p><em>For this part, we will use an Image library that we will be using for the rest of the term.
-In order to use it, you best place the following code at the top of your file:</em>
+
+<p>In this class, we will work with images quite often.  To work with
+images, include the following code at the top of your file:</p>
+
 <pre><code>(require 2htdp/image)</code></pre></p>
-<p>In this class, we will work with images quite often. Here are the basic functions for drawing
-you will encounter:</p>
+
+<p>This loads the image library.  Here are the basic functions for
+calculating with images:</p>
 
 <pre><code>    ;; bitmap : Path -&gt; Image
-    ;; Takes a path (as a string, e.g. "myfile.jpg") and loads that file as an image.
-    
+    ;; GIVEN: a path to a file containing an image as a .jpg or .png
+    ;; The path is given as a string, e.g. "myfile.jpg"
+    ;; RETURNS: the image found in that file.
+
     ;; above : Image ... -&gt; Image
-    ;; Takes an arbirary number of images and places them above each other
+    ;; GIVEN an arbitrary number of images
+    ;; RETURNS: an image in which the given images appear one above
+    ;; the other from top to bottom.
 
     ;; beside : Image ... -&gt; Image
-    ;; Takes an arbirary number of images and places them beside each other
+    ;; GIVEN an arbitrary number of images
+    ;; RETURNS: an image in which the given images appear next to each 
+    ;; from left to right.
 
     ;; An OutlineMode is one of
-    ;;  - "outline" ... only the shapes outline is drawn
+    ;;  - "outline" ... only the shape's outline is drawn
     ;;  - "solid" ... the whole inside of the shape is filled
 
     ;; rectangle : Number Number OutlineMode Color -&gt; Image
-    ;; Creates an image of a rectangle with given width and height, drawing mode and color
+    ;; RETURNS: an image of a rectangle with given width, height,
+    ;; drawing mode and color
 
     ;; circle : Number OutlineMode Color -&gt; Image
-    ;; Creates animage of a circle with given radius, drawing mode and color
+    ;; RETURNS: an image of a circle with given radius, drawing mode
+    ;; and color.
 
     ;; text : String Number Color -&gt; Image
-    ;; Renders the given string in the given color with the given number as text size and
-    ;; returns the resulting image
+    ;; RETURNS: An image consisting of the given string, rendered
+    ;; in the given color and with the given number as text size.
 
     ;; empty-scene : Number Number -&gt; Image
-    ;; Creates an empty white rectangle with given width and height
-	
-    ;; place-image : Image Number Number Image -&gt; Image
-    ;; Places the first image into the second image with its center at the given coordinates (x/y)
+    ;; RETURNS: The image of an empty rectangle with given width and
+    ;; height.  An empty rectangle is a white rectangle with a black
+    ;; outline. 
+
+    ;; place-image : Image Real Real Image -&gt; Image
+    ;; GIVEN: An Image img1, 2 Reals x and y, and an Image img2
+    ;; RETURNS: An image like img2, but with img1 placed with its
+    ;; center placed at the given coordinates.  The coordinates are
+    ;; given relative to the top-left corner of img2.  The resulting
+    ;; image is cropped to the dimensions of img2.
 </code></pre>
 
-<code>string-append</code> is another useful function:
-<pre><code>    ;; string-append : String ... -> String
-    ;; Takes an arbitrary number of strings and concatenates them
-    &gt; (string-append "Hello " "World!")
-    "Hello World!"
-</pre></code>
+<p> Observe that the contract for rectangle says that it expects one
+    of exactly two strings as its third argument: either the string
+    <kbd>"outline"</kbd> or the string <kbd>"solid"</kbd>.  If you
+    give it some other string, you've violated rectangle's contract,
+    and its behavior is unpredictable!  Maybe it will just produce an
+    error, or maybe it will erase your disk! Who knows?  The contract
+    doesn't tell us.  </p>
+
+<p>Similarly, we've written <kbd>Color</kbd> for the fourth argument
+to <kbd>rectangle</kbd>.  Look in the Help Desk to find out the
+permissible values for a Color.</p>
+
+
+
 
 <div class="exercise">
 <p>Ex16: Create a folder on git and save your Racket file there. Then also copy some image to that
@@ -781,16 +829,15 @@ sequence. <em>Test the function!</em></p>
 </div>
 
 <div class="exercise">
-<p>Ex19: Design the following function:
-<pre><code>    ;; rel-rec-sequence: <span class="strike">Number Number</span> <span class="new"> PosReal PosReal </span>-&gt; Rectangle
-    ;; Takes two numbers and returns a solid blue rectangle, where the first number is
-    ;; the width of the rectangle, and the second number is the proportion of width
-    ;; and height of the rectangle to be produced (i.e. height = width * proportion).
+<p>Ex19: Write the following function:
+<pre>
+    ;; rectangle-from-proportions: PosReal PosReal -&gt; Rectangle
+    ;; RETURNS: a solid blue rectangle, whose width in pixels is given
+    ;; by the first argument, and whose proportion (ratio of height to
+    ;; width, i.e. height = width * proportion) is given by the second
+    ;; argument. 
 </code></pre>
-<!-- Can you write a function <code>rec-sequence-2</code> that has the same contract as <code>rec-sequence</code>, -->
-<!-- but does not directly use the original <code>rec-sequence</code> or any of the functions of the image -->
-<!-- library? -->
-<em>Test the function!</em></p>
+Test the function!</p>
 </div>
 
 <div class="exercise">
@@ -815,9 +862,11 @@ should be twice as high and wide as the image of the second
 person).</p> </div>
 
 <div class="exercise">
-<p>Ex21a: extend <code>-person-image</code>
-such that the full (first + last) name of the person is drawn below
-the image of the person.</p>
+<p>Ex21a: Write a function <kbd>person+name-image</kbd>, which returns
+an image like the one returned by <code>person-image</code>
+except that the full (first + last) name of the person is drawn below
+the image of the person.  You may want to use the built-in function
+<kbd>string-append</kbd>.  Look in the help desk to see what it returns.</p>
 </div>
 
 <h2>Lists</h2>
@@ -899,11 +948,12 @@ but less than the list we were given) and then <em>combine</em> it
 with the first element. Let's look at an example:</p>
 
 <pre><code>    ;; sum : List -&gt; Number
-    ;; Returns the sum of the numbers in the given list
-    ;; Examples: 
+    ;; RETURNS: the sum of the numbers in the given list
+    ;; EXAMPLES: 
     ;; (sum empty) = 0
     ;; (sum (list 1)) = 1
     ;; (sum (list 1 2 3) = 6
+
     (define (sum lst)
       (cond
         [(empty? lst) 0]
@@ -918,19 +968,21 @@ have to use any of the values in the list in every case:</p>
 
 
 <pre><code>    ;; list-length : List -&gt; Number
-    ;; Returns the length of the given list
-    ;; Examples: 
+    ;; RETURNS the length of the given list
+    ;; EXAMPLES: 
     ;; (list-length empty) = 0
     ;; (list-length (list 1)) = 1
     ;; (list-length (list 1 2 3) = 3
+
     (define (list-length lst)
       (cond
         [(empty? lst) 0]
         [else (+ 1 (list-length (rest lst)))]))
 </code></pre>
 
-<p>Here, the length of an empty list is again clearly 0, and the length of a list where
-there is a first element and a rest must be 1 + the length of that rest.</p>
+<p>Here, the length of an empty list is again clearly 0, and the
+length of a list where there is a first element and a rest must be 1 +
+the length of that rest.</p>
 
 <div class="exercise">
 <p>Ex24: Write a function that returns the product of all the numbers in a list (Hint:
@@ -1013,14 +1065,21 @@ on a number of the input list.</p>
 
 <p>Ex32: Design a function that takes a list of Points and returns the
 sum of the distances to each of those Points from (0,0). You should
-write a helper function to calculate the distance. Use the <a
-href="http://en.wiktionary.org/wiki/Manhattan_distance"
-target="_blank" >Manhattan distance</a> measure (distance = x +
-y).</p>
+write a helper function to calculate the distance.
 
-</div> <HR/> <font
-size=-1> <p align=right>
+<!-- Use the <a -->
+<!-- href="http://en.wiktionary.org/wiki/Manhattan_distance" -->
+<!-- target="_blank" >Manhattan distance</a> measure (distance = x + -->
+<!-- y). -->
+ 
+</p>
+
+</div> <HR/> 
+
+
+<font size=-1>
+<p align=right>
 <!-- hhmts start -->
-Last modified: Sun Sep 14 09:57:11 Eastern Daylight Time 2014 <!-- hhmts end -->
+Last modified: Sat Aug  1 19:17:26 Eastern Daylight Time 2015 <!-- hhmts end -->
 
 </DIV></BODY></HTML>
