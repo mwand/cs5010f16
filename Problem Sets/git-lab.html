@@ -10,7 +10,7 @@ li {padding-bottom: 10pt}
 
 </head>
 
-<!-- This file should live in .www/lab01 -->
+
 
 <body>
 <h1></h1>
@@ -31,7 +31,12 @@ will use git and github are explained <a href="../git.html" >here</a></p>
   href="https://docs.google.com/presentation/d/1PkOQjpY-6_-Kg-kjtR8riCWL1hICEx-gFZhORpy4ymk/edit?usp=sharing"
   >here</a>, and the watch the <a
   href="https://www.youtube.com/watch?v=thrpcSzdvso" >video
-  demonstration</a>.  </li>
+  demonstration</a>. (Alas, some of the details have changed since
+  this video demo was made, but the ideas are the same). </li>
+
+  <li>If you have not already done so, go to <a
+  href="https://github.ccs.neu.edu" >github.ccs.neu.edu</a> and log in
+  with your CCS credentials.</li>
 
   <li>If you have not already done so, download <a
   href="http://windows.github.com/" >Github for Windows</a> or <a
@@ -40,48 +45,66 @@ will use git and github are explained <a href="../git.html" >here</a></p>
   using a Linux machine, you will have to use the command-line
   interface or git-gui, which should have been included in your
   distro.)  </li>
-  
-  <li>If you have not already done so, create an account for yourself
-  on <a href="https://github.com" >Github</a>.  (You can do that
-  directly from GHF* if you want). If you do not have any
-  repositories in your account, click on the little book in the
-  upper-right-hand corner to create a public repository.  
-  </li>
 
-  <li>Open GHF*, and click "LOG IN" to log in to your github account.
-  The first time you do this, it will ask for your github login and
-  password.  It will also give you a checkbox icon that says "always
-  use REBASE".  Leave this box checked.
-  
- <p> You should see your repository in the repository list. Select it,
-  and mouse over to the right side of the entry.  A little down-arrow
-  should appear.  Select it to clone this repository on your local
-  machine.  (Don't worry, it gets simpler after this.)</p> </li>
+  <li>Open GHF*.  You'll need to do the following steps in order to
+  configure GHF*.  I've checked these steps on GHFW; GHFM may be
+  slightly different.  This part is slightly complicated, but you only
+  have to do it once.
+  <p></p>
 
-  <li>
-  Then click on the right arrow to open the repository. Click
-  on the gear icon "tools" to open an explorer window pointing at the
-  repository. </li>
+  <ol>
+    <li>Select "Github Enterprise".</li>
+    <li>Enter your CCS login and password, and enter
+    "https://github.ccs.neu.edu" when it asks for the github server
+    name. </li>
+    <li>Go on to "configure git". This will display your CCS username
+    and email.  Accept these settings.</li>
+    <li>It will next ask you about finding local repositories.  If you
+    want GHF* to manage all your existing repositories, you can do
+    this.  Otherwise uncheck everything and skip this step.</li>
+    <li>It will then give you some advice about "The Github Flow",
+    which involves making lots of temporary branches.  If you are
+    familiar with github and know about this stuff, feel free to do
+    what it says.  Otherwise ignore it:  your repositories will have a
+    single branch, called "master".  For a solo or pair project, this
+    is all you need.</li>
+    <li>Click on the "+" sign in the upper-left corner. Click on
+    "create" to create a new local repository.  It will ask you where to
+    create it; choose whatever location you like, or accept the one
+    that is offered. NOTE: when we create
+    repositories for you, these should appear in the list of
+    repositories, and you'll click on "clone" to create a local
+    copy.</li>
+    <li>Click on the little cloud in the upper right-hand corner that
+    says "publish" to connect your local repo to the github server. </li>
+    <li>GHF* will say something like "No local changes; would you like
+    to open this repository in Explorer?".  Click to open the repo.
+    </li>
+  </ol>
+
+  <p>You've now created your first repository, and you're ready to
+  go.</p>
+</li>
+
 
   <li>Add a text file to the repository, using the tool of your
   choice.</li>
 
-  <li>Now go back to GHF*.  You should see the blue message that says
-  "uncommitted changes".  Click "SHOW" to display them. You can see
-  the diffs. </li>
+  <li>Now go back to GHF*.  You should see a message that says "1
+  change" and another that says "1 uncommitted change" You should see
+  the blue message in the upper right-hand corner that says
+  "uncommitted changes".  Click on the name of your new document to
+  display the change.  You'll see some diffs. </li>
 
-  <li>In the yellow box, write a commit message, and hit
-  "COMMIT".</li>
+  <li>Write a commit message.  Informative commit messages are Good
+  Things.  Click on the checkbox for "Commit to Master".</li>
 
-  <li>Now you should see a display for "unsynced commits".</li>
+
 
   <li><strong>THIS NEXT PART IS VERY IMPORTANT!</strong><span
-  style="color:red"> You see the panel that says "unsynced commits"?
-  This means that you have made changes to the repository that have
-  not been uploaded to the server.  Upload your changes to the server
-  by clicking on the icon that says "sync" to upload them.  It will
-  throb for a little while, and then switch to a checkmark that says
-  "in sync". </span></li>
+  style="color:red"> You see the little cloud in the upper right-hand
+  corner that says "Sync".  Do it!  This uploads your changes to the server.
+  </span></li>
 
   <li>To see that your changes have been uploaded, click on "tools"
   again.  This time, select "view on github". </li>
@@ -89,23 +112,28 @@ will use git and github are explained <a href="../git.html" >here</a></p>
   <li>A browser window should pop open with your repository.  You
   should see your new file there.</li>
 
-  <li>Now let's edit the file in the brower. Click on the file to view
-  it, and then click "edit".  A text window should open.  Edit the
-  file a little.  Scroll down, change the commit message if you like,
-  and hit "commit changes."</li>
+  <li>Now let's edit the file in the browser. Click on the file to
+  view it, and then click on the little pencil to edit the file.  A
+  text window should open.  Edit the file a little.  Scroll down and
+  change the commit message if you like, then select "commit directly
+  to the 'master' branch".  Then hit "commit changes."</li>
 
   <li>Now let's download those changes into your local copy.  In GHF*,
-  if you are still looking at your repository, hit F5 to
-  refresh. (Otherwise just open your repository again, and it will
-  refresh).  Now the "in sync" checkmark will be replaced by
-  "refreshing..." .  Eventually the "sync" icon will appear. (If there
-  were no changes on the server, it will go back to the "in sync"
-  checkmark.) Click the sync icon to download the changes.  You will
-  get a screen that says "no local changes". To see the changes that
-  were made, click on the first panel in the "history" display. </li>
+  if you are still looking at your repository, his "sync" to download
+  the changes to your local copy of the repository.  Open your local
+  copy to confirm that the changes have arrived.</li>
+
+  <li>Last, click on one of the little dots on the little thing that
+  looks like a spaceship, just below the "sync" button. This will show
+  the history display, where you can see the history of your commits.
+  You can go back to the head of the spaceship to look at your current
+  changes (right now there shouldn't be any).</li>
+
   </li>
 
 </ol>
+
+
 
 </div>
 
@@ -116,5 +144,5 @@ will use git and github are explained <a href="../git.html" >here</a></p>
 <font size=-1>
 <p align=right>
 <!-- hhmts start -->
-Last modified: Wed Sep  3 22:11:27 Eastern Daylight Time 2014 <!-- hhmts end -->
+Last modified: Wed Aug 12 12:04:51 Eastern Daylight Time 2015 <!-- hhmts end -->
 </body> </html>
