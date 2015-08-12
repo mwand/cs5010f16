@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html> <head>
+<title>Git Introduction</title>
+<link type="text/css" rel="stylesheet" href="../css/course.css">
+<style>
+body {max-width:700px}
+li {padding-bottom: 10pt}
+
+</style>
+
+</head>
+
+<!-- This file should live in .www/lab01 -->
+
+<body>
+<h1></h1>
+
+<h1>Laboratory Exercise: Using Git</h1>
+
+<p>In this course, we will use <a href="https://github.com" >Github</a>
+as our version control and repository system.  The way in which we
+will use git and github are explained <a href="../git.html" >here</a></p>
+
+
+<div class="exercise">
+
+<ol>
+
+  <li>If you have not already done so, read the general introduction
+  to git found <a
+  href="https://docs.google.com/presentation/d/1PkOQjpY-6_-Kg-kjtR8riCWL1hICEx-gFZhORpy4ymk/edit?usp=sharing"
+  >here</a>, and the watch the <a
+  href="https://www.youtube.com/watch?v=thrpcSzdvso" >video
+  demonstration</a>.  </li>
+
+  <li>If you have not already done so, download <a
+  href="http://windows.github.com/" >Github for Windows</a> or <a
+  href="http://mac.github.com/" >Github for Mac</a>. We will refer to
+  either of these clients as GHF* (If you are
+  using a Linux machine, you will have to use the command-line
+  interface or git-gui, which should have been included in your
+  distro.)  </li>
+  
+  <li>If you have not already done so, create an account for yourself
+  on <a href="https://github.com" >Github</a>.  (You can do that
+  directly from GHF* if you want). If you do not have any
+  repositories in your account, click on the little book in the
+  upper-right-hand corner to create a public repository.  
+  </li>
+
+  <li>Open GHF*, and click "LOG IN" to log in to your github account.
+  The first time you do this, it will ask for your github login and
+  password.  It will also give you a checkbox icon that says "always
+  use REBASE".  Leave this box checked.
+  
+ <p> You should see your repository in the repository list. Select it,
+  and mouse over to the right side of the entry.  A little down-arrow
+  should appear.  Select it to clone this repository on your local
+  machine.  (Don't worry, it gets simpler after this.)</p> </li>
+
+  <li>
+  Then click on the right arrow to open the repository. Click
+  on the gear icon "tools" to open an explorer window pointing at the
+  repository. </li>
+
+  <li>Add a text file to the repository, using the tool of your
+  choice.</li>
+
+  <li>Now go back to GHF*.  You should see the blue message that says
+  "uncommitted changes".  Click "SHOW" to display them. You can see
+  the diffs. </li>
+
+  <li>In the yellow box, write a commit message, and hit
+  "COMMIT".</li>
+
+  <li>Now you should see a display for "unsynced commits".</li>
+
+  <li><strong>THIS NEXT PART IS VERY IMPORTANT!</strong><span
+  style="color:red"> You see the panel that says "unsynced commits"?
+  This means that you have made changes to the repository that have
+  not been uploaded to the server.  Upload your changes to the server
+  by clicking on the icon that says "sync" to upload them.  It will
+  throb for a little while, and then switch to a checkmark that says
+  "in sync". </span></li>
+
+  <li>To see that your changes have been uploaded, click on "tools"
+  again.  This time, select "view on github". </li>
+
+  <li>A browser window should pop open with your repository.  You
+  should see your new file there.</li>
+
+  <li>Now let's edit the file in the brower. Click on the file to view
+  it, and then click "edit".  A text window should open.  Edit the
+  file a little.  Scroll down, change the commit message if you like,
+  and hit "commit changes."</li>
+
+  <li>Now let's download those changes into your local copy.  In GHF*,
+  if you are still looking at your repository, hit F5 to
+  refresh. (Otherwise just open your repository again, and it will
+  refresh).  Now the "in sync" checkmark will be replaced by
+  "refreshing..." .  Eventually the "sync" icon will appear. (If there
+  were no changes on the server, it will go back to the "in sync"
+  checkmark.) Click the sync icon to download the changes.  You will
+  get a screen that says "no local changes". To see the changes that
+  were made, click on the first panel in the "history" display. </li>
+  </li>
+
+</ol>
+
+</div>
+
+
+
+<hr>
+<address></address>
+<font size=-1>
+<p align=right>
+<!-- hhmts start -->
+Last modified: Wed Sep  3 22:11:27 Eastern Daylight Time 2014 <!-- hhmts end -->
+</body> </html>

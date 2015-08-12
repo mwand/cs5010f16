@@ -1,6 +1,6 @@
 Skeleton Rubric
 CS 5010, Fall 2014
-Time-stamp: "2014-10-22 15:48:36 MWand"
+Time-stamp: "2014-12-03 10:19:55 MWand"
 
 This is the public version of the master rubric for CS 5010.  The
 actual rubrics for each week will vary a little bit, depending on the
@@ -156,8 +156,10 @@ Deductions for:
 
  [-1] Argument types in contracts must be interfaces, not
       classes. (repeatable per contract, max -4)
- [-1] Must have interface for each itemization data type (repeatable
-      per data type)
+ % [-1] Must have interface for each itemization data type (repeatable
+ %      per data type)
+ [-1] Method called outside a class, but not an interface (repeatable
+      per method)
  [-1] Interface must have contract and purpose statement for each
       method. Purpose must be clear, correct, and add at least some information
       beyond the contract (repeatable per method)
