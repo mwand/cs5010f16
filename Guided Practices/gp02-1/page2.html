@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html> <head>
+<title>Guided Practice 2.1</title>
+<link type="text/css" rel="stylesheet" href="../../css/course.css">
+</head>
+
+<body>
+<h1>Guided Practice 2.1</h1>
+
+<p>Consider the following data definitions, taken from Module 01:</p>
+
+<pre>
+;; A Size is one of
+;; -- "small"
+;; -- "medium"
+;; -- "large"
+
+;; size-fn : Size -> ??
+(define (size-fn s)
+  (cond
+    [(string=? s "small") ...]
+    [(string=? s "medium") ...]
+    [(string=? s "large") ...]))
+
+;; A Year is a PosInt[1900,2020]
+;; interp: the year.  Must be between 1900 and 2020.
+
+;; Year is Scalar data, so we don't need a template.
+
+;; A Vineyard is ... /to be filled in/
+
+(define-struct coffee (size type milk?))
+(define-struct wine (vineyard year))
+(define-struct tea (size type))
+
+;; A BarOrder is one of
+;; -- (make-coffee Size String Boolean)
+;;  interp: 
+;;   size is the size of cup desired
+;;   type is the origin of the coffee (as a string)
+;;   milk? tells whether milk is desired.
+;; -- (make-wine Vineyard Year)
+;;  interp:
+;;   vineyard is the origin of the grapes
+;;   year is the year of harvest
+;; -- (make-tea Size String)
+;;  interp: 
+;;   size is the size of cup desired
+;;   type is the type of tea (as a string)
+
+;; bo-fn : BarOrder -> ??
+;(define (bo-fn order)
+;  (cond
+;    [(coffee? order) (...
+;                      (coffee-size order)
+;                      (coffee-type order)
+;                      (coffee-milk? order))]
+;    [(wine? order) (...
+;                    (wine-vineyard order)
+;                    (wine-year order))]
+;    [(tea? order) (...
+;                   (tea-size order)
+;                   (tea-type order))]))
+</pre>
+
+<p>The function definition was:</p>
+
+<pre>
+;; function1 : Size Number Number -> Number
+;; STRATEGY: Use template for Size on s
+(define (function1 s lo hi)
+  (cond
+    [(string=? s "medium") lo]
+    [(string=? s "small") hi]
+    [(string=? s "large") lo]))
+</pre>
+
+<p>Does this function definition follow the template?</p>
+
+<p><strong>NO,</strong> this definition does not follow the
+template. The predicates are not in the same order as in the data definition.
+</p>
+
+
+
+<p><a href="page3.html" >[NEXT]</a></p>
+
+<hr>
+<address></address>
+<font size=-1>
+<p align=right>
+<!-- hhmts start -->
+Last modified: Thu Aug 13 15:58:39 Eastern Daylight Time 2015 <!-- hhmts end -->
+</body> </html>
