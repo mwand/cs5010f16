@@ -1,0 +1,243 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<TITLE>CS 5010: Problem Set 03: Iterative Design</TITLE>
+<link type="text/css" rel="stylesheet" href="../css/course.css">
+</head>
+
+<body>
+<h1>CS 5010: Problem Set 02</h1>
+
+<p>
+<strong>Out:</strong> Monday, September 28, 2015
+
+<p><strong>Due:</strong> Monday, October 5, 2015
+at 600pm
+local time
+</p>
+
+<!-- See Google spreadsheet for collected problem sets and TOTs -->
+
+
+<p>
+The goal of this problem set is to help you design functions that deal
+with the Universe model, and to give you practice with the Iterative
+Design Recipe.</p>
+
+<p>You will also get experience with the Perfect Bounce and Smooth
+Dragging, which we will be using in many of our exercises.</p>
+
+<p>You must use the HtDP Beginning Student Language to solve the
+  problems.  </p>
+
+<p>For these problems, download a copy of <a href="extras.rkt"
+>extras.rkt</a> and put it in the folder with your solutions.  Then
+import this library by including the line
+
+<pre>
+(require "extras.rkt")
+</pre>
+
+at the top of your file with the other requires.  Then, for each
+problem, put in lines that say
+
+<pre>
+(provide <em>function</em>)
+</pre>
+
+for each deliverable function, as you have done on previous problem sets.
+This will allow our testing framework to import your file and do
+automated testing on it.</p>
+
+
+<p>Remember that you must follow the design recipe.  Your <a
+  href="../Info/homework.html" >deliverables</a> include the data
+  definitions (including interpretation and templates), contract and
+  purpose header, code, and tests.  Be sure to sync your work and fill
+  out a Work Session Report at the end of every work session.  Use the
+
+<p>NEED TO CREATE WORK SESSION REPORT</p>
+
+
+<a href="http://goo.gl/forms/K9ZHiaPkdh" >Work Session Report for
+  PS02</a>.</p> 
+
+<p><strong>Note:</strong> For all universe programs, you may assume
+that the mouse is never dragged or moved outside of the canvas.  Once
+the mouse enters the canvas, if the mouse ever leaves the canvas, then
+the behavior of your system is unspecified.</p>
+
+
+<hr>
+
+<ol>
+
+  <li>(screensaver-1).  Your boss has assigned you to a project to
+  build a screensaver.  The specifications for the screensaver are as
+  follows:<p></p>
+
+  <ul>
+
+    <li> The screensaver is a universe program that displays two
+    rectangles that move around a canvas.</li>
+
+    <li>The rectangles bounce smoothly off the edge of the
+    canvas. Bouncing is defined as follows: if the rectangle would hit
+    or go past one side of the canvas, then at the next tick it should
+    appear tangent to the edge of the canvas, travelling at the same
+    speed, but in the opposite direction (that is, away from the
+    wall).  If the rectangle would go past a corner, then both the x-
+    and y- velocities are both reversed.  We call this a <em>perfect
+    bounce</em>.  </li>
+
+
+    <li> Each rectangle is displayed as an outline blue rectangle 60
+    pixels wide and 50 pixels high. In addition, the rectangle's
+    current velocity is displayed as a string (vx, vy) in the center
+    of the rectangle.  </li>
+
+
+    <li>The space bar pauses or unpauses the entire simulation.  The
+    simulation is initially paused.
+    </li>
+
+
+    <li>The canvas is 400 pixels wide and 300 pixels high.
+    </li>
+
+    <li> The two rectangles are initially centered at positions
+    (200,100) and (200,200), and have velocities of (-12, 20) and (23,
+    -14), respectively. Remember that we are using computer-graphics
+    coordinates, in which y increases as you go down the page
+    (south).</li>
+
+  </ul>
+
+  <p>Here's a demo:</p>
+
+
+  <p><center>
+<video src="ps03-demo1.mp4" controls />
+</center>
+</p>
+
+
+  <p>INSERT VIDEO HERE</p>
+
+  <p>You are to deliver a file named <kbd>screensaver-1.rkt</kbd> that
+  provides the following functions:</p>
+
+  <pre>
+;; screensaver : PosReal -> WorldState
+;; GIVEN: the speed of the simulation, in seconds/tick
+;; EFFECT: runs the simulation, starting with specified initial state.
+;; RETURNS: the final state of the world
+
+;; initial-world : Any -> WorldState
+;; GIVEN: any value (ignored)
+;; RETURNS: the specified initial world.
+
+;; world-after-tick : WorldState -> WorldState
+;; RETURNS: the world state that should follow the given world state
+;; after a tick.
+
+;; world-after-key-event : WorldState KeyEvent -> WorldState
+;; RETURNS: the WorldState that should follow the given worldstate
+;; after the given keyevent
+
+;; world-rect1 : WorldState -> Rectangle
+;; world-rect2 : WorldState -> Rectangle
+;; world-paused? : WorldState -> Rectangle
+;; RETURNS: the specified attribute of the WorldState
+;; NOTE: if these are part of the world struct, you don't need to
+;; write any deliverables for these functions.
+
+;; new-rectangle : PosInt PosInt Int Int -> Rectangle
+;; GIVEN: 2 positive integers x and y, and 2 integers vx and vy
+;; RETURNS: a rectangle centered at (x,y), which will travel with
+;; velocity (vx, vy).
+
+;; rect-x : Rectangle -> PosInt
+;; rect-y : Rectangle -> PosInt
+;; rect-vx : Rectangle -> Int
+;; rect-vy : Rectangle -> Int
+;; RETURNS: the coordinates of the center of the rectangle and its
+;; velocity in the x- and y- directions.
+</pre>
+
+</li>
+
+
+<li>(screensaver-2).  Your boss has now decided to build a better
+    screensaver.  This one is like the original, except for the
+    following:<p></p>
+
+  <ul>
+
+    <li> The rectangle is selectable and draggable.  Depressing the
+    mouse button within the rectangle causes the rectangle to be
+    "selected".  When the rectangle is selected, it and its velocity
+    are displayed in red instead of blue.</li>
+
+    <li>The location where the mouse grabbed the rectangle should be
+    indicated by an outline red circle of radius 5 pixels. Simply
+    pressing the mouse button, without moving the mouse, should not
+    cause the rectangle to move on the canvas.  </li>
+
+    <li>Once the rectangle has been selected, you should be able to
+    drag it around the Universe canvas with the mouse.  As you drag
+    it, the position of the mouse within the rectangle (as indicated
+    by the red circle), should not change.  When the mouse button is
+    released, the rectangle should go back to its unselected state
+    (outline blue) in its new location.  </li>
+
+    <li>All of this works whether or not the simulation is paused.
+    </li>
+
+
+    <li>We refer to this behavior as "smooth dragging."  We will be
+    implementing other objects with this behavior in future problem
+    sets.  </li>
+
+  </ul>
+
+  <p>Here's a demo:</p>
+
+  <p>INSERT VIDEO HERE</p>
+
+
+  <p>Your file should provide all the functions above, plus the following:</p>
+
+  <pre>
+;; world-after-mouse-event : WorldState Int Int MouseEvent -> WorldState
+;; RETURNS: the world that should follow the given world after the given mouse
+;; event.
+
+;; rect-after-mouse-event :  Rectangle Int Int MouseEvent -> Rectangle
+;; RETURNS: the rectangle that should follow the given rectangle after
+;; the given mouse event
+
+;; new-rectangle
+;; as before, but now it returns an UNSELECTED rectangle.
+</pre>
+
+
+</ul>
+</li>
+
+</ol>
+
+
+<hr>
+
+
+<font size=-1>
+<p align=right>
+<!-- hhmts start -->
+Last modified: Sat Aug 22 17:56:09 Eastern Daylight Time 2015 <!-- hhmts end -->
+</body> </html>
+
+
+C:\Users\MWand\Dropbox\Work\cs5010\15-2-Fall\public\Problem Sets\03-screensaver-1-demo.swf
