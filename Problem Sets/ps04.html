@@ -1,0 +1,192 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<TITLE>CS 5010: Problem Set 04</TITLE>
+<link type="text/css" rel="stylesheet" href="../css/course.css">
+</head>
+
+<body>
+<h1>CS 5010: Problem Set 05: Working with Lists</h1>
+
+<p>
+<strong>Out:</strong> Monday, October 5, 2015
+
+<p><strong>Due:</strong> Monday, October 12, 2015
+at 600pm
+local time
+</p>
+
+<!-- See Google spreadsheet for collected problem sets and TOTs -->
+
+
+<p>
+The goal of this problem set is to help you design functions that deal
+with lists, and with the Iterative Design Recipe</p>
+
+<p>You must use the HtDP Beginning Student Language to solve the
+  problems.  </p>
+
+<p>For these problems, download a copy of <a href="extras.rkt"
+>extras.rkt</a> and put it in the folder with your solutions.  Then
+import this library by including the line
+
+<pre>
+(require "extras.rkt")
+</pre>
+
+at the top of your file with the other requires.  Then, for each
+problem, put in lines that say
+
+<pre>
+(provide <em>function</em>)
+</pre>
+
+for each deliverable function, as you have done on previous problem sets.
+This will allow our testing framework to import your file and do
+automated testing on it.</p>
+
+
+<p>Remember that you must follow the design recipe.  Your <a
+  href="../Info/homework.html" >deliverables</a> include the data
+  definitions (including interpretation and templates), contract and
+  purpose header, code, and tests.  Be sure to sync your work and fill
+  out a Work Session Report at the end of every work session.  Use the
+
+<a href="NEED NEW WSR" >Work Session Report for
+  PS04</a>.</p> 
+
+<p><strong>Note:</strong> For all universe programs, you may assume
+that the mouse is never dragged or moved outside of the canvas.  Once
+the mouse enters the canvas, if the mouse ever leaves the canvas, then
+the behavior of your system is unspecified.</p>
+
+
+<hr>
+
+<ol>
+
+  <li>(screensaver-3).  Your boss has decided that your screensaver
+  needs to show more stuff on the screen.  In the new screensaver,
+  there will be a list of rectangles.
+
+  <p>Initially, there are no rectangle.  Hitting the "n" key adds a
+  new rectangle, at the center of the canvas, at rest (velocity is 0).</p>
+
+  <p>When a rectangle is selected, the arrow keys increase the
+  velocity of the rectangle in the specified direction (up, down,
+  left, or right).  Each push of the arrow key increases the velocity
+  by 2 pixels/tick.  </p>
+
+
+
+
+  <p>You are to deliver a file named <kbd>screensaver-3.rkt</kbd> that
+  provides all the functions of <kbd>screensaver-2.rkt</kbd>, plus the
+  following: </p>
+
+  <pre>
+;; world-rects : WorldState -> ListOfRectangle
+;; RETURNS: the specified attribute of the WorldState
+;; NOTE: this replaces world-rect1 and world-rect2.
+;; NOTE: if these are part of the world struct, you don't need to
+;; write any deliverables for these functions.
+
+;; rect-after-key-event : Rectangle KeyEvent -> Rectangle
+;; RETURNS: the state of the rectangle that should follow the given
+;; rectangle after the given key event
+</pre>
+
+</li>
+
+
+<li>(screensaver-4).  Your boss is so pleased with your work that he
+assigns you yet another feature.  Screensaver 4.0 adds the following
+feature:
+
+<p>When a rectangle is selected, the "d" key drops a pen down.  When
+the pen is down, the rectangle records on the screen a dot marking its
+center at each tick.  The dot is displayed as a solid black circle of
+radius 1.  </p>
+
+<p>When a rectangle is selected, the "u" key lifts the pen up.  When
+the pen is up, the rectangle does not leave a track on the screen.
+</p>
+
+<p>You are to deliver a file named <kbd>screensaver-4.rkt</kbd> that
+implements this functionality.  It should provide the same functions
+as <kbd>screensaver-3</kbd>, plus a function <kbd>rect-pen-down?</kbd>
+that tests whether the pen in the given rectangle is down or not.
+</p>
+</ul>
+</li>
+
+
+<li>Professor Felleisen and Professor Shivers each keep their class
+lists on slips of paper, one student on each slip.  Professor
+Felleisen keeps his list on slips of yellow paper.  Professor Shivers
+keeps his list on slips of blue paper.
+
+<p>Unfortunately, both professors are sloppy record-keepers.
+Sometimes they have more than one slip for the same student.
+Sometimes they record the student names first-name first; sometimes
+they record the names last-name first.</p>
+
+<p>One day, Professor Felleisen was walking up the stairs in WVH,
+talking to one of his graduate students.  At the same time, Professor Shivers
+was walking down the stairs, all the time talking to one <em>his</em>
+graduate students.   They collided, and dropped all the slips
+containing their class lists on the stairs, where they got all mixed
+up.</p>
+
+<p>Your job is to clean up this mess.  Deliver a file named
+<kbd>class-lists.rkt</kbd> that provides the following functions:</p>
+
+<pre>
+felleisen-roster : ListOfSlip -> ListOfSlip
+GIVEN: a list of slips
+RETURNS: a list of slips containing all the student in Professor
+Felleisen's class, without duplication.
+
+shivers-roster: ListOfSlip -> ListOfSlip
+GIVEN: a list of slips
+RETURNS: a list of slips containing all the student in Professor
+Shivers' class, without duplication.
+</pre>
+
+<p>Here is the beginning of the data definition for <kbd>ListOfSlip</kbd>:</p>
+
+<pre>
+(define-struct slip (color name1 name2))
+A Slip is a (make-slip Color String String)
+
+A Color is one of
+-- "yellow"
+-- "blue"
+</pre>
+
+<p>As mentioned before, the professors are confused about first names
+and last names, so  <kbd>(make-slip "yellow" "Wang" "Xi")</kbd> and 
+ <kbd>(make-slip "yellow" "Xi" "Wang")</kbd> represent the same
+student in Professor Felleisen's class.  Your function should return a
+list in which this student is represented only once.
+</p>
+
+<p>Be sure to finish the data definitions I've started above.</p>
+
+
+</li>
+
+
+</ol>
+
+
+<hr>
+
+
+<font size=-1>
+<p align=right>
+<!-- hhmts start -->
+Last modified: Tue Aug 25 09:11:09 Eastern Daylight Time 2015 <!-- hhmts end -->
+</body> </html>
