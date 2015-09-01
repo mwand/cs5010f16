@@ -1,0 +1,162 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<TITLE>CS 5010: Problem Set 04</TITLE>
+<link type="text/css" rel="stylesheet" href="../css/course.css">
+</head>
+
+<body>
+<h1>CS 5010: Problem Set 05: Working with Higher-Order Functions</h1>
+
+<p>
+<strong>Out:</strong> Monday, October 12, 2015
+
+<p><strong>Due:</strong> Monday, October 19, 2015
+at 600pm
+local time
+</p>
+
+
+<p>
+The goal of this problem set is to help you design functions using 
+higher-order functions like map, filter, foldr, etc.</p>
+
+<p>You must use the HtDP Intermediate Student Language + Lambda to solve the
+  problems.  You are to use HOFs wherever it is appropriate.  These
+  will replace almost all the uses of the List template.</p>
+
+<p>For these problems, download a copy of <a href="extras.rkt"
+>extras.rkt</a> and put it in the folder with your solutions.  Then
+import this library by including the line
+
+<pre>
+(require "extras.rkt")
+</pre>
+
+at the top of your file with the other requires.  Then, for each
+problem, put in lines that say
+
+<pre>
+(provide <em>function</em>)
+</pre>
+
+for each deliverable function, as you have done on previous problem sets.
+This will allow our testing framework to import your file and do
+automated testing on it.</p>
+
+
+<p>Remember that you must follow the design recipe.  Your <a
+  href="../Info/deliverables.html" >deliverables</a> include the data
+  definitions (including interpretation and templates), contract and
+  purpose header, code, and tests.  Be sure to sync your work and fill
+  out a Work Session Report at the end of every work session.  Use the
+
+<a href="http://goo.gl/forms/XXXXX" >Work Session Report for
+  PS04</a>.</p>
+
+<p>NEED NEW WORK SESSION REPORT</p>
+
+<p><strong>Note:</strong> For all universe programs, you may assume
+that the mouse is never dragged or moved outside of the canvas.  Once
+the mouse enters the canvas, if the mouse ever leaves the canvas, then
+the behavior of your system is unspecified.</p>
+
+
+<hr>
+
+<ol>
+
+
+  <li>(The absent-minded professors, part 2). Reimplement the last
+  problem from last week's problem set (class-lists.rkt), but using
+  HOFs wherever possible and appropriate.
+</li>
+
+<li>(screensaver-5). Rewrite screensaver-4 to use higher-order
+functions whenever possible instead of using recursions down a list.
+</p>
+
+</li>
+
+<li>The Registrar has heard about your excellent work with the
+absent-minded professors that he asks you to solve the following
+problem:
+
+<p>You are given a list of (student, class) pairs.  Deliver a file 
+called <kbd>rosters.rkt</kbd> that produces the class roster for each
+class that has at least one student enrolled.  Here are more detailed
+specifications: </p>
+
+<pre>
+A SetOfX is a list of X's without duplication.  Two SetofX's are equal
+if they have the same members.
+
+An Enrollment is a (make-enrollment Student Class)
+
+A ClassRoster is a (make-roster Class SetOfStudent)
+
+Student and Class are unspecified, but you may assume that students
+and classes may be compared for equality with equal?
+
+Two ClassRosters are equal if they have the same class and the same
+set of students.  
+
+You are to provide the following functions:
+
+make-enrollment
+enrollment-student
+enrollment-class
+make-roster
+roster-classname
+roster-students
+
+roster=? : ClassRoster ClassRoster -> Boolean
+RETURNS: true iff the two arguments represent the same roster
+
+rosterset=? : SetOfClassRoster SetOfClassRoster -> Boolean
+RETURNS: true iff the two arguments represent the same set of rosters
+
+enrollments-to-rosters: SetOfEnrollment -> SetofClassRoster
+GIVEN: a set of enrollments
+RETURNS: the set of class rosters for the given enrollments
+
+EXAMPLE:
+  (enrollment-to-rosters
+    (list (make-enrollment "John" "PDP")
+          (make-enrollment "Kathryn" "Networks")
+          (make-enrollment "Feng" "PDP")
+          (make-enrollment "Amy" "PDP")
+          (make-enrollment "Amy" "Networks")))
+=>
+ (list
+   (make-roster "PDP" (list "John" "Feng" "Amy"))
+   (make-roster "Networks" (list "Kathryn" "Amy")))
+
+In the output, the classes may be in any order, and the students in
+each class may be in any order.
+</pre>
+
+<p>As elsewhere in this problem set, use HOFs whenever possible and
+appropriate. </p>
+
+<p>Be sure that your tests accept <em>any</em> correct answer, not
+just the one that your function happens to produce.  (Hint: don't use
+<kbd>check-equal?</kbd>; instead use <kbd>check</kbd> with an
+appropriate equality test.)</p>
+
+</li>
+
+
+</ol>
+
+
+<hr>
+
+
+<font size=-1>
+<p align=right>
+<!-- hhmts start -->
+Last modified: Tue Aug 25 16:45:32 Eastern Daylight Time 2015 <!-- hhmts end -->
+</body> </html>
