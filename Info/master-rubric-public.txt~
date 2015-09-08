@@ -1,59 +1,30 @@
-Skeleton Rubric
-CS 5010, Fall 2015
+GRADE SHEET FALL 2015
 
-This is the public version of the master rubric for CS 5010.  The
-actual rubrics for each week will vary a little bit, depending on the
-particular problem, but the changes will not be significant.
+Problem Set #: ____
 
-Our goal, as always, is to get you to write well-designed,
-well-documented programs.  The rubric is designed to detect flaws in
-the design that manifest themselves through elements that are missing,
-incorrect, inconsistent, or just plain messy.
-
-You will get three grades for each problem set: correctness, design,
-and presentation.  Correctness is on a scale of 0-15; Design and
-Presentation get letter grades.  The possible letter grades are A+, A,
-AB, B, C, and D.
-
-When you do pair work, students in a pair receive the same marks for
-correctness and design.  Students will receive individual marks for
-presentation. 
-
-The three grades are weighted approximately as follows:
-
-30% correctness
-50% design
-20% presentation
-
-
-================================================================
-
-Pair number:_______ 
+Pair number: _______ 
 
 Student1 Name: ________________ 
 
-Student1:  Correctness:   ___/15
-           Design:        ___
-           Presentation   ___
+Student1:  Correctness:   ___/15   [30% of grade]
+           Design:        ___      [50% of grade]
+           Presentation   ___      [20% of grade]
 
 Student2 Name: ________________ 
 
-Student2:  Correctness:   ___/15
-           Design:        ___
-           Presentation   ___
-
- 
-================================================================
-
-Section I: CORRECTNESS [__/15 points]
-
-Points as assigned by the automated grading program.
+Student2:  Correctness:   ___/15   [30% of grade]
+           Design:        ___      [50% of grade]
+           Presentation   ___      [20% of grade]
 
 ================================================================
+Each student will receive 3 grades for each problem set:
+a correctness grade (numeric), a design grade (letter grade), 
+and a presentation grade (letter grade)
+================================================================
 
-Section II: DESIGN [letter grade]
+KEY TO GRADES:
 
-The meanings of the letter grades are as follows:
+Design Grades:
 
 A+: Outstanding: The code is well-organized and well-documented.
 There are at most a few minor errors.  I would be happy to post this
@@ -83,147 +54,9 @@ wrong.
 
 F: Missing.  Not turned in.
 
-================
-
-INSTRUCTIONS FOR GRADERS:
-
-Put the student's solution on the screen and scroll through it,
-evaluating the data definitions and as much of the program as you can,
-starting from the particular function or functions specified each
-week.  As you read, ask the student to explain anything you find
-confusing or odd.  Evaluate the student's answers using the rubric in
-Part III below.
-
-[Note: this replaces the old prompt of "Please explain the design of
-function X.  Follow the design recipe"  You should be leading the
-discussion.] 
-
-Your goal is to get a general evaluation of the program in terms of
-the descriptors above.
-
-Below is a list of things to look for.  Do NOT try to convert these
-individual items into point values.  Mark problem areas and translate
-them into a general evaluation following the descriptors above.
-
-Try to distinguish between harmless errors (typos, copy/paste errors)
-and errors that hinder the reader's understanding of the program.
-
-================
-
-Data Design:
-
--- bad design choices (eg: doesn't use mixed/recursive data where
-   appropriate, bad/misleading field names)
-
--- missing/incomplete interpretation.  (Criterion: does the
-   interpretation give you sufficient information to read and
-   understand the program?  Does the interpretation account for every
-   value assigned to this field by the program? eg: (set! mx 0) for a
-   mouse position)
-
--- missing/incomplete/wrong invariants. (Criterion: there are combinations
-   of data values that are unaccounted for, regardless of whether they
-   come up in the program)
-
--- missing/incorrect templates.  When evaluating, try to distinguish
-   between harmless errors and those that will hinder the programmer
-   in correctly using the template.
-
-================
-
-Contract/Purpose Statement/Design Strategy:
-
--- poor choice of function/constant names.  Names should be nouns
-   whenever possible. The name should give a good indication of what
-   the function does or what the constant denotes.  It should NOT
-   mislead the reader.
-
-   Examples of bad function/constant names:
-
-   *helper* (instead, describe what the helper returns.)
-   IMG (image of what??)
-   TOY (when it should be TOY-IMAGE)
-   check-* (if it returns a boolean, it should be something ending in
-   	    "?"; if it returns a non-boolean, it should be replace by
-	     a noun)
-   LETTER-S-KEY (should be CREATE-NEW-SQUARE-KEY).
-   ONE  (no need to define a constant for 0 or 1)
-   FIVE (should be COLOR-CHANGE-TIME-INTERVAL or whatever)
-
-   On the grading sheet, try to indicate which names you found lame or
-   misleading.
-
--- poor choice of argument names.  Arguments should refer to the
-   information, not to the data type. eg: 'ships' not 'los' or 'loship'.
-   
--- missing/incorrect contracts.
-
--- missing/incomplete/misleading purpose statements. Purpose must be
-   clear, correct, and add at least some information beyond the
-   contract.  Ideally, the reader should be able to figure out what
-   the function returns by reading the purpose statement and the
-   examples, WITHOUT LOOKING AT THE CODE.
-
--- purpose statement does not mention one of the arguments.
-
--- missing/incomplete invariant:  The function should fulfill its
-   purpose for EVERY combination of inputs that is permissible
-   according to the contract.  If not, the permissible combinations of
-   inputs must be documented by an invariant (WHERE clause).  The
-   WHERE clause may also be used to document assumptions about the
-   arguments, e.g. "WHERE: the ball would hit the wall on the next tick"
-
--- missing/wrong design strategy.  If the strategy is "use template",
-   then the definition must must match the template.
-
--- function definition not "obviously correct".  Ideally, you should
-   be able to tell whether a function fulfills its purpose just by
-   reading the function definition and the purpose statements of the
-   functions it calls (NOT the code of its helpers).
-
--- Spaghetti code.  Code that is hard to understand because it has
-   long call chains or many functions with similar names and purpose
-   statements.
-
--- Student does not use appropriate programming techniques
-   (e.g. doesn't use map/filter, doesn't eliminate annoying code
-   duplication)
-
--- missing/incomplete/incorrect termination argument
-
--- uses concepts/terms from previous semesters (Note: this may be the
-   result of cutting&pasting from the example files, or it may be the
-   result of the student using a solution submitted by a student in a
-   previous semester.  If the student insists that it is the former,
-   ask him/her to email you later showing you the source.)
-
-================
-
-Examples and Tests:
-
--- should have 100% test coverage except for big-bang and friends.
-
-================
-
-Objects and Classes:
-
--- There will be more items added when we get to objects and classes.
-
 ================================================================
 
-Section III: PRESENTATION [letter grade]
-
-The presentation is judged on the following:
-
-1. Does the student understand his/her program?
-2. Can the student understand questions that are asked?
-3. Does the student answer them easily or with difficulty?
-4. Does the student get to the right answer?
-5. Can the student answer those questions in a precise way?
-6. Does the student speak English understandably and with adequate
-volume?
-
-The meanings of the letter grades are as follows:
+Presentation Grades:
 
 A: Excellent.  The student understands his/her program and can explain
 it clearly.  The student speaks clearly and with adequate volume to be
@@ -252,71 +85,105 @@ repeatedly to speak more clearly or loudly.
 F: Missing: The student did not appear for the codewalk, and did not
 give notice.
 
-
-Here are some example scenarios.  Don't follow these slavishly.  Use
-them as samples of the conversations you might have a student
-
-- Student presents his/her data definitions but you notice there are no
-  interpretations. You might ask: "Are you missing any data design
-  components?"  If the student is vague, you can ask him to recite the
-  parts of a data definition.  You could follow up by asking him to
-  explain the significance of some part, e.g. "What is the purpose of
-  an interpretation?"
-
-- Student implemented a function with two compound data inputs as data
-  decomposition on the first input. You might ask: "Why did you decompose the
-  first input rather than the second?".  You could follow up with "How
-  would your program change if you decomposed the second input first?
-  Would the result be better or worse than what you wrote?"
-
-- The graphical demo showed a bug.  Ask: "what happened here? Why? How
-  would you fix that?"
-
-Other possible questions:
-
-- "Your interpretation says that <some variable> contains the last
-  mouse position.  What do you mean by 'the last mouse position'?  I
-  notice that on <line NNN> you set this variable to 0.  Is that
-  consistent with your interpretation?
-
-- Please explain how to implemented <some tricky part of the solution>?
-
-- Where would you make changes to accomodate <some extension>?
-
-- How would your program behave if we changed <some parameter>?
-
 ================================================================
 
-Section IV: Cheating or Plagiarism
+Specific Items Noted.  (Grader: fill an X in front of applicable item,
+and insert location or specifics as possible). 
 
-If the student displays blatant ignorance about some portion of the
-program, as evidenced by unsatisfactory answers to questions like
+================
 
-"Why did you do <X>?
+Data Design:
 
-"Why did you mention <some old Design Strategy>?"
+-- bad design choices (eg: doesn't use mixed/recursive data where
+   appropriate, bad/misleading field names)
 
-"Why did you indent the program like that?"
+-- missing/incomplete interpretation.  (Criterion: does the
+   interpretation give you sufficient information to read and
+   understand the program?  Does the interpretation account for every
+   value assigned to this field by the program? eg: (set! mx 0) for a
+   mouse position)
 
-the grader should ask:
+-- missing/incomplete/wrong invariants. (Criterion: there are combinations
+   of data values that are unaccounted for, regardless of whether they
+   come up in the program)
 
-"Did you write this program (or this portion of the program)
-yourself?"
+-- missing/incorrect templates.  When evaluating, try to distinguish
+   between harmless errors and those that will hinder the programmer
+   in correctly using the template.
 
-"Did you have any help doing it?"
+================
 
-"From whom?"
+Contract/Purpose Statement/Design Strategy:
 
-If the answers are unsatisfactory, you should say something like this
-to the student:  
+-- missing/incorrect contracts.
 
-I'm not convinced by your account of what happened here.  It's not my
-job to judge whether there's an Academic Integrity violation here, but
-I'm going to flag this solution for closer scrutiny by our plagiarism
-detection system.  If Prof. (Wand|Clinger|Miller) and his staff decide
-there's evidence of plagiarism, you will hear from him.  If there's
-something you don't want to say here, we encourage you to contact
-Prof. {Wand|Clinger|Miller} directly before the plagiarism system gets
-involved.
+-- missing/incomplete/misleading purpose statements. Purpose must be
+   clear, correct, and add at least some information beyond the
+   contract.  Ideally, the reader should be able to figure out what
+   the function returns by reading the purpose statement and the
+   examples, WITHOUT LOOKING AT THE CODE.
 
-================================================================
+-- purpose statement does not mention one of the arguments.
+
+-- missing/incomplete invariant:  The function should fulfill its
+   purpose for EVERY combination of inputs that is permissible
+   according to the contract.  If not, the permissible combinations of
+   inputs must be documented by an invariant (WHERE clause).  The
+   WHERE clause may also be used to document assumptions about the
+   arguments, e.g. "WHERE: the ball would hit the wall on the next tick"
+
+-- missing/wrong design strategy.  If the strategy is "use template",
+   then the definition must must match the template.
+
+-- function definition not "obviously correct".  Ideally, you should
+   be able to tell whether a function fulfills its purpose just by
+   reading the function definition and the purpose statements of the
+   functions it calls (NOT the code of its helpers).
+
+-- poor choice of function/constant names.  Names should be nouns
+   whenever possible. The name should give a good indication of what
+   the function does or what the constant denotes.  It should NOT
+   mislead the reader.
+
+-- poor choice of argument names.  Arguments should refer to the
+   information, not to the data type. eg: 'ships' not 'los' or 'loship'.
+
+-- Spaghetti code.  Code that is hard to understand because it has
+   long call chains or many functions with similar names and purpose
+   statements.
+
+-- Student does not use appropriate programming techniques
+   (e.g. doesn't use map/filter, doesn't eliminate annoying code
+   duplication)
+
+-- missing/incomplete/incorrect termination argument
+
+-- uses concepts/terms from previous semesters (Note: this may be the
+   result of cutting&pasting from the example files, or it may be the
+   result of the student using a solution submitted by a student in a
+   previous semester.  If the student insists that it is the former,
+   ask him/her to email you later showing you the source.)
+
+================
+
+Examples and Tests:
+
+-- should have 100% test coverage except for big-bang and friends.
+
+================
+
+Presentation:
+
+-- student shows lack of understanding of his/her program
+
+-- student has difficulty understanding questions that are asked
+
+-- student has difficulty answering questions
+
+-- student talks around answer rather than answering precisely
+
+-- student's English is hard to understand (pronounciation)
+
+-- student speaks too softly to be heard
+
+

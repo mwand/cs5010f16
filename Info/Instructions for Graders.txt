@@ -26,7 +26,7 @@ sheet. Indicate the location if possible.  Do NOT try to convert these
 individual items into point values.  
 
 When you are done, assign each student letter grades for design and
-presentation that best describes his/her performance, based on the
+presentation that best describe his/her performance, based on the
 Key to Grades on the Grade Sheet.
 
 ================================================================
