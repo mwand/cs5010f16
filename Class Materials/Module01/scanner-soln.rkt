@@ -21,7 +21,7 @@
 (define suitcase1 (make-suitcase 12 35 24))
 
 (define-struct scanner (width height))
-;; A Scanner is a (make-scanner PosNum PosNum)
+;; A Scanner is a (make-scanner PosReal PosReal)
 ;; Interp:
 ;; width and height are the width and height of the intake,
 ;; in cm.
