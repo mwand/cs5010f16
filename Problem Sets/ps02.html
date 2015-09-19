@@ -198,10 +198,11 @@ is $1.50, but hot chocolate is $0.60.  A customer may put any sequence
 of coins into the machine, and then select an item.  If the customer
 has deposited enough money into the machine, and the machine is not
 out of the selected item, then the machine will dispense the requested
-item.  Otherwise the machine will flash "Out of Item" and do nothing.
-The customer may also press "change", in which case the machine will
-return any unspent money that the customer has put in during the
-current transaction.
+item.  If the machine is out of the selected item, the machine will
+flash "Out of Item".  The customer may also press "change", in which
+case the machine will return any unspent money that the customer has
+put in during the current transaction.  If none of these apply, the
+machine does nothing.
 
 <p>For example, the customer may put three 25-cent pieces into the
 machine.  If he then selects the hot chocolate, the machine will
@@ -233,6 +234,7 @@ A MachineOutput is one of
 -- "Out of Item"    interp: machine displays "Out of Item"
 -- a PosInt         interp: machine releases the specified amount of
                             money, in cents
+-- "Nothing"        interp: the machine does nothing
 </pre>
 
   <p>You are to write a file called <kbd>coffee-machine.rkt</kbd> that provides
@@ -380,6 +382,6 @@ ANSWERS: whether the probe is facing in the specified direction.
 <font size=-1>
 <p align=right>
 <!-- hhmts start -->
-Last modified: Sat Sep 19 10:53:42 Eastern Daylight Time 2015 <!-- hhmts end -->
+Last modified: Sat Sep 19 17:59:51 Eastern Daylight Time 2015 <!-- hhmts end -->
 </body> </html>
  
