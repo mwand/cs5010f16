@@ -11,9 +11,9 @@
 <!-- the h1! -->
 
 <p>
-<strong>Out:</strong> Monday, October 13, 2014
+<strong>Out:</strong> Monday, October 19, 2015
 
-<p><strong>Due:</strong> Monday, October 20, 2014
+<p><strong>Due:</strong> Monday, October 26, 2015
 at 600pm local time.
 </p>
 
@@ -29,9 +29,22 @@ give you practice using the list abstractions and HOFC.
   Lambda.</p>
 
 <p>As usual, the rubric for grading is <a
-href="../Info/master-rubric-public.txt" >here</a>. You should also
-refer to the more detailed guidelines <a
-href="http://bit.ly/cs5010f14-guidelines" >here</a>.</p> 
+href="../Info/master-rubric-public.txt" >here</a>. Remember that you must follow the design recipe.  Your <a
+  href="../Info/deliverables.html" >deliverables</a> include the data
+  definitions (including interpretation and templates), contract and
+  purpose header, code, and tests.  Be sure to sync your work and fill
+  out a Work Session Report at the end of every work session.  Use the
+
+<a href="http://goo.gl/forms/XXXXX" >Work Session Report for
+  PS04</a>.</p>
+
+<p>NEED NEW WORK SESSION REPORT</p>
+
+<p><strong>Note:</strong> For all universe programs, you may assume
+that the mouse is never dragged or moved outside of the canvas.  Once
+the mouse enters the canvas, if the mouse ever leaves the canvas, then
+the behavior of your system is unspecified.</p>
+</p> 
 
 
 
@@ -65,56 +78,35 @@ href="http://bit.ly/cs5010f14-guidelines" >here</a>.</p>
     nodes, all the nodes are selected, even if one node is a son or
     descendant of the other. </li>
 
-    <li>When a node is selected, there should be a vertical line
-    displayed <span class="new">at the position where the left edge of
-    a new son would be if it were created.  (See the "n" command,
-    below).</span>
+    <li> Dragging a selected node causes the entire tree rooted at
+    that node to be dragged.  The relative positions of all the nodes
+    in the subtree should stay the same.  It is ok if this action
+    causes some nodes to be moved off the edge of the canvas; if the
+    node is moved again so that they are now back on the canvas, they
+    should reappear in the proper place.</li>
 
-<span class="strike">  3 circle-lengths to the left of that node's leftmost son.
-  This delimits the area in which new sons may be created. (See the
-  "n" command, below). If the selected node has no sons, no line
-  should be displayed</span>
- </li>
+    <li> Hitting "t" at any time creates a new root node in the center
+    of the top of the canvas. The root appears tangent to the top of
+    the canvas and initially has no sons.</li>
 
-  <li> Dragging a selected node causes the entire tree rooted at that
-  node to be dragged.  The relative positions of all the nodes in the
-  subtree should stay the same.  It is ok if this action causes some
-  nodes to be moved off the edge of the canvas; if the node is moved
-  again so that they are now back on the canvas, they should reappear
-  in the proper place.</li>
+    <li> Hitting "n" while a node is selected adds a new son, whose
+    center has an x-coordinate that is 3 radii to the right of the
+    center of the currently rightmost son, and a y-coordinate that is
+    3 radii down from the center of the parent.  The first son of a
+    node should appear 3 radii down and directly beneath the
+    node. </li>
 
-  <li><span class="new">When you drag a node, the rectangle should
-  become centered on the mouse position.  (That is, we are not doing
-  "smooth dragging" in this problem.</span></li>
-  
-  <li> Hitting "t" at any time creates a new root node in the center of the top
-  of the canvas. The root appears tangent to the top of the canvas and
-  initially has no sons.</li>
+    <li> Hitting "d" while a node is selected deletes the node and its
+    whole subtree. </li>
 
-  <li> Hitting "n" while a node is selected adds a new son, whose
-  center has an x-coordinate two radii to the left of the center of
-  the currently leftmost son, and a y-coordinate 3 radii down from the
-  center of the parent.  If a selected node ever moves into a position
-  so that there is no room for the son, it should appear as red solid
-  rather than green, and "n" has no effect.  The first son of a node
-  should appear 3 radii down and directly beneath the
-  node. There is room for a new son if it would be placed with the
-  whole circle entirely within the canvas. Note that a node should
-  turn red at the same instant that its vertical line disappears off
-  the left edge of the screen.</li>
-
-  <li> Hitting "d" while a node is selected deletes the node and its
-  whole subtree. </li>
-
-  <li>Hitting "u" (whether a node is selected or not) deletes every
-  node <span>whose center is</span> in the upper half of
-  the canvas. (If a node is deleted, all of its children are also
-  deleted.)</li>
+    <li>Hitting "l" at any time (whether a node is selected or not)
+    deletes every node whose center is in the left half
+    of the canvas. (If a node is deleted, all of its children are also
+    deleted, as with "d")</li>
 
   </ol> <!-- end requirements list -->
 
-    <p>Here's a small demo.  It doesn't demonstrate "u", though, nor
-    does it demonstrate having multiple roots on the screen, sorry. </p>
+    <p>Here's a small demo.   </p>
 
 <p><center>
 <video src="../Videos/ps05.mp4" controls/>
@@ -123,14 +115,14 @@ href="http://bit.ly/cs5010f14-guidelines" >here</a>.</p>
 <p>  Your solution should provide the following functions:</p>
 
   <pre>
-initial-world : -> World
-GIVEN: no arguments
+initial-world : Any -> World
+GIVEN: any value
 RETURNS: an initial world.  The given value is ignored.
 
-run :  -> World
-GIVEN: no arguments
+run :  Any -> World
+GIVEN: any value
 EFFECT: runs a copy of an initial world
-RETURNS: the final state of the world.  
+RETURNS: the final state of the world.  The given value is ignored.
 
 world-after-mouse-event : World Integer Integer MouseEvent -> World
 GIVEN: a World, a location, and a MouseEvent
@@ -160,25 +152,7 @@ node-to-selected? : Node -> Boolean
 RETURNS: true iff the given node is selected.
 </pre>
 
-  <p> Before you turn in your solution, make sure it passes the tests
-  in <a href="ps05-qualification.rkt"
-  ><kbd>ps05-qualification.rkt</kbd></a>.   As before,
-  download this file, save it in your set05 directory, and run it to
-  qualify your program for grading.  Be sure to commit this file to the repository
-  so we know that you've done this correctly.  <span
-  class="new"><strong>DO NOT TURN IN YOUR SOLUTION UNLESS IT PASSES
-  THE QUALIFICATION TEST!  IF YOUR SOLUTION DOES NOT PASS THE
-  QUALIFICATION TEST, WE MAY NOT GRADE IT.</strong></span></p>
 
-  <p><span class="new">Please download a fresh copy of
-  <a href="extras.rkt" >extras.rkt</a> for
-  this problem set.  The new version should print out a header showing
-  a version date.  For this problem, be sure the version you have is
-  dated later than Wed Oct 15 13:00:00 2014.  When you run your
-  qualification test, if you get a message
-  like "undefined function <kbd>check-location</kbd>", it means that
-  your version of extras.rkt is too old and you need to download the
-  latest one.  </span></p>
 
   	<!-- end question 1 -->
 
@@ -198,21 +172,25 @@ RETURNS: true iff the given node is selected.
   structural decomposition on one data type, followed immediately by
   structural decomposition on another data type, try doing them in the
   other order.</li>
+
+  <li>The specifications talk about Tree and Node, because some
+  students may wish to implement these as different data definitions.
+  If you wish to represent Trees and Nodes as the SAME data structure,
+  that is also permissible. </li>
   
-<li>The built-in abstraction functions, like map, foldr, and filter,
-are your friends.  Use them wherever it is feasible to do so.  As before,
-you may want to write your functions using explicit recursions, and
-then rewrite them using the abstractions and higher-order function
-combination.  You will be penalized for recursions in your code that
-"obviously" could have been replaced by HOFC.</li>
+  <li>The built-in abstraction functions, like map, foldr, and filter,
+  are your friends.  Use them wherever it is feasible to do so.  As
+  before, you may want to write your functions using explicit
+  recursions, and then rewrite them using the abstractions and
+  higher-order function combination.  You will be penalized for
+  recursions in your code that "obviously" could have been replaced by
+  HOFC.</li>
 
   <li>Most likely you will want to use <kbd>scene+line</kbd> from the image
   library rather than <kbd>add-line</kbd>, since the latter changes the
   dimensions of the image in surprising ways.</li>
 
-  <li>My solution to this problem was about 320 lines, plus tests.  Median
-  time on task for this problem for the last two semesters has been
-  right around 20 hours.</li>
+
 
 </ul>
 
@@ -229,5 +207,5 @@ combination.  You will be penalized for recursions in your code that
 <font size=-1>
 <p align=right>
 <!-- hhmts start -->
-Last modified: Fri Sep 11 17:11:04 Eastern Daylight Time 2015 <!-- hhmts end -->
+Last modified: Sun Sep 20 11:40:39 Eastern Daylight Time 2015 <!-- hhmts end -->
 </body> </html>
