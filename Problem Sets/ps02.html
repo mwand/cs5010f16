@@ -54,6 +54,7 @@ file should say
   make-editor
   editor-pre
   editor-post
+  editor?
   edit
   ) 
 </pre>
@@ -104,7 +105,13 @@ below.</span> </p>
   solution.  So be sure that your solution is in the right place
   (<kbd>set02/editor.rkt</kbd> in your private
   <kbd>cs5010f15/pdp-<em>YOURUSERNAME</em></kbd> repository), and that
-  it provides all the functions listed above.</p>
+  it provides all the functions listed above.  To see if your file is
+  in the right place, insert the following line somewhere near the top
+  of your file:</p>
+
+  <pre>
+(check-location "02" "editor.rkt")
+</pre>
 
  <!-- <p>We will be doing automated testing of your solution.  In order to -->
  <!-- see whether you have correctly provided the indicated functions, load -->
@@ -178,7 +185,13 @@ the problem is already phrased in terms of strings.
   solution.  So be sure that your solution is in the right place
   (<kbd>set02/fsm.rkt</kbd> in your private
   <kbd>cs5010f15/pdp-<em>YOURUSERNAME</em></kbd> repository), and that
-  it provides all the functions listed above.</p>
+  it provides all the functions listed above.  To see if your file is
+  in the right place, insert the following line somewhere near the top
+  of your file:</p>
+
+  <pre>
+(check-location "02" "fsm.rkt")
+</pre>
 
 
 <!-- <p>As with the other questions in this problem set, we will be doing -->
@@ -279,7 +292,9 @@ RETURNS: the amount of money in the machine's bank, in cents
 
   <p>As before, remember that we will be doing automated testing of your
   solution.  So be sure that your solution is in the right place, and that
-  it provides all the functions listed above.</p>
+  it provides all the functions listed above.  You can use
+  <kbd>check-location</kbd> to check whether your file is in the right
+  place. </p>
 
 
 </li>
@@ -382,6 +397,6 @@ ANSWERS: whether the probe is facing in the specified direction.
 <font size=-1>
 <p align=right>
 <!-- hhmts start -->
-Last modified: Sat Sep 19 17:59:51 Eastern Daylight Time 2015 <!-- hhmts end -->
+Last modified: Wed Sep 23 22:46:37 Eastern Daylight Time 2015 <!-- hhmts end -->
 </body> </html>
  
