@@ -49,7 +49,9 @@ problem, put in lines that say
 
 for each deliverable function, as you have done on previous problem sets.
 This will allow our testing framework to import your file and do
-automated testing on it.</p>
+automated testing on it.  You can use <kbd>check-location</kbd>, as
+you did on the preceding problem set, to double-check that your
+solutions are in the right place.</p>
 
 
 <p>Remember that you must follow the design recipe.  Your <a
@@ -81,13 +83,13 @@ the behavior of your system is unspecified.</p>
     rectangles that move around a canvas.</li>
 
     <li>The rectangles bounce smoothly off the edge of the
-    canvas. Bouncing is defined as follows: if the rectangle would hit
-    or go past one side of the canvas, then at the next tick it should
-    appear tangent to the edge of the canvas, travelling at the same
-    speed, but in the opposite direction (that is, away from the
-    wall).  If the rectangle would go past a corner, then both the x-
-    and y- velocities are both reversed.  We call this a <em>perfect
-    bounce</em>.  </li>
+    canvas. Bouncing is defined as follows: if the rectangle in its
+    normal motion would hit or go past one side of the canvas at the
+    next tick, then instead at the next tick it should appear tangent
+    to the edge of the canvas, travelling at the same speed, but in
+    the opposite direction.  If the rectangle would go past a corner,
+    then both the x- and y- velocities are both reversed.  We call
+    this a <em>perfect bounce</em>.  </li>
 
 
     <li> Each rectangle is displayed as an outline blue rectangle 60
@@ -218,6 +220,9 @@ the behavior of your system is unspecified.</p>
 ;; RETURNS: the rectangle that should follow the given rectangle after
 ;; the given mouse event
 
+;; rect-selected? : Rectangle -> Booleans
+;; RETURNS: true iff the given rectangle is selected.
+
 ;; new-rectangle
 ;; as before, but now it returns an UNSELECTED rectangle.
 </pre>
@@ -235,7 +240,7 @@ the behavior of your system is unspecified.</p>
 <font size=-1>
 <p align=right>
 <!-- hhmts start -->
-Last modified: Sun Aug 23 16:24:52 Eastern Daylight Time 2015 <!-- hhmts end -->
+Last modified: Thu Sep 24 16:19:36 Eastern Daylight Time 2015 <!-- hhmts end -->
 </body> </html>
 
 
