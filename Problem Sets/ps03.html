@@ -88,7 +88,7 @@ the behavior of your system is unspecified.</p>
     next tick, then instead at the next tick it should appear tangent
     to the edge of the canvas, travelling at the same speed, but in
     the opposite direction.  If the rectangle would go past a corner,
-    then both the x- and y- velocities are both reversed.  We call
+    then both the x- and y- velocities are reversed.  We call
     this a <em>perfect bounce</em>.  </li>
 
 
@@ -131,12 +131,13 @@ the behavior of your system is unspecified.</p>
   <pre>
 ;; screensaver : PosReal -> WorldState
 ;; GIVEN: the speed of the simulation, in seconds/tick
-;; EFFECT: runs the simulation, starting with specified initial state.
+;; EFFECT: runs the simulation, starting with the initial state as
+;; specified in the problem set.
 ;; RETURNS: the final state of the world
 
 ;; initial-world : Any -> WorldState
 ;; GIVEN: any value (ignored)
-;; RETURNS: the specified initial world.
+;; RETURNS: the initial world specified in the problem set
 
 ;; world-after-tick : WorldState -> WorldState
 ;; RETURNS: the world state that should follow the given world state
@@ -153,13 +154,13 @@ the behavior of your system is unspecified.</p>
 ;; NOTE: if these are part of the world struct, you don't need to
 ;; write any deliverables for these functions.
 
-;; new-rectangle : PosInt PosInt Int Int -> Rectangle
-;; GIVEN: 2 positive integers x and y, and 2 integers vx and vy
+;; new-rectangle : NonNegInt NonNegInt Int Int -> Rectangle
+;; GIVEN: 2 non-negative integers x and y, and 2 integers vx and vy
 ;; RETURNS: a rectangle centered at (x,y), which will travel with
 ;; velocity (vx, vy).
 
-;; rect-x : Rectangle -> PosInt
-;; rect-y : Rectangle -> PosInt
+;; rect-x : Rectangle -> NonNegInt
+;; rect-y : Rectangle -> NonNegInt
 ;; rect-vx : Rectangle -> Int
 ;; rect-vy : Rectangle -> Int
 ;; RETURNS: the coordinates of the center of the rectangle and its
@@ -212,15 +213,21 @@ the behavior of your system is unspecified.</p>
   <p>Your file should provide all the functions above, plus the following:</p>
 
   <pre>
-;; world-after-mouse-event : WorldState Int Int MouseEvent -> WorldState
+;; world-after-mouse-event
+;;  : WorldState Int Int MouseEvent -> WorldState
+;; 
+;; GIVEN: A World, the x- and y-coordinates of a mouse event, and the
+;; mouse event
 ;; RETURNS: the world that should follow the given world after the given mouse
 ;; event.
 
 ;; rect-after-mouse-event :  Rectangle Int Int MouseEvent -> Rectangle
+;; GIVEN: A rectangle, the x- and y-coordinates of a mouse event, and the
+;; mouse event
 ;; RETURNS: the rectangle that should follow the given rectangle after
 ;; the given mouse event
 
-;; rect-selected? : Rectangle -> Booleans
+;; rect-selected? : Rectangle -> Boolean
 ;; RETURNS: true iff the given rectangle is selected.
 
 ;; new-rectangle
@@ -240,7 +247,7 @@ the behavior of your system is unspecified.</p>
 <font size=-1>
 <p align=right>
 <!-- hhmts start -->
-Last modified: Thu Sep 24 16:19:36 Eastern Daylight Time 2015 <!-- hhmts end -->
+Last modified: Sat Sep 26 13:44:41 Eastern Daylight Time 2015 <!-- hhmts end -->
 </body> </html>
 
 
