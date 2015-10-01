@@ -1,0 +1,182 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html> <head>
+<title>CS 5010: Problem Set 6</title>
+<link type="text/css" rel="stylesheet" href="../css/course.css">
+
+</head>
+
+<body>
+<h1>CS 5010: Problem Set 6</h1>
+
+<!-- Be sure to change the problem set number both in the title and -->
+<!-- the h1! -->
+
+<p>
+<strong>Out:</strong> Monday, October 26, 2015
+
+<p><strong>Due:</strong> Monday, November 2, 2015
+at 600pm local time.
+</p>
+
+
+<p>
+The goal of this problem set is to give you practice using context
+arguments and invariants.
+</p>
+
+<p>Remember that you must follow the design recipe, and write
+invariants (as WHERE clauses) whenever an argument represents context
+information. </p>
+
+<p>You must use DrScheme's HtDP Intermediate Student Language with
+  Lambda. Use list abstractions like filter, fold, and map whenever
+  they are helpful. As before, you will be penalized for failing to
+use these when they are "obviously" applicable. </p>
+
+<p>Note: not everything on this problem set requires the use of
+invariants; some may only require generalization.  Part of your task
+is to figure out when you need an invariant and when you do not.
+Remember, it is the purpose statement that determines whether or not
+you need to state an invariant.</p>
+
+<p>Remember that you must follow the design recipe.  Your <a
+  href="../Info/homework.html" >deliverables</a> include the data
+  definitions (including interpretation and templates), contract and
+  purpose header, code, and tests.  Be sure to sync your work and fill
+  out a Work Session Report at the end of every work session.  Use the
+
+<a href="http://goo.gl/forms/Pi631A0QoO" >Work Session Report for
+  PS07</a>.</p> 
+
+
+<p>As usual, the rubric for grading is <a
+href="../Info/master-rubric-public.txt" >here</a>. 
+</p>
+
+
+<hr>
+<p/>
+
+
+<p>The first few problems on this problem set have to do with
+outlines. Consider a text in the form of an outline, for example:
+</p>
+
+<pre>
+1 The first section
+1.1 A subsection with no subsections
+1.2 Another subsection
+1.2.1 This is a subsection of 1.2
+1.2.2 This is another subsection of 1.2
+1.3 The last subsection of 1
+2 Another section
+2.1 More stuff
+2.2 Still more stuff
+</pre>
+
+<p>The point of an outline is to impose a tree structure on a
+  document, so it is natural to represent an outline as a tree.  For example,
+  the outline above might be represented as:</p>
+
+<pre>
+  (list 
+    (make-section "The first section"
+      (list
+        (make-section "A subsection with no subsections" empty)
+        (make-section "Another subsection"
+          (list
+            (make-section "This is a subsection of 1.2" empty)
+            (make-section "This is another subsection of 1.2" empty)))
+        (make-section "The last subsection of 1" empty)))
+    (make-section "Another section"
+      (list
+        (make-section "More stuff" empty)
+        (make-section "Still more stuff" empty))))
+</pre>
+
+  <p>using the data definition</p>
+
+  <pre>
+;; An Outline is a ListOfSection
+;; A Section is a (make-section String ListOfSection)
+;; INTERP: (make-section str secs) is a section where
+;; str is the header text of the section
+;; secs is the list of subsections of the section
+</pre>
+
+  <p>We'll call this the <em>tree</em> representation</p>
+
+<p>Another representation of an outline could be as a list with one
+  element per section or subsection.  Each element of the list would
+  consist of two members: the section number, represented as a list of
+  natural numbers, and a string. This would look more like the text
+  representation. We call this the <em>flat</em> representation.</p>
+  
+<p> In the flat representation, the outline above
+  would be represented as
+<pre>
+  (list
+    (make-line (list 1) "The first section")
+    (make-line (list 1 1) "A subsection with no subsections")
+    (make-line (list 1 2) "Another subsection")
+    (make-line (list 1 2 1) "This is a subsection of 1.2")
+    (make-line (list 1 2 2) "This is another subsection of 1.2")
+    (make-line (list 1 3) "The last subsection of 1")
+    (make-line (list 2) "Another section")
+    (make-line (list 2 1) "More stuff")
+    (make-line (list 2 2) "Still more stuff"))
+</pre>
+
+
+<p</p>
+
+<ol>
+
+  <li> Write a data definition for FlatRep.  Be sure that your data
+  definition defines exactly the legal flat representations.  Be sure
+  to include whatever invariants are applicable.  Remember the rules
+  about outlines that you learned in school: section numbers must be
+  in order, and you are not allowed to skip any section numbers.
+
+  <p> Then, design and provide the following function: </p>
+
+<pre>
+legal-flat-rep? : ListOfLine -> Boolean
+GIVEN: a list of lines, like the one above
+RETURNS: true iff it is a legal flat representation of an outline.
+</pre>
+  </li>
+
+  <li>
+  Design and provide the following function:
+
+<pre>
+tree-rep-to-flat-rep : Outline -> FlatRep
+GIVEN: the representation of an outline as a list of Sections
+RETURNS: the flat representation of the outline
+</pre>
+
+  <p> Deliver questions 1 and 2 as a file named "outlines.rkt." </p>
+
+  </li>
+
+  <li>Design a program that consumes a list of numbers representing
+  daily rainfall amounts as entered by a user. The list may contain
+  the number -999 indicating the end of the data of interest. Produce
+  the average of the non-negative values in the list up to the first
+  -999 (if it shows up). There may be negative numbers other than -999
+  in the list.  Deliver your program by providing a function called
+  <kbd>rainfall</kbd> in a file named <kbd>rainfall.rkt</kbd>. </li>
+
+
+
+</ol>
+
+
+<hr>
+<address></address>
+<font size=-1>
+<p align=right>
+<!-- hhmts start -->
+Last modified: Tue Sep 29 11:15:20 Eastern Daylight Time 2015 <!-- hhmts end -->
+</body> </html>

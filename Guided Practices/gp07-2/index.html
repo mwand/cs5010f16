@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html> <head>
+<title>Guided Practice 7.1</title>
+<link type="text/css" rel="stylesheet" href="../../css/course.css">
+</head>
+
+<body>
+<h1>Guided Practice 7.2</h1>
+
+<p>Consider the computation of</p>
+
+<pre>
+(free-vars
+  (make-app
+    (make-lam
+      'x
+      (make-app
+        'x
+        (make-lam
+          'y
+          (make-app
+            'x
+            (make-app 'y 'z)))))
+    (make-lam
+      'y
+      (make-app
+        'u
+        (make-lam
+          'z
+          (make-app
+            'x
+            (make-app 'y 'z)))))))
+</pre>
+
+<p>Which of the following will appear as calls to free-vars-in-subexp during
+this computation?
+</p>
+
+<ol>
+  <li><kbd>(free-vars-in-subexp (list 'z 'y) (make-app 'y 'z))</kbd></li>
+  <li><kbd>(free-vars-in-subexp (list 'x 'y) (make-app 'y 'z)) </kbd></li>
+  <li><kbd>(free-vars-in-subexp (list 'y 'x) (make-app 'y 'z)) </kbd></li>
+  <li><kbd>(free-vars-in-subexp (list 'x 'z) (make-app 'y 'z)) </kbd></li>
+
+</ol>
+
+<p><a href="page2.html" >[ANSWER]</a></p>
+
+<hr>
+<address></address>
+<font size=-1>
+<p align=right>
+<!-- hhmts start -->
+Last modified: Mon Sep 28 13:55:33 Eastern Daylight Time 2015 <!-- hhmts end -->
+</body> </html>
