@@ -1,0 +1,47 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html> <head>
+<title>Guided Practice 8.3</title>
+<link type="text/css" rel="stylesheet" href="../../css/course.css">
+</head>
+
+<body>
+<h1>Guided Practice 8.3</h1>
+
+<p>Modify 08-2-binary-search.rkt to design the following function:</p>
+
+<pre>
+;; binary-search-count : Nat (Nat -> Number) Number -> Nat
+;; GIVEN: a number N, a function f : Nat -> Number and a number tgt
+;; WHERE: f is monotonic (ie, i<=j implies f(i) <= f(j))
+;; RETURNS: the number of i s.t. f(i) = x
+;; EXAMPLES/TESTS:
+(begin-for-test
+  ;; successful search
+  (check-equal?
+    (binary-search-count 12 sqr 49)
+    7)
+  ;; unsuccessful search
+  (check-equal?
+    (binary-search-count 12 sqr 48)
+    false)
+  ;; make sure we don't miss the endpoints
+  (check-equal?
+    (binary-search-count 12 sqr 0)
+    0)
+  (check-equal?
+    (binary-search-count 12 sqr 144)
+    12))
+</pre>
+
+<p>Remember that your invariants are at least as important as your code.</p>
+
+
+<p><a href="binary-search-count.rkt" >[ANSWER]</a></p>
+
+<hr>
+<address></address>
+<font size=-1>
+<p align=right>
+<!-- hhmts start -->
+Last modified: Sun Oct 19 16:42:49 Eastern Daylight Time 2014 <!-- hhmts end -->
+</body> </html>
