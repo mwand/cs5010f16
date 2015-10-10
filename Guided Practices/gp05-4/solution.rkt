@@ -56,6 +56,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; STRATEGY: Use HOF foldr on lob
+
 (define (inventory-total-copies-on-hand lob)
   (foldr
     (lambda (b total-for-rest)

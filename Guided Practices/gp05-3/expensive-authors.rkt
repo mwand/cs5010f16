@@ -20,6 +20,7 @@
 ;; the authors of books whose prices are greater than the given
 ;; price. 
 ;; Strategy: Use HOF filter on books
+
 (define (authors-of-expensive-books p books)
   (map book-author
     (filter

@@ -13,7 +13,8 @@
 ;; EXAMPLE:
 ;; (convert-currencies 1.18 (list 1 10 100)) = (list 1.18 11.18 111.80)
 
-;; strategy: Use HOF map on lst
+;; STRATEGY: Use HOF map on lst
+
 (define (convert-currencies factor lst)
   (map
     (lambda (val) (* factor val))
