@@ -86,10 +86,10 @@ class that has at least one student enrolled.  Here are more detailed
 specifications: </p>
 
 <pre>
-A SetOfX is a list of X's without duplication.  Two SetofX's are
+A SetOfX is a list of X's without duplication.  Two SetOfX's are
 considered equal if they have the same members.
 
-Example: (list (list 1 2) (list 2 1)) is NOT a SetofSetofNumbers,
+Example: (list (list 1 2) (list 2 1)) is NOT a SetOfSetOfNumber,
 because (list 1 2) and (list 2 1) represent the same set of numbers. 
 
 An Enrollment is a (make-enrollment Student Class)
@@ -121,7 +121,7 @@ RETURNS: true iff the two arguments represent the same roster
 rosterset=? : SetOfClassRoster SetOfClassRoster -> Boolean
 RETURNS: true iff the two arguments represent the same set of rosters
 
-enrollments-to-rosters: SetOfEnrollment -> SetofClassRoster
+enrollments-to-rosters: SetOfEnrollment -> SetOfClassRoster
 GIVEN: a set of enrollments
 RETURNS: the set of class rosters for the given enrollments
 
