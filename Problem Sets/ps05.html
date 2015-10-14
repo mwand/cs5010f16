@@ -67,11 +67,14 @@ automated testing on it.</p>
 
   <li>(The absent-minded professors, part 2). Reimplement the last
   problem from last week's problem set (class-lists.rkt), but using
-  HOFs wherever possible and appropriate.
+  HOFs wherever possible and appropriate.  Be sure to provide
+  make-slip, slip-color, slip-name1 and slip-name2, which I forgot to
+  specify in PS04.
 </li>
 
 <li>(screensaver-5). Rewrite screensaver-4 to use higher-order
 functions whenever possible instead of using recursions down a list.
+Provide the same functions you did for screensaver-4.
 </p>
 
 </li>
@@ -100,8 +103,11 @@ A ClassRoster is a (make-roster Class SetOfStudent)
 (make-roster c ss) represents that the students in class c are exactly
 the students in set ss.
 
-Student and Class are unspecified, but you may assume that students
-and classes may be compared for equality with equal?
+Student is unspecified, but you may assume that students may be
+compared for equality with equal?
+
+Class is unspecified, but you may assume that classes may be
+compared for equality with equal?
 
 Two ClassRosters are equal if they have the same class and the same
 set of students.  
@@ -144,6 +150,11 @@ each class may be in any order.
 <p>As elsewhere in this problem set, use HOFs whenever possible and
 appropriate. </p>
 
+<p>For your tests, you may use any data type for Student and Class.
+However, your code should not depend on your choice of data type; that
+is, it should work for any definition of Student and Class (so long as
+each is testable using equal?, as specified above).</p>
+
 <p>Be sure that your tests accept <em>any</em> correct answer, not
 just the one that your function happens to produce.  (Hint: don't use
 <kbd>check-equal?</kbd>; instead use <kbd>check</kbd> with an
@@ -161,5 +172,5 @@ appropriate equality test.)</p>
 <font size=-1>
 <p align=right>
 <!-- hhmts start -->
-Last modified: Sat Oct 10 13:42:24 Eastern Daylight Time 2015 <!-- hhmts end -->
+Last modified: Wed Oct 14 13:25:10 Eastern Daylight Time 2015 <!-- hhmts end -->
 </body> </html>
