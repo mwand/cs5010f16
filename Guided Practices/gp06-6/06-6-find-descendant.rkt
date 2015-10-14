@@ -62,7 +62,8 @@
             (person-descendant? (first ps) str)
             (lop-any-descendant? (rest ps) str))]))
 
-;; or with the list abstractions:
+;; or with the HOF:
+
 ;; STRATEGY: Use template for ListOfPerson on ps + HOF ormap on
 ;; (person-children p)
 

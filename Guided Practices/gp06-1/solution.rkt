@@ -4,36 +4,28 @@
 ;;; QUESTION 1
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
+(define-struct plain-pizza ())
 (define-struct topped-pizza (topping base))
+
 ;; A Topping is a String.
+
 ;; A Pizza is either
-;; -- the string "plain crust"
+;; -- (make-plain-pizza)
 ;; -- (make-topped-pizza Topping Pizza)
 ;; INTERP:
-;; "plain crust" means a pizza with no toppings
+;; (make-plain-pizza)      represents a pizza with no toppings
 ;; (make-topped-pizza t p) represents the pizza p with topping t added
-;; on top.
-
-;; empty-pizza? : Pizza -> Boolean
-;; RETURNS: true iff the pizza is empty
-;; STRATEGY: function composition
-;; Note: string=? only works on strings, so we need to _guard_ call the
-;; string-equal? with a string? test.
-(define (empty-pizza? p)
-  (if (string? p)
-    (string-equal? p "plain crust")
-    false))
+;;                         on top.
     
-
 ;; replace-all-anchovies-with-onions 
 ;;   : Pizza -> Pizza
 ;; RETURNS: a pizza like the given pizza, but with
 ;; anchovies in place of each layer of onions
-;; STRATEGY: Structural decomposition on p : Pizza
+;; STRATEGY: Use template for Pizza on p
+
 (define (replace-all-anchovies-with-onions p)
   (cond
-    [(empty-pizza? p) empty]
+    [(plain-pizza? p) empty]
     [else (if (string=? (topped-pizza-topping p) "anchovies")
             (make-topped-pizza "onions"
               (replace-all-anchovies-with-onions 
@@ -46,10 +38,11 @@
 ;; replace-all-anchovies : Pizza Topping -> Pizza
 ;; RETURNS: a pizza like the given pizza, but with 
 ;; all anchovies replaced by the given topping.
-;; STRATEGY: Structural decomposition on p : Pizza
+;; STRATEGY: Use template for Pizza on p
+
 (define (replace-all-anchovies p replacement)
   (cond
-    [(empty-pizza? p) empty]
+    [(plain-pizza? p) empty]
     [else (if (string=? (topped-pizza-topping p) "anchovies")
             (make-topped-pizza replacement
               (replace-all-anchovies
@@ -65,10 +58,11 @@
 ;; RETURNS: a pizza like the given one, but with 
 ;; all instances of the first topping replaced by
 ;; the second one.
-;; STRATEGY: Structural decomposition on p : Pizza
+;; STRATEGY: Use template for Pizza on p
+
 (define (replace-topping p topping replacement)
   (cond
-    [(empty-pizza? p) empty]
+    [(plain-pizza? p) empty]
     [else (if (string=? (topped-pizza-topping p) topping)
             (make-topped-pizza replacement
               (replace-topping 
@@ -80,6 +74,21 @@
                (topped-pizza-base p)
                topping
                replacement)))]))
+
+;; another solution (also Use template for Pizza on p):
+
+(define (replace-topping p topping replacement)
+  (cond
+    [(plain-pizza? p) empty]
+    [else (make-topped-pizza
+            (if (string=? (topped-pizza-topping p) topping)
+              replacement
+              topping)
+            (replace-topping 
+               (topped-pizza-base p)
+               topping
+               replacement))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; QUESTION 2
@@ -95,8 +104,8 @@
 ;; What you DO say is
 
 (define (make-topped-pizza t p) (make-shazam p t))
-(define (make-empty-pizza) "kaphlooey")
-(define (empty-pizza? p) (string=? p "kaphlooey"))
+(define (make-plain-pizza) "kaphlooey")
+(define (plain-pizza? p) (string=? p "kaphlooey"))
 (define (topped-pizza-topping p) (shazam-topping p))
 (define (topped-pizza base p) (shazam-base p))
 

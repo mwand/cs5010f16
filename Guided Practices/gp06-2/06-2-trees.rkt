@@ -54,7 +54,8 @@
 
 ;; leaf-max : 23Tree -> Number
 ;; RETURNS: the largest leaf in the given tree
-;; STRATEGY: structural decomposition on t : 23Tree
+;; STRATEGY: Use template for 23Tree on t
+
 (define (leaf-max t)
   (cond
     [(leaf-node? t) (leaf-node-data t)]
@@ -68,7 +69,8 @@
 
 ;; double-all : 23Tree -> 23Tree
 ;; RETURNS: a tree like the original, but with all the leaf nodes doubled.
-;; STRATEGY: structural decomposition on t : 23Tree
+;; STRATEGY: Use template for 23Tree on t
+
 (define (double-all t)
   (cond
     [(leaf-node? t) (make-leaf-node (* 2 (leaf-node-data t)))]
