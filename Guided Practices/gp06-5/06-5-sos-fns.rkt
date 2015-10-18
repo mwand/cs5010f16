@@ -46,7 +46,7 @@
   (cond
     [(empty? los) 0]
     [else (+ (characters-in (first los))
-            (characters-in-loss (rest los)))]))
+             (characters-in-loss (rest los)))]))
 
 (begin-for-test
   (check-equal?
