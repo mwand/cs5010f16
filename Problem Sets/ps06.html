@@ -32,7 +32,7 @@ give you practice using the list abstractions and HOFC.
 href="../Info/master-rubric-public.txt" >here</a>. Remember that you must follow the design recipe.  Your <a
   href="../Info/deliverables.html" >deliverables</a> include the data
   definitions (including interpretation and templates), contract and
-  purpose header, code, and tests.  Be sure to sync your work and fill
+  purpose header, <span class="new">strategy,</span> code, and tests.  Be sure to sync your work and fill
   out a Work Session Report at the end of every work session.  Use the
 
 <a href="http://goo.gl/forms/My1l4oKLcL" >Work Session Report for
@@ -136,9 +136,39 @@ GIVEN: a World
 RETURNS: a list of all the trees in the given world.
 
 tree-to-root : Tree -> Node
+GIVEN: a tree
+RETURNS: the node at the root of the tree
+EXAMPLE: Consider the tree represented as follows:
+
+                 A
+                 |
+       +---+-----+-----+
+       |   |     |     |
+       B   C     D     E
+           |           |
+         +---+      +-----+
+         |   |      |     |
+         F   G      H     I
+
+If tree-to-root is given the subtree rooted at C, it should return the
+data structure associated with node C. This data structure may or may
+not include data associated with rest of the tree, depending on
+whether you have chosen to represent nodes differently from trees.
+
+
 tree-to-sons : Tree -> ListOfTree
 GIVEN: a tree
-RETURNS: the node at the root of the tree, or its sons.
+RETURNS: the data associated with the immediate subtrees of the given
+tree. 
+EXAMPLE: In the situation above, if tree-to-sons is given the subtree
+rooted at C, it should return a list consisting of the subtree rooted
+at F and the subtree rooted at G.
+
+[Note how these examples are expressed.  They are not just tests, but
+are constructed to illuminate possible ambiguities or
+misunderstandings in the purpose statement.  This is what a good
+example does.]
+
 
 node-to-center : Node -> Posn
 RETURNS: the center of the given node as it is to be displayed on the
@@ -206,5 +236,5 @@ RETURNS: true iff the given node is selected.
 <font size=-1>
 <p align=right>
 <!-- hhmts start -->
-Last modified: Tue Sep 29 11:08:07 Eastern Daylight Time 2015 <!-- hhmts end -->
+Last modified: Wed Oct 21 16:32:32 Eastern Daylight Time 2015 <!-- hhmts end -->
 </body> </html>

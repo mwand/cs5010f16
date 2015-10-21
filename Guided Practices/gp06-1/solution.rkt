@@ -83,11 +83,11 @@
     [else (make-topped-pizza
             (if (string=? (topped-pizza-topping p) topping)
               replacement
-              topping)
+              (topped-pizza-topping p))
             (replace-topping 
                (topped-pizza-base p)
                topping
-               replacement))
+               replacement))]))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
