@@ -49,7 +49,7 @@
 
 ;; increment-all : Tree -> Tree
 ;; RETURNS: a tree just like the original, but in which all of the
-;; leaves have contents double that in the original
+;; leaves have contents one more  than in the original.
 ;; STRATEGY: Use HOF tree-fold on t
 (define (increment-all t)
   (tree-fold
