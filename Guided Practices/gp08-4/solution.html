@@ -12,7 +12,7 @@ example, we could write</p>
 
 <pre>
 ;; Node Graph -> ListOfNode
-;; STRATEGY: Struct Decomp on g : Graph 
+;; STRATEGY: Use template for Graph on g
 (define (successors n1 g)
   (cond
     [(empty? g) empty]
@@ -21,12 +21,12 @@ example, we could write</p>
               (successors n1 (rest g)))]))
 
 ;; NodeInfo -> Node
-;; SD on i : NodeInfo
+;; Use template for NodeInfo on i
 (define (node-info-node i)
   (first i))
 
 ;; NodeInfo -> ListOfNode
-;; SD on i : NodeInfo
+;; Use template for NodeInfo on i
 (define  (node-info-successors i)
   (rest i))
 
@@ -36,7 +36,7 @@ example, we could write</p>
 ;; them and write
 
 ;; Node Graph -> ListOfNode
-;; STRATEGY: Struct Decomp on g : Graph, (first g) : NodeInfo
+;; STRATEGY: Use template for Graph on g
 (define (successors n1 g)
   (cond
     [(empty? g) empty]
@@ -44,7 +44,6 @@ example, we could write</p>
               (rest (first g))
               (successors n1 (rest g)))]))
 
-;; But this is double decomposition.
 </pre>
 
 <p>Do you think the second version is clearer or less clear than the
@@ -60,5 +59,5 @@ code?
 <font size=-1>
 <p align=right>
 <!-- hhmts start -->
-Last modified: Sun Oct 19 17:27:04 Eastern Daylight Time 2014 <!-- hhmts end -->
+Last modified: Tue Oct 27 08:36:01 Eastern Daylight Time 2015 <!-- hhmts end -->
 </body> </html>

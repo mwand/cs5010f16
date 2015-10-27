@@ -42,19 +42,8 @@ A SortedList is one of
   <p>Here are my solutions:</p>
 
   <pre>
-;; General Recursion Template #1
-(define (solve problem)
-  (cond
-    [(trivial1? problem) (trivial-solution1 problem)]
-    [(trivial2? problem) (trivial-solution2 problem)]
-    [(difficult-case? problem)      ;; this is else
-     (adapt-solution
-       (solve (simpler-instance problem)))]))
-
-;; Solution 1:
-
 ;; odd-elements : ListOfNumber -> ListOfNumber
-;; Strategy: Use General Recursion Template #1
+;; Strategy: Recur on (rest (rest lst))
 (define (odd-elements lst)
   (cond
     [(empty? lst) empty]
@@ -64,7 +53,7 @@ A SortedList is one of
             (odd-elements (rest (rest lst))))]))
 
 ;; even-elements : ListOfNumber -> ListOfNumber
-;; Strategy: Use General Recursion Template #1
+;; Strategy: Recur on (rest (rest lst))
 (define (even-elements lst)
   (cond
     [(empty? lst) empty]
@@ -106,5 +95,5 @@ A SortedList is one of
 <font size=-1>
 <p align=right>
 <!-- hhmts start -->
-Last modified: Sat Oct  3 21:03:44 Eastern Daylight Time 2015 <!-- hhmts end -->
+Last modified: Tue Oct 27 08:29:34 Eastern Daylight Time 2015 <!-- hhmts end -->
 </body> </html>
