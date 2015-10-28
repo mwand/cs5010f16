@@ -1,17 +1,23 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
-#reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname 07-bad-daughters) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+#reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname 07-bad-daughters-v2) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
 (require "extras.rkt")
 (require rackunit)
 
 ;; filtering bad nodes
 
-(define-struct node (bad? data daughters))
-;; A Node is a (make-node Badness Integer ListOfNode)
+;;(define-struct node (bad? data daughters))
 
-;; A Badness is a Boolean
-(define GOOD false)
-(define BAD  true)
+;; A Node is a (list Badness Integer ListOfNode)
+
+(define (make-node b i ds) (list b i ds))
+(define (node-bad? l) (first l))
+(define (node-data l) (second l))
+(define (node-daughters l) (third l))
+
+;; A Badness is a 0 | 1
+(define GOOD 0)
+(define BAD  1)
 
 ;; Integer ListOfNode -> Node
 (define (good-node n daughters)
