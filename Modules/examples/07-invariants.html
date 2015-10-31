@@ -106,6 +106,35 @@ and your function should return the list
 (0 10 12 17)
 </pre>
 
+  </li>
+
+  <li>You are writing the code for sending data back from the Pluto
+  rover.  The data consists of a list of integers, but the data
+  contains many runs of identical values.  So rather than sending a
+  list with 365 consecutive zeros, you'd like to send a single message
+  saying "insert 365 zeros here".   Here's a more detailed
+  specification:
+
+  <pre>
+;; A Count is a Positive Integer
+
+(define-struct rep (value count))
+;; A Rep is a (make-rep Integer Count)
+;; (rep v c) represents the list (v v v v v ..)  c copies of v
+
+;; compress : ListOfInteger -> ListOfRep
+;; Compresses the given input by replacing each run of consecutive v's
+;; by (rep v k)
+
+;; EXAMPLES:
+;; () => ()
+;; (30 30 20 20 20 20 50 60 60) =>
+;;  (list (make-rep 30 2) (make-rep 20 4) (make-rep 50 1) (make-rep 60 2))
+</pre>
+
+  <p>You'll need a help function.  Make sure you give a suitable
+  contract, purpose statement, and invariants for your help function.</p>
+
 </li>
 
 
@@ -117,5 +146,5 @@ and your function should return the list
 <font size=-1>
 <p align=right>
 <!-- hhmts start -->
-Last modified: Sun Oct 19 11:49:26 Eastern Daylight Time 2014 <!-- hhmts end -->
+Last modified: Sat Oct 31 13:20:02 Eastern Daylight Time 2015 <!-- hhmts end -->
 </body> </html>

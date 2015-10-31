@@ -37,10 +37,10 @@ this computation?
 </p>
 
 <ol>
-  <li><kbd>(free-vars-in-subexp (list 'z 'y) (make-app 'y 'z))</kbd></li>
-  <li><kbd>(free-vars-in-subexp (list 'x 'y) (make-app 'y 'z)) </kbd></li>
-  <li><kbd>(free-vars-in-subexp (list 'y 'x) (make-app 'y 'z)) </kbd></li>
-  <li><kbd>(free-vars-in-subexp (list 'x 'z) (make-app 'y 'z)) </kbd></li>
+  <li><kbd>(free-vars-in-subexp (make-app 'y 'z) (list 'z 'y))</kbd></li>
+  <li><kbd>(free-vars-in-subexp (make-app 'y 'z) (list 'x 'y)) </kbd></li>
+  <li><kbd>(free-vars-in-subexp (make-app 'y 'z) (list 'y 'x)) </kbd></li>
+  <li><kbd>(free-vars-in-subexp (make-app 'y 'z) (list 'x 'z)) </kbd></li>
 
 </ol>
 
@@ -87,5 +87,5 @@ the lambda variables listed inside out). </p>
 <font size=-1>
 <p align=right>
 <!-- hhmts start -->
-Last modified: Sat Oct 11 15:38:26 Eastern Daylight Time 2014 <!-- hhmts end -->
+Last modified: Sat Oct 31 12:30:11 Eastern Daylight Time 2015 <!-- hhmts end -->
 </body> </html>

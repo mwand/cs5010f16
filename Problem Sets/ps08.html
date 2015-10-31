@@ -98,6 +98,8 @@ href="../Info/master-rubric-public.txt" >here</a>.
 <hr>
 <p/>
 
+<ol>
+
 <li>
 Consider the following definition of expressions:
 
@@ -163,7 +165,7 @@ each line represented as a string of length not greater than the width.
   <p>In addition, you must turn in a file containing the call graph for
   your program.  This file must show which functions call which, so we
   (and you) can see the overall structure of your program and find all
-  the recursive calls.  You may turn this in as a text file, pdfee, jpg,
+  the recursive calls.  You may turn this in as a text file, pdf, jpg,
   or Racket file.  Call your file <kbd>pretty-call-tree</kbd> with an
   appropriate suffix, and bring a paper copy to your codewalk.</p>
 
@@ -238,15 +240,6 @@ not enough room
 > 
 </pre>
 
-  <p> As usual, before you turn in your solution, make sure it passes the tests
-  in <a href="ps06-pretty-qualification.rkt"
-  ><kbd>ps06-pretty-qualification.rkt</kbd></a>.   As before,
-  download this file, save it in your set06 directory, and run it to
-  qualify your program for grading.  Be sure to commit this file to repository
-  so we know that you've done this correctly.</p>
-
-
-
 <p>Here are some hints on this problem.</p>
 
   <ul>
@@ -274,9 +267,10 @@ not enough room
  </ul>
 
 </li>
+</li>
 
 <li>Imagine an infinite chessboard. The chessboard extends infinitely
-in all directionsd. You can think of the positions on the board as
+in all directions. You can think of the positions on the board as
 pairs of integers.
 
 <p>On the chessboard, we have a robot and some blocks.  The robot
@@ -314,7 +308,7 @@ This API uses the following data definitions:
 
 <pre>
 ;; A Position is a (list Integer Integer)
-;; (x y) represents the position at position x, y.
+;; (list x y) represents the position (x,y).
 ;; Note: this is not to be confused with the built-in data type Posn.
 
 ;; A Move is a (list Direction PosInt)
@@ -330,11 +324,15 @@ This API uses the following data definitions:
 ;; A Plan is a ListOfMove
 ;; WHERE: the list does not contain two consecutive moves in the same
 ;; direction.
-;; INTERP: the moves are to be executed from left to right
+;; INTERP: the moves are to be executed from the first in the list to
+;; the last in the list.
 </pre>
 
-Here are some examples that your program should be able to handle
-easily.  Why do the first two fail, but the third succeeds?
+<p>Here are some examples that your program should be able to handle
+easily.  Why do the first two fail, but the other two succeed? 
+I haven't shown solutions to the second two, because there are many
+correct answers.  Your tests should accept any correct answer.
+</p>
 
 <pre>
 (define wall1
@@ -363,7 +361,7 @@ output of <kbd>path</kbd>, you get to the desired position.
   graph for your program.  This file must show which functions call
   which, so we (and you) can see the overall structure of your program
   and find all the recursive calls.  You may turn this in as a text
-  file, pdfee, jpg, or Racket file.  Call your file
+  file, pdf, jpg, or Racket file.  Call your file
   <kbd>robot-call-tree</kbd> with an appropriate suffix, and bring a
   paper copy to your codewalk.</p>
 
@@ -375,5 +373,5 @@ output of <kbd>path</kbd>, you get to the desired position.
 <font size=-1>
 <p align=right>
 <!-- hhmts start -->
-Last modified: Fri Oct 30 12:26:50 Eastern Daylight Time 2015 <!-- hhmts end -->
+Last modified: Sat Oct 31 13:45:20 Eastern Daylight Time 2015 <!-- hhmts end -->
 </body> </html>
