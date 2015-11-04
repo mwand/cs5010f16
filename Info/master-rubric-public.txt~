@@ -45,7 +45,7 @@ B: Adequate: The student understands most of the relevant course
 materials, but the program shows serious flaws in organization or
 detail.
 
-C: Deficient.  The program indicate lack of understanding of the
+C: Deficient.  The program indicates lack of understanding of the
 relevant course materials.  Significant portions of the program are
 not obvious to the reader, even with the supplied documentation.
 
@@ -60,27 +60,27 @@ Presentation Grades:
 
 A: Excellent.  The student understands his/her program and can explain
 it clearly.  The student speaks clearly and with adequate volume to be
-understood by the audience (not just the grader).  The
-student understands questions as they are asked, and answers them
-precisely and promptly, with little need for followup questions.
+understood by the audience (not just the grader).  The student
+understands questions as they are asked, and answers them precisely
+and promptly, with little need for followup questions.
 
 AB: Good, but not excellent. The student has a good understanding of
 the program, and can explain it, though followup questions may be
 necessary in order to get to a precise answer.  The student speaks
 clearly and with adequate volume to be understood by the audience (not
-just the grader). 
+just the grader).
 
 B: Adequate.  The student has a general understanding of the program,
 but may be confused or is unable to explain some of the details.  The
 student may not speak sufficiently clearly or with adequate volume to
 be understood by the audience (not just the grader).
 
-C: Deficient.  The student's answers indicate lack of understanding of
-the program and of the relevant course materials.  The student may
-require multiple rephrasings or followup questions in order to answer
-the question; some answers may remain unsatisfactory even after
-multiple interactions with the grader.  The student must be asked
-repeatedly to speak more clearly or loudly.
+C: Deficient.  The student's answers may indicate lack of
+understanding of the program and of the relevant course materials.
+The student may require multiple rephrasings or followup questions in
+order to answer the question; some answers may remain unsatisfactory
+even after multiple interactions with the grader.  The student may
+need to be asked repeatedly to speak more clearly or loudly.
 
 F: Missing: The student did not appear for the codewalk, and did not
 give notice.
@@ -133,7 +133,7 @@ Contract/Purpose Statement/Design Strategy:
    arguments, e.g. "WHERE: the ball would hit the wall on the next tick"
 
 -- missing/wrong design strategy.  If the strategy is "use template",
-   then the definition must must match the template.
+   then the definition must match the template.
 
 -- function definition not "obviously correct".  Ideally, you should
    be able to tell whether a function fulfills its purpose just by

@@ -10,8 +10,8 @@
 
 
 
-<p>Here are the items you need to include for each question:
-</p>
+<h3>Here are the items you need to include for each question:
+</h3>
 
 
 <ul>
@@ -144,11 +144,94 @@
 
 </li>
 
+ <a name="oo-deliverables">
+ <h3>Additional Deliverables and Coding Conventions for
+ Object-Oriented Programs</h3> 
+
+<ul>
+
+  <li><strong>For Each Interface:</strong><p/>
+
+  <ol>
+
+    <li>Interface names should end in <kbd>&lt;%&gt;</kbd> .</li>
+    
+    <li>A purpose statement for the interface</li>
+    
+    <li>For each method in the interface, a contract and purpose
+    statement of the method.  Contracts should always be written in
+    terms of interfaces, not classes.  You may write <kbd>Widget</kbd>
+    in place of <kbd>Widget&lt;%&gt;</kbd> in contracts if you
+    prefer.</li>
+  
+  </ol></li> <!-- end For Each Interface -->
+
+  <li><strong>For Each Class:</strong><p/>
+
+  <ol>
+
+    <li>Class names should end in <kbd>%</kbd> .</li>
+    <li>A purpose statement saying what information the class
+    represents. </li>
+
+    <li>A constructor template showing how to build an object of that
+    class.  </li>
+
+    <li>Every field (both init-fields and other fields) must have an
+    interpretation stating what kind of data is contained in the field
+    and what that field represents.  If there is an invariant relating
+    two or more fields, it must be stated.</li>
+
+    <li>A set of unit tests that exercise every method and function in
+    the class.  In our test framework, these will be located outside
+    the class. </li>
+
+    <li>Every method in the class must come from some interface that
+    the class implements.  Exception: methods named
+    <kbd>for-test:...</kbd> need not be part of any interface, but
+    they may only be used for testing.</li>
+
+    <li>A class may not contain any private methods.  Private methods
+    should be written as ordinary functions instead.</li>
+
+  </ol>
+  
+  </li>	<!-- end For Each Class -->
+
+  <li><strong>For Each Method:</strong><p/>
+
+  <ol>
+    <li>A contract that is identical to the contract in the
+    interface. </li>
+
+    <li>A purpose statement that specializes the purpose statement in
+    the interface to the current class.</li>
+
+    <li>Examples, if these are necessary to clarify the purpose
+    statement.  These should generally be stated in human-readable
+    language. </li>
+
+    <li>A Design Strategy, if needed to explain the method
+    definition.  These can be any tweet-sized description of how your
+    code works.</li>
+
+    <li>Tests.  These will be part of the unit tests for the class.</li>
+
+  </ol>
+
+
+
+
+  </li> <!-- end For Each Method -->
+
+</ul>
+
+
 
 <hr>
 <address></address>
 <font size=-1>
 <p align=right>
 <!-- hhmts start -->
-Last modified: Thu Sep  3 22:54:01 Eastern Daylight Time 2015 <!-- hhmts end -->
+Last modified: Tue Nov  3 16:24:59 Eastern Standard Time 2015 <!-- hhmts end -->
 </body> </html>

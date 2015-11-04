@@ -2,8 +2,8 @@
 ;; about the language level of this file in a form that our tools can easily process.
 #reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname solution) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
 
-;; binary-search-count : Nat (Nat -> Number) -> Nat
-;; GIVEN: a number N, a function f : Nat -> Number and a number tgt
+;; binary-search-count : Nat (Nat -> Real) -> Nat
+;; GIVEN: a number N and a function f : Nat -> Real
 ;; WHERE: f is monotonic (ie, i<=j implies f(i) <= f(j))
 ;; RETURNS: the number of i in [0,N] s.t. f(i) = f(N)
 ;; STRATEGY: call a more general function
