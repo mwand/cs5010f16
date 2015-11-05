@@ -34,7 +34,7 @@ A Bintree is one of
   </pre>
 
   Design a function called <kbd>tree-with-leaf-sums</kbd> which, given a
-  Bintree, returns a Bintree of the same shape, but in which each leaf
+  Bintree, returns a Bintree like the original, except that each leaf
   node is replaced by the sum of all the numbers on the path from the
   root to the leaf.
 
@@ -128,8 +128,8 @@ and your function should return the list
 
 ;; EXAMPLES:
 ;; () => ()
-;; (30 30 20 20 20 20 50 60 60) =>
-;;  (list (make-rep 30 2) (make-rep 20 4) (make-rep 50 1) (make-rep 60 2))
+;; (30 30 20 20 20 20 50 30 30) =>
+;;  (list (make-rep 30 2) (make-rep 20 4) (make-rep 50 1) (make-rep 30 2))
 </pre>
 
   <p>You'll need a help function.  Make sure you give a suitable
@@ -146,5 +146,5 @@ and your function should return the list
 <font size=-1>
 <p align=right>
 <!-- hhmts start -->
-Last modified: Sat Oct 31 13:20:02 Eastern Daylight Time 2015 <!-- hhmts end -->
+Last modified: Wed Nov  4 21:06:23 Eastern Standard Time 2015 <!-- hhmts end -->
 </body> </html>
