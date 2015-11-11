@@ -5,11 +5,8 @@
          rackunit/log)
 (provide begin-for-test)
 (provide provide rename-out struct-out check-error)
-(provide check-location)
 
-(define extras-version "Wed Oct 15 13:09:22 2014")
 
-(printf "extras.rkt ~a~n" extras-version)
 
 (define-syntax (check-error stx)
   (syntax-case stx ()
@@ -80,62 +77,3 @@
            (n-tests failed)
            (n-tests total)
            filename)]))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; check-location : String String -> Void
-;; GIVEN: a 2 digit problem set number NN and the name of the file
-;; being qualified.
-;; EFFECT: throws an error if this file is not a directory of the form
-;; pdp-*./setNN 
-(define (check-location NN correct-file-name)
-  (define path-elements (explode-path (current-directory)))
-  (define path-len (length path-elements))
-  (define correct-folder-name (string-append "set" NN))
-  (cond
-    [(>= path-len 2) 
-     (define set-folder (path->string (last path-elements)))
-     (define pdp-folder (path->string (list-ref path-elements (- path-len 2))))
-     (define set-regexp (regexp correct-folder-name))
-     (define pdp-regexp (regexp "pdp-.*"))
-     (match* ((regexp-match? set-regexp set-folder)
-              (regexp-match? pdp-regexp pdp-folder))
-       [(_ #f)
-        (error
-         (format
-         "File is in folder \"~a/~a\", which does not appear to be a local repo"
-         pdp-folder set-folder))]
-       [(#f _)
-        (error 
-         (format 
-          "File should be in a folder named ~a, but is in a folder named ~a" 
-          correct-folder-name
-          set-folder))]
-       [(#t #t)
-        (printf
-          "~a appears to be in a correctly named folder. Running tests...~n"
-          correct-file-name)]
-       [(_ _) (void)])]
-    [else
-     (error
-      (format
-       "File should be in a folder named pdp-*/~a"
-       correct-folder-name))]))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; for Problem Set 6, render-expr problem
-
-;; ListOf<String> -> Void
-;; GIVEN: A List of Strings
-;; EFFECT: displays the strings in separate lines
-;; RETURNS: the empty string
-(define (display-strings! strs)
-  (if (empty? strs) (void)
-      (let* ((d1 (display (first strs)))
-             (d2 (display "\n")))
-        (display-strings! (rest strs)))))
-
-(provide display-strings!)
-
-
