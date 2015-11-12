@@ -63,15 +63,15 @@ Design Recipe and deliverables as spelled out in Lesson 9.5 and in <a href="../I
     ; KeyEvent : KeyEvent -> Void
     ; GIVEN: a key event
     ; EFFECT: updates this world to the state that should follow the
-    ; given key event
+    ; given key event.
     after-key-event     
 
-    ; -> Scene
-    ; GIVEN: a scene
+    ; : -> Scene
+    ; GIVEN: no value
     ; RETURNS: a scene that depicts this World
     to-scene
 
-   ; Widget -> Void
+   ; Widget<%> -> Void
    ; GIVEN: A widget
    ; EFFECT: add the given widget to the world
    add-widget
@@ -94,12 +94,12 @@ Design Recipe and deliverables as spelled out in Lesson 9.5 and in <a href="../I
 (define Widget<%>
   (interface ()
 
-    ; -> Widget
+    ; -> Widget<%>
     ; GIVEN: no arguments
-    ; RETURNS: the state of this object that should follow at time t+1.
+    ; RETURNS: the state of this object that should follow at the next tick.
     after-tick          
 
-    ; Integer Integer -> Widget
+    ; Integer Integer -> Widget<%>
     ; GIVEN: a location
     ; RETURNS: the state of this object that should follow the
     ; specified mouse event at the given location.
@@ -108,7 +108,7 @@ Design Recipe and deliverables as spelled out in Lesson 9.5 and in <a href="../I
     after-drag
 
     ; KeyEvent : KeyEvent -> Widget
-    ; GIVEN: a key event and a time
+    ; GIVEN: a key event
     ; RETURNS: the state of this object that should follow the
     ; given key event
     after-key-event     
@@ -290,5 +290,5 @@ these and to discuss your design decisions about each of them.</p>
 <font size=-1>
 <p align=right>
 <!-- hhmts start -->
-Last modified: Wed Nov 11 14:48:37 Eastern Standard Time 2015 <!-- hhmts end -->
+Last modified: Thu Nov 12 11:54:42 Eastern Standard Time 2015 <!-- hhmts end -->
 </body> </html>
