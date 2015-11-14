@@ -6,37 +6,19 @@
 ;; (require "extras.rkt")
 
 (provide 
-  StatefulWorld<%>   
   make-world
   Widget<%>
   SWidget<%>)
+
+;; the problem set says we provide StatefulWorld<%>, so we'll provide it,
+;; even though there's no logical necessity to do so.
+(provide StatefulWorld<%>)
+
 
 ;; The World implements the StatefulWorld<%> interface
 
 (define StatefulWorld<%>
   (interface ()
-
-    ; -> Void
-    ; GIVEN: no arguments
-    ; EFFECT: updates this world to its state after a tick
-    after-tick          
-
-    ; Integer Integer MouseEvent-> Void
-    ; GIVEN: a location
-    ; EFFECT: updates this world to the state that should follow the
-    ; given mouse event at the given location.
-    after-mouse-event
-
-    ; KeyEvent : KeyEvent -> Void
-    ; GIVEN: a key event
-    ; EFFECT: updates this world to the state that should follow the
-    ; given key event
-    after-key-event     
-
-    ; -> Scene
-    ; GIVEN: a scene
-    ; RETURNS: a scene that depicts this World
-    to-scene
 
    ; Widget -> Void
    ; GIVEN: A widget
@@ -123,10 +105,7 @@
 
 
 
-;; make-world : NonNegInt NonNegInt -> StatefulWorld
-;; GIVEN: the width and height of a canvas
-;; RETURNS: a StatefulWorld object that will run on a canvas of the
-;; given width and height.
+; ListOfWidget ListOfStatefulWidget -> WorldState
 (define (make-world w h)
   (new WorldState% [canvas-width w][canvas-height h]))
 
@@ -151,19 +130,19 @@
     (define/public (run rate)
       (big-bang this
         (on-tick
-          (lambda (w) (begin (send w after-tick) w))
+          (lambda (w) (begin (after-tick) w))
           rate)
         (on-draw
-          (lambda (w) (send w to-scene)))
+          (lambda (w) (to-scene)))
         (on-key
           (lambda (w kev)
             (begin
-              (send w after-key-event kev)
+              (after-key-event kev)
               w)))
         (on-mouse
           (lambda (w mx my mev)
             (begin
-              (send w after-mouse-event mx my mev)
+              (after-mouse-event mx my mev)
               w)))))
 
     (define/public (add-widget w)
@@ -182,7 +161,7 @@
     ;; Use map on the Widgets in this World; use for-each on the
     ;; stateful widgets
 
-    (define/public (after-tick)
+    (define (after-tick)
       (process-widgets
         (lambda (obj) (send obj after-tick))))
 
@@ -190,7 +169,7 @@
     ;; Use HOFC foldr on the Widgets and SWidgets in this World
     ;; Note: the append is inefficient, but clear..
       
-    (define/public (to-scene)
+    (define (to-scene)
       (foldr
         (lambda (obj scene)
           (send obj add-to-scene scene))
@@ -200,13 +179,13 @@
     ;; after-key-event : KeyEvent -> WorldState
     ;; STRATEGY: Pass the KeyEvents on to the objects in the world.
 
-    (define/public (after-key-event kev)
+    (define (after-key-event kev)
       (process-widgets
         (lambda (obj) (send obj after-key-event kev))))
 
     ;; world-after-mouse-event : Nat Nat MouseEvent -> WorldState
     ;; STRATGY: Cases on mev
-    (define/public (after-mouse-event mx my mev)
+    (define (after-mouse-event mx my mev)
       (cond
         [(mouse=? mev "button-down")
          (world-after-button-down mx my)]

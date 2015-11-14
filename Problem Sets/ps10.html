@@ -53,28 +53,6 @@ in multiple files. See details below. </p>
 (define StatefulWorld<%>
   (interface ()
 
-    ; -> Void
-    ; GIVEN: no arguments
-    ; EFFECT: updates this world to its state after a tick
-    after-tick          
-
-    ; Integer Integer MouseEvent-> Void
-    ; GIVEN: a location
-    ; EFFECT: updates this world to the state that should follow the
-    ; given mouse event at the given location.
-    after-mouse-event
-
-    ; KeyEvent : KeyEvent -> Void
-    ; GIVEN: a key event
-    ; EFFECT: updates this world to the state that should follow the
-    ; given key event.
-    after-key-event     
-
-    ; : -> Scene
-    ; GIVEN: no value
-    ; RETURNS: a scene that depicts this World
-    to-scene
-
    ; Widget<%> -> Void
    ; GIVEN: A widget
    ; EFFECT: add the given widget to the world
@@ -334,6 +312,6 @@ you so desire.  Here are some ground rules:
 <font size=-1>
 <p align=right>
 <!-- hhmts start -->
-Last modified: Fri Nov 13 13:35:05 Eastern Standard Time 2015 <!-- hhmts end -->
+Last modified: Sat Nov 14 09:17:43 Eastern Standard Time 2015 <!-- hhmts end -->
 </body> </html>
  
