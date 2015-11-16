@@ -130,4 +130,17 @@ after-tick</panel_attributes>
     <panel_attributes>bg=yellow</panel_attributes>
     <additional_attributes/>
   </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>180</x>
+      <y>190</y>
+      <w>260</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+update-wall-pos
+</panel_attributes>
+    <additional_attributes>10.0;30.0;240.0;30.0</additional_attributes>
+  </element>
 </diagram>
