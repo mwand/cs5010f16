@@ -234,9 +234,9 @@ exactly the same, except that:
   provides the following functions:</p>
 
   <pre>
-make-playground : -> PlaygroundState
+<span class="strike">make-playground : -> PlaygroundState
 GIVEN: no arguments
-RETURNS: a PlaygroundState
+RETURNS: a PlaygroundState</span>
 
 make-block : NonNegInt NonNegInt ListOfBlock<%> -> Block<%>
 GIVEN: an x and y position, and a list of blocks
@@ -253,6 +253,10 @@ RETURNS: the teammates of this block
 
 add-teammate: Block<%> -> Void
 EFFECT: adds the given block to this block's team
+
+<span class="new">block-x : -> Integer
+block-y : -> Integer
+RETURNS: the x or y coordinates of this block</span>
 </pre>
 
 <p>You may put more methods in the <kbd>Block<%></kbd> interface if you so desire.
@@ -312,6 +316,6 @@ you so desire.  Here are some ground rules:
 <font size=-1>
 <p align=right>
 <!-- hhmts start -->
-Last modified: Wed Nov 18 16:08:47 Eastern Standard Time 2015 <!-- hhmts end -->
+Last modified: Mon Nov 23 20:44:05 Eastern Standard Time 2015 <!-- hhmts end -->
 </body> </html>
  
