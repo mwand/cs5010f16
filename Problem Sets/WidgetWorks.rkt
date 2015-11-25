@@ -105,7 +105,7 @@
 
 
 
-; ListOfWidget ListOfStatefulWidget -> WorldState
+; NonNegInt NonNegInt -> StatefulWorld<%>
 (define (make-world w h)
   (new WorldState% [canvas-width w][canvas-height h]))
 
