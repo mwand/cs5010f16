@@ -163,7 +163,13 @@ exactly the same, except that:
   <kbd>Widget&lt;%&gt;</kbd>.</li>
 
   <li>Since WidgetWorks has comandeered the <kbd>make-world</kbd> function, you
-  should provide a function called <kbd>make-playground</kbd> instead.</li>
+  should provide a function called <kbd>make-playground</kbd>
+  instead.</li>
+
+  <li><span class="new">Also, the contract for the run function should
+  be <kbd>run : PosNum PosInt -> Void</kbd></span>.  Note that this
+  change relaxes the previous contract, since now any value is
+  acceptable as a return value from <kbd>run</kbd>.</li>
 
 </ul>
 
@@ -318,6 +324,6 @@ you so desire.  Here are some ground rules:
 <font size=-1>
 <p align=right>
 <!-- hhmts start -->
-Last modified: Wed Nov 25 11:36:50 Eastern Standard Time 2015 <!-- hhmts end -->
+Last modified: Sat Nov 28 13:51:14 Eastern Standard Time 2015 <!-- hhmts end -->
 </body> </html>
  
