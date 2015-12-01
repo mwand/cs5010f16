@@ -1,10 +1,20 @@
 #lang racket
 
-(require "Interfaces.rkt")
+; (require "Interfaces.rkt")
 (require 2htdp/image)
 (require 2htdp/universe)
 
 (provide World% make-world)
+
+(define World<%>
+  (interface ()
+
+    ; SWidget<%> -> Void
+    add-widget                          ; all the widgets are stateful
+
+    ; PosReal -> Void
+    run
+    ))
 
 ;; A World is a (make-world model canvas-width canvas-height) 
 
