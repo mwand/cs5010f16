@@ -135,8 +135,17 @@ method is the one defined in Class3%.  So
 = (send this m2 (- 100 30))
 = (send obj3 m2 70)
 = (send this m1 (+ 70 35))
+= (send obj3 m1 105)
+= (send this m2 (- 105 30))
+= (send obj3 m2 75)
+= (send this m1 (+ 75 35))
 = (send obj3 m1 110)
-= 110  
+= 110
+
+(send obj3 m2 100)
+= (send this m1 (+ 100 35))
+= (send obj3 m1 135)
+= 135
 
 4. (send obj4 m1 100) and (send obj4 m2 100)
 
@@ -168,5 +177,5 @@ method is the one defined in Class4%.  So
 <font size=-1>
 <p align=right>
 <!-- hhmts start -->
-Last modified: Wed Nov 19 15:38:35 Eastern Standard Time 2014 <!-- hhmts end -->
+Last modified: Tue Dec  1 22:59:51 Eastern Standard Time 2015 <!-- hhmts end -->
 </body> </html>
