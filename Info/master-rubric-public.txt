@@ -1,4 +1,6 @@
-GRADE SHEET FALL 2015
+GRADE SHEET FALL 2016
+
+(* Last modified: Sat Jul 23 18:47:30 2016 *)
 
 Problem Set #: ____
 
@@ -26,27 +28,27 @@ KEY TO GRADES:
 
 Design Grades:
 
-A+: Outstanding: The code is well-organized and well-documented.
-There are at most a few minor errors.  I would be happy to post this
-document on the wall of the student center for all to read.  Very few
-students receive this score. If there's any doubt, a student should
-not receive this score.
+A+: Outstanding: The submission is well-organized and well-documented.
+The submission shows creativity and originality, beyond mere
+correctness.  There are at most a few minor errors.  Very few students
+receive this score. If there's any doubt, a student should not receive
+this score.
 
-A: Excellent work. The code is well-organized and well-documented.
+A: Excellent work. The submission is well-organized and well-documented.
 There are at most a few minor errors, but the work is not quite in the
 A+ category.  Everything is clear and understandable without asking
 the student.
 
-AB: Good, but not excellent.   The program is mostly clear and
-understandable  but the program may lack organization or have gaps in
-detail that hinder the reader's understanding.
+AB: Good, but not excellent.  The submission is mostly clear and
+understandable but it may lack organization or have gaps in detail
+that hinder the reader's understanding.
 
 B: Adequate: The student understands most of the relevant course
-materials, but the program shows serious flaws in organization or
+materials, but the submission shows serious flaws in organization or
 detail.
 
-C: Deficient.  The program indicates lack of understanding of the
-relevant course materials.  Significant portions of the program are
+C: Deficient.  The submission indicates lack of understanding of the
+relevant course materials.  Significant portions of the submission are
 not obvious to the reader, even with the supplied documentation.
 
 D: Incomplete.  Many required deliverables missing, incomplete, or
@@ -58,25 +60,25 @@ F: Missing.  Not turned in.
 
 Presentation Grades:
 
-A: Excellent.  The student understands his/her program and can explain
+A: Excellent.  The student understands his/her submission and can explain
 it clearly.  The student speaks clearly and with adequate volume to be
 understood by the audience (not just the grader).  The student
 understands questions as they are asked, and answers them precisely
 and promptly, with little need for followup questions.
 
 AB: Good, but not excellent. The student has a good understanding of
-the program, and can explain it, though followup questions may be
+the submission, and can explain it, though followup questions may be
 necessary in order to get to a precise answer.  The student speaks
 clearly and with adequate volume to be understood by the audience (not
 just the grader).
 
-B: Adequate.  The student has a general understanding of the program,
+B: Adequate.  The student has a general understanding of the submission,
 but may be confused or is unable to explain some of the details.  The
 student may not speak sufficiently clearly or with adequate volume to
 be understood by the audience (not just the grader).
 
 C: Deficient.  The student's answers may indicate lack of
-understanding of the program and of the relevant course materials.
+understanding of the submission and of the relevant course materials.
 The student may require multiple rephrasings or followup questions in
 order to answer the question; some answers may remain unsatisfactory
 even after multiple interactions with the grader.  The student may
@@ -88,7 +90,7 @@ give notice.
 ================================================================
 
 Specific Items Noted.  (Grader: fill an X in front of applicable item,
-and insert location or specifics as possible). 
+and insert location or specifics whenver possible). 
 
 ================
 
@@ -99,13 +101,13 @@ Data Design:
 
 -- missing/incomplete interpretation.  (Criterion: does the
    interpretation give you sufficient information to read and
-   understand the program?  Does the interpretation account for every
+   understand the submission?  Does the interpretation account for every
    value assigned to this field by the program? eg: (set! mx 0) for a
    mouse position)
 
 -- missing/incomplete/wrong invariants. (Criterion: there are combinations
    of data values that are unaccounted for, regardless of whether they
-   come up in the program)
+   come up in execution)
 
 -- missing/incorrect templates.  When evaluating, try to distinguish
    between harmless errors and those that will hinder the programmer
@@ -121,7 +123,7 @@ Contract/Purpose Statement/Design Strategy:
    clear, correct, and add at least some information beyond the
    contract.  Ideally, the reader should be able to figure out what
    the function returns by reading the purpose statement and the
-   examples, WITHOUT LOOKING AT THE CODE.
+   examples, WITHOUT LOOKING AT THE FUNCTION DEFINITION.
 
 -- purpose statement does not mention one of the arguments.
 
@@ -159,7 +161,7 @@ Contract/Purpose Statement/Design Strategy:
 -- missing/incomplete/incorrect termination argument
 
 -- uses concepts/terms from previous semesters (Note: this may be the
-   result of cutting&pasting from the example files, or it may be the
+   result of cutting & pasting from the example files, or it may be the
    result of the student using a solution submitted by a student in a
    previous semester.  If the student insists that it is the former,
    ask him/her to email you later showing you the source.)
@@ -197,13 +199,11 @@ Interfaces, Objects, and Classes
 -- method missing design strategy if you think it is necessry to
    explain the code.
 
-
-
 ================
 
 Presentation:
 
--- student shows lack of understanding of his/her program
+-- student shows lack of understanding of his/her submission
 
 -- student has difficulty understanding questions that are asked
 

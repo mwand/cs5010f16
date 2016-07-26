@@ -410,7 +410,7 @@ pattern to be filled in.</p>
 'nand', using 'and' and 'not':</P>
 
 <PRE><CODE>    ; nand : Boolean Boolean -&gt; Boolean
-    ; RETURNS the negative of the conjunction of the two given booleans.
+    ; RETURNS the negation of the conjunction of the two given booleans.
     (define (nand x y)
       (not (and x y)))
 </CODE></PRE>
@@ -503,13 +503,15 @@ examples.</P></DIV>
 function.  Follow the examples of contracts and purpose statements above.</P></DIV>
 
 <DIV class="exercise">
-<P>Ex 6: One of the solutions of the <A href="http://en.wikipedia.org/wiki/Quadratic_Equation">quadratic 
-equation </A> is given by the formula: </P><IMG class="tex" alt="x_+ = \frac{-b + \sqrt {b^2-4ac}}{2a}" 
+<P>Ex 6: One of the solutions of the <xA href="http://en.wikipedia.org/wiki/Quadratic_Equation">quadratic 
+equation </A> a*x^2 + b*x + c = 0 is given by the formula: </P><IMG class="tex" alt="x_+ = \frac{-b + \sqrt {b^2-4ac}}{2a}" 
 src="Images/formula.png"> 
 <P>Write the contract, purpose statement, examples, and definition of a 
 function <CODE>quadratic-root</CODE> that takes as arguments <CODE>a</CODE>, 
 <CODE>b</CODE>, and <CODE>c</CODE>, and computes the root of the corresponding
- quadratic equation. </P></DIV>
+ quadratic equation.  Test your code on simple examples, like x^2-4 =
+0 or x^2-2x+1 = 0.  What does your function give as a solution for
+x^2+4 = 0 ?</P></DIV>
 
 <DIV class="exercise">
 <P>Ex 7: Define a function called <CODE>circumference</CODE> that computes the
@@ -755,9 +757,9 @@ calculating with images:</p>
     ;; RETURNS: an image in which the given images appear next to each 
     ;; from left to right.
 
-    ;; An OutlineMode is one of
-    ;;  - "outline" ... only the shape's outline is drawn
-    ;;  - "solid" ... the whole inside of the shape is filled
+    ;; An OutlineMode represents a style for drawing an shape.
+    ;;  - "outline" --only the shape's outline is drawn
+    ;;  - "solid"   --the whole inside of the shape is filled
 
     ;; rectangle : Number Number OutlineMode Color -&gt; Image
     ;; RETURNS: an image of a rectangle with given width, height,
@@ -787,7 +789,7 @@ calculating with images:</p>
 <p> Observe that the contract for rectangle says that it expects one
     of exactly two strings as its third argument: either the string
     <kbd>"outline"</kbd> or the string <kbd>"solid"</kbd>.  If you
-    give it some other string, you've violated rectangle's contract,
+    give it some other string, you've violated <kbd>rectangle</kbd>'s contract,
     and its behavior is unpredictable!  Maybe it will just produce an
     error, or maybe it will erase your disk! Who knows?  The contract
     doesn't tell us.  </p>
@@ -1049,7 +1051,7 @@ you did not use to solve Ex27.</p>
 <p>Ex28: Design a function that takes a list of lists of strings as an argument that treats
 each of the lists of strings as a line (assembled like in Ex27) in a text and renders the 
 whole text as an image.</p> 
-<p>Ex29: Look up the beside/align function on the Racket Help Desk. Use it to design a function
+<p>Ex29: Look up the <kbd>beside/align</kbd> function on the Racket Help Desk. Use it to design a function
 that takes a list of people (as defined in Ex21) and uses the function from Ex21 to draw these
 people, placing them beside each other to form some kind of a group
 photo.</p>
@@ -1080,6 +1082,6 @@ write a helper function to calculate the distance.
 <font size=-1>
 <p align=right>
 <!-- hhmts start -->
-Last modified: Sat Aug  1 19:17:26 Eastern Daylight Time 2015 <!-- hhmts end -->
+Last modified: Sun Jul 24 18:28:33 Eastern Daylight Time 2016 <!-- hhmts end -->
 
 </DIV></BODY></HTML>
