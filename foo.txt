@@ -1,1 +1,2 @@
 Here is some text
+Here is some new text
