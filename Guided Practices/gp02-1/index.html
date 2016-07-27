@@ -1,90 +1,37 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <html> <head>
-<title>Guided Practice 2.1</title>
+<title>Guided Practice N.M</title>
 <link type="text/css" rel="stylesheet" href="../../css/course.css">
 </head>
 
 <body>
 <h1>Guided Practice 2.1</h1>
 
-<p>Consider the following data definitions, taken from Module 01:</p>
+<p>In Lesson 2.2 we wrote the following example:</p>
 
 <pre>
-;; A Size is one of
-;; -- "small"
-;; -- "medium"
-;; -- "large"
+;; ball-after-tick : Ball -> Ball
+;; GIVEN: The state of a ball b
+;; RETURNS: the state of given ball at the next tick
+;; STRATEGY: cases on whether ball would hit the wall on ;; the next tick
 
-;; size-fn : Size -> ??
-(define (size-fn s)
-  (cond
-    [(string=? s "small") ...]
-    [(string=? s "medium") ...]
-    [(string=? s "large") ...]))
-
-;; A Year is a PosInt[1900,2020]
-;; interp: the year.  Must be between 1900 and 2020.
-
-;; Year is Scalar data, so we don't need a template.
-
-;; A Vineyard is ... /to be filled in/
-
-(define-struct coffee (size type milk?))
-(define-struct wine (vineyard year))
-(define-struct tea (size type))
-
-;; A BarOrder is one of
-;; -- (make-coffee Size String Boolean)
-;;  interp: 
-;;   size is the size of cup desired
-;;   type is the origin of the coffee (as a string)
-;;   milk? tells whether milk is desired.
-;; -- (make-wine Vineyard Year)
-;;  interp:
-;;   vineyard is the origin of the grapes
-;;   year is the year of harvest
-;; -- (make-tea Size String)
-;;  interp: 
-;;   size is the size of cup desired
-;;   type is the type of tea (as a string)
-
-;; bo-fn : BarOrder -> ??
-;(define (bo-fn order)
-;  (cond
-;    [(coffee? order) (...
-;                      (coffee-size order)
-;                      (coffee-type order)
-;                      (coffee-milk? order))]
-;    [(wine? order) (...
-;                    (wine-vineyard order)
-;                    (wine-year order))]
-;    [(tea? order) (...
-;                   (tea-size order)
-;                   (tea-type order))]))
+(define (ball-after-tick b)
+  (if (ball-would-hit-wall? b)
+      (ball-after-bounce b)
+      (ball-after-straight-travel b)))
 </pre>
 
-<p>Over the next few pages, we will give you some function definitions
-using the "Use a Template" strategy.  For each
-function definition, indicate whether the definition uses the
-specified template correctly.</p>
+What should be the contract and purpose statement for
+<kbd>ball-after-bounce</kbd> and
+<kbd>ball-after-straight-travel</kbd>?
 
 
-<pre>
-;; function1 : Size Number Number -> Number
-;; STRATEGY: Use template for Size on s
-(define (function1 s lo hi)
-  (cond
-    [(string=? s "medium") lo]
-    [(string=? s "small") hi]
-    [(string=? s "large") lo]))
-</pre>
-
-<p><a href="page2.html" >[ANSWER]</a></p>
+<p><a href="solution.html" >[ANSWER]</a></p>
 
 <hr>
 <address></address>
 <font size=-1>
 <p align=right>
 <!-- hhmts start -->
-Last modified: Thu Aug 13 16:01:49 Eastern Daylight Time 2015 <!-- hhmts end -->
+Last modified: Tue Jul 26 23:28:07 Eastern Daylight Time 2016 <!-- hhmts end -->
 </body> </html>
