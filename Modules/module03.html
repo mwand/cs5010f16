@@ -12,15 +12,49 @@
 
 <h2>Module Overview</h2>
 
-<p>This week you will learn about the 2htdp/universe module, which
+<p>This week you will learn about the System Design Recipe and the Iterative Design Recipe, which
+give you a roadmap to designing systems that are larger than a few
+functions.  To design a system iteratively means to design it by
+starting with a simple base and then adding new features one at a
+time.  The iterative design recipe gives a recipe for adding a new
+feature to an existing system.</p>
+
+<p>The System Design Recipe says</p>
+
+<ul class= "condensed">
+  <li>Write a purpose statement for your system</li>
+  <li>Design data to represent the relevant information in the
+  world</li>
+  <li>Make a wishlist of "main functions".  Write down their contracts
+  and purpose statements.</li>
+  <li>Design the individual functions.  Maintain a wishlist of
+  functions you will need to write.</li>
+</ul>
+
+<p>The Iterative Design Recipe says</p>
+
+<ul class="condensed">
+  <li>Perform information analysis for the new feature</li>
+  <li>Modify data definitions as needed</li>
+  <li>Update existing functions to work with the new data
+  definitions</li>
+  <li>Write a wishlist of functions for the new feature</li>
+  <li>Design the new functions following the Function Design
+  Recipe</li>
+  <li>Repeat for the next new feature</li>
+</ul>
+
+We will study this pattern in the context of 
+the 2htdp/universe module, which
 allows us to create interactive animations.  You will learn:
 
 <ul class="condensed">
-  <li>How to design worlds</li>
-  <li>How to design more complex data</li>
+  <li>How to identify the relevant information for an interactive animation</li>
+  <li>How to design the data to represent that information</li>
   <li>How to use structural decomposition to guide the development of
   programs involving multiple data definitions</li>
-  <li>The steps in adding new functionality to a working program</li>
+  <li>How to add new functionality to a working program using the
+  Iterative Design Recipe</li>
 </ul>
 </p>
 
@@ -44,10 +78,12 @@ Language in Racket.
 <h2>Resources</h2>
 
 <ul>
-  <li><a href="examples/week03examples.zip" >Examples for Week
-  03</a></li>
+  <li>The examples for this week are in the Examples folder, as
+  usual.</a></li>
 
-  <li><a href="Class Notes/module03.zip" >In-Class Examples for Week 03</a></li>
+  <li>Something about sprints and user stories</li>
+
+  <!-- <li><a href="Class Notes/module03.zip" >In-Class Examples for Week 03</a></li> -->
   
 </ul>
 
@@ -95,6 +131,6 @@ href="../Problem Sets/ps03.html"
 <font size=-1>
 <p align=right>
 <!-- hhmts start -->
-Last modified: Wed Sep 30 22:22:57 Eastern Daylight Time 2015 <!-- hhmts end -->
+Last modified: Mon Aug  1 16:21:37 Eastern Daylight Time 2016 <!-- hhmts end -->
 </body> </html>
  
