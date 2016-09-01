@@ -1,6 +1,6 @@
 GRADE SHEET FALL 2016
 
-(* Last modified: Sat Jul 23 18:47:30 2016 *)
+(* Last modified: Thu Sep  1 11:24:44 2016 *)
 
 Problem Set #: ____
 
@@ -28,16 +28,9 @@ KEY TO GRADES:
 
 Design Grades:
 
-A+: Outstanding: The submission is well-organized and well-documented.
-The submission shows creativity and originality, beyond mere
-correctness.  There are at most a few minor errors.  Very few students
-receive this score. If there's any doubt, a student should not receive
-this score.
-
-A: Excellent work. The submission is well-organized and well-documented.
-There are at most a few minor errors, but the work is not quite in the
-A+ category.  Everything is clear and understandable without asking
-the student.
+A: Excellent work. The submission is well-organized and
+well-documented.  There are at most a few minor errors.  Everything is
+clear and understandable without asking the student.
 
 AB: Good, but not excellent.  The submission is mostly clear and
 understandable but it may lack organization or have gaps in detail
