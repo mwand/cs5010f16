@@ -6,6 +6,7 @@
 ;; -- empty
 ;; -- (cons String LANS)
 
+;; HALTING MEASURE: length of lans or lasn
 ;; lans-fn : LANS -> ??
 ;; (define (lans-fn lans)
 ;;   (cond
