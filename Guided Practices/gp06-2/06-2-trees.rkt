@@ -17,6 +17,7 @@
 
 ;; Template:
 ;; tree-fn : 23Tree -> ??
+;; HALTING MEASURE: number of nodes in t
 ;(define (tree-fn t)
 ;  (cond
 ;    [(leaf-node? t) (... (leaf-node-data t))]
