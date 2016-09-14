@@ -43,12 +43,18 @@ problem, put in lines that say
 (provide <em>function</em>)
 </pre>
 
-for each deliverable function.  Thus, for problem 1, the top of your
+for each deliverable function.  <span class="new">Also, include a line calling
+<kbd>check-location</kbd> to check to see if your file is correctly
+named and in the right place in your repository.
+</span>
+
+Thus, for problem 1, the top of your
 file should say
 
 <pre>
 (require rackunit)
 (require "extras.rkt")
+<span class="new">(check-location "02" "fsm.rkt")</span>
 
 (provide
   initial-state
@@ -347,6 +353,6 @@ the second probe.
 <font size=-1>
 <p align=right>
 <!-- hhmts start -->
-Last modified: Sun Sep 11 21:19:03 Eastern Daylight Time 2016 <!-- hhmts end -->
+Last modified: Wed Sep 14 10:34:44 Eastern Daylight Time 2016 <!-- hhmts end -->
 </body> </html>
  
