@@ -39,6 +39,8 @@
     [(fancy-stereo? r) (... (fancy-stereo-nspeakers r))]
     [(nav-system? r)   (... (nav-system-source r))]))
 
+;; if you used "plain-radio" as the representation, instead of a
+;; struct, you'd say:
 (define (plain-radio? r)
   (and (string? r) (string=? r "plain-radio")))
 
