@@ -105,7 +105,7 @@
 
 (define (make-topped-pizza t p) (make-shazam p t))
 (define (make-plain-pizza) "kaphlooey")
-(define (plain-pizza? p) (string=? p "kaphlooey"))
+(define (plain-pizza? p) (equal? p "kaphlooey"))
 (define (topped-pizza-topping p) (shazam-topping p))
 (define (topped-pizza base p) (shazam-base p))
 
