@@ -176,21 +176,21 @@
   (check-equal?
     (world-after-key-event paused-world-at-20 pause-key-event)
     unpaused-world-at-20
-    "after pause key, paused world did not become unpaused")
+    "after pause key, paused world should become unpaused")
 
   (check-equal?
     (world-after-key-event unpaused-world-at-20 pause-key-event)
     paused-world-at-20
-    "after pause key, unpaused world did not become paused")
+    "after pause key, unpaused world should still be paused")
 
   (check-equal?
     (world-after-key-event paused-world-at-20 non-pause-key-event)
     paused-world-at-20
-    "after a non-pause key, paused world was not unchanged")
+    "after a non-pause key, paused world should be unchanged")
 
   (check-equal?
     (world-after-key-event unpaused-world-at-20 non-pause-key-event)
     unpaused-world-at-20
-    "after a non-pause key, unpaused world was not unchanged"))
+    "after a non-pause key, unpaused world should be unchanged"))
 
 

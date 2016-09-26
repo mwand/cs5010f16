@@ -6,14 +6,21 @@
 (provide begin-for-test)
 (provide provide rename-out struct-out check-error)
 (provide check-location)
+(provide check-within)
 
-(define extras-version "Wed Oct 15 13:09:22 2014")
+(define extras-version "Wed Sep 14 08:52:19 2016")
 
 (printf "extras.rkt ~a~n" extras-version)
 
 (define-syntax (check-error stx)
   (syntax-case stx ()
     [(_ code . msg) #`(check-exn exn:fail? (lambda () code) . msg)]))
+
+(define-syntax (check-within stx)
+  (syntax-case stx ()
+    [(_ val1 val2 tol . msg)
+;    #`(check-true (<= (abs (- val1 val2)) tol) .  msg)
+     #`(check <= (abs (- val1 val2)) tol)]))
 
 
 
