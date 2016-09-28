@@ -43,18 +43,12 @@ problem, put in lines that say
 (provide <em>function</em>)
 </pre>
 
-for each deliverable function.  <span class="new">Also, include a line calling
-<kbd>check-location</kbd> to check to see if your file is correctly
-named and in the right place in your repository.
-</span>
-
-Thus, for problem 1, the top of your
+for each deliverable function.  Thus, for problem 1, the top of your
 file should say
 
 <pre>
 (require rackunit)
 (require "extras.rkt")
-<span class="new">(check-location "02" "fsm.rkt")</span>
 
 (provide
   initial-state
@@ -73,7 +67,7 @@ automated testing on it.</p>
   href="../Info/homework.html" >deliverables</a> include the data
   definitions (including interpretation and templates), contract and
   purpose header, code, and tests.  Be sure to follow our <a
-  href="../Info/coding-conventions.html" >coding conventions</a>.  This
+  href="Info/coding-conventions.html" >coding conventions</a>.  This
   will make the TA's job much easier.</p>
 
 <p>Be sure to sync your work and fill
@@ -259,7 +253,7 @@ RETURNS: the amount of money in the machine's bank, in cents
 
   <p>As before, remember that we will be doing automated testing of your
   solution.  So be sure that your solution is in the right place, and that
-  it provides all the functions listed above.  Use
+  it provides all the functions listed above.  You can use
   <kbd>check-location</kbd> to check whether your file is in the right
   place. </p>
 
@@ -271,10 +265,9 @@ RETURNS: the amount of money in the machine's bank, in cents
 <p></p>
   <ol>
 
-    <li>The probe accepts two kinds of commands from Earth.  You can
-    command it to move forward some number of steps, or you can
-    command it to rotate 90 degrees either right or left.  The probe
-    moves by taking steps of exactly 1 cm.</li>
+    <li>At every step, the probe can move forward some number of
+    steps, or it can rotate 90 degrees either right or left.  The
+    probe moves by taking steps of exactly 1 cm.</li>
     
     <li>The probe has landed facing north (up).</li>
 
@@ -318,7 +311,10 @@ GIVEN: two probes and a distance
 RETURNS: true iff the first probe, given a move-forward command with
 the specified number of steps, could wind up in the state described by
 the second probe.
-</pre>
+  </pre>
+
+  <!-- s/wind up/end/ -->
+  
 
 <!-- <p>Note: When the specification groups functions as we have done here, -->
 <!--   you need only write down the purpose statement once (as we have done -->
@@ -335,9 +331,7 @@ the second probe.
  <!-- passes those tests before you turn in your problem set.</p> -->
 
     <p>As before, remember that we will be doing automated testing of your
-  solution.  Use
-  <kbd>check-location</kbd> to check whether your file is in the right
-  place. </p>
+  solution. Same story as for the preceding problems.</p>
 
 
 </li>
@@ -356,6 +350,6 @@ the second probe.
 <font size=-1>
 <p align=right>
 <!-- hhmts start -->
-Last modified: Sun Sep 25 10:04:35 Eastern Daylight Time 2016 <!-- hhmts end -->
+Last modified: Mon Sep 26 14:52:33 Eastern Daylight Time 2016 <!-- hhmts end -->
 </body> </html>
  
