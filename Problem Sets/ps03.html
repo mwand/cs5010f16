@@ -29,8 +29,9 @@ Design Recipe.</p>
 <p>You will also get experience with the Perfect Bounce and Smooth
 Dragging, which we will be using in many of our exercises.</p>
 
-<p>You must use the HtDP Beginning Student Language to solve the
-  problems.  </p>
+<p>You must use the HtDP <span class="strike">Beginning</span> <span
+class="new">Intermediate</span> Student Language to solve the problems.
+</p>
 
 <p>For these problems, download a copy of <a href="extras.rkt"
 >extras.rkt</a> and put it in the folder with your solutions.  Then
@@ -109,9 +110,9 @@ the behavior of your system is unspecified.</p>
     entire circle within the canvas at all times.  If a circle's
     position and velocity would cause any part of a circle to lie
     outside of the canvas at the end of a tick, then its x and y
-    coordinates at the end of that tick are to calculated as follows:
+    coordinates at the end of that tick are calculated as follows:
     first calculate the new x and y coordinates without regard to the
-    boundaries, and then adjusted those calculated coordinates
+    boundaries, and then adjust those calculated coordinates
     (separately) by the smallest adjustments that keep the entire
     circle within the canvas.  If an x or y coordinate is adjusted
     during that process, then the corresponding velocity component
@@ -205,7 +206,7 @@ the behavior of your system is unspecified.</p>
 
     <li> Each circle is selectable and draggable.  Depressing the
     mouse button within a circle causes the circle to be
-    "selected".  When a circle is selected, it and its velocity
+    "selected".  When a circle is selected, it <span class="strike">and its velocity</span>
     are displayed in red instead of blue.</li>
 
     <p>When the mouse button is down, its location should be indicated
@@ -229,7 +230,8 @@ the behavior of your system is unspecified.</p>
     Example:  A circle is dragged so that its center  is at x=25
     and y=80, with
     velocity components vx=-15 and vy=20, and is then released.  At
-    the next tick, it should have its center at x=20 and y=100, while its velocity
+    the next tick, it should have its center at <span
+    class="strike">x=20</span> <span style="color:blue">x=40</span> and y=100, while its velocity
     components would become vx=15 and vy=20.
     </li></span>
 
@@ -284,5 +286,5 @@ the behavior of your system is unspecified.</p>
 <font size=-1>
 <p align=right>
 <!-- hhmts start -->
-Last modified: Tue Sep 27 20:12:24 Eastern Daylight Time 2016 <!-- hhmts end -->
+Last modified: Wed Sep 28 21:16:23 Eastern Daylight Time 2016 <!-- hhmts end -->
 </body> </html>
