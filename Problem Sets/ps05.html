@@ -97,7 +97,10 @@ A ClassRosterAssertion is a (make-roster Class SetOfStudent).
 c are exactly the students in set ss.
 
 Student is unspecified, but you may assume that students may be
-compared for equality with equal?
+compared for equality with equal? (Among other things, this means that
+we don't have to worry about the first name/last name problems that
+Professors Shivers and Felleisen had; the Registrar knows the student
+name exactly)
 
 Class is unspecified, but you may assume that classes may be
 compared for equality with equal?
@@ -160,7 +163,9 @@ enrollments-to-rosters-bad-1: SetOfEnrollment -> SetOfClassRoster
 enrollments-to-rosters-bad-2: SetOfEnrollment -> SetOfClassRoster
 enrollments-to-rosters-bad-3: SetOfEnrollment -> SetOfClassRoster
 GIVEN: a set of enrollments
-RETURN: an incorrect set of class rosters for the given enrollments
+RETURN: an incorrect set of class rosters for the given enrollments.
+The three functions should return DIFFERENT incorrect sets of class
+rosters. 
 </pre>
 
 <p>Test your <kbd>behavior-correct?</kbd> function by writing a correct
@@ -178,12 +183,13 @@ appropriate. </p>
 
   <p>You will find this problem much easier if you follow the slogan
 "The Structure of the Program Follows the Structure of the Data".  To
-help you with this concept, please must turn in a file containing the
-call graph for your program.  This file must show which functions call
-which, so we (and you) can see the overall structure of your program.
-You may turn this in as a text file, pdf, jpg, or Racket file.  Call
-your file <kbd>call-tree</kbd> with an appropriate suffix, and bring a
-paper copy to your codewalk.</p>
+help you with this concept, please must turn in a file illustrating
+the call graph for your program.  This file must contain a diagram
+showing which functions call which, so we (and you) can see the
+overall structure of your program.  You may turn this in as a text
+file, pdf, jpg, or Racket file.  Call your file <kbd>call-tree</kbd>
+with an appropriate suffix, and bring a paper copy to your
+codewalk.</p>
 
 </p>
 
@@ -199,5 +205,5 @@ paper copy to your codewalk.</p>
 <font size=-1>
 <p align=right>
 <!-- hhmts start -->
-Last modified: Fri Sep  2 14:53:32 Eastern Daylight Time 2016 <!-- hhmts end -->
+Last modified: Wed Oct  5 22:27:16 Eastern Daylight Time 2016 <!-- hhmts end -->
 </body> </html>
