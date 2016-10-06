@@ -29,8 +29,9 @@ Design Recipe.</p>
 <p>You will also get experience with the Perfect Bounce and Smooth
 Dragging, which we will be using in many of our exercises.</p>
 
-<p>You must use the HtDP Beginning Student Language to solve the
-  problems.  </p>
+<p>You must use the HtDP <span class="strike">Beginning</span> <span
+class="new">Intermediate</span> Student Language to solve the problems.
+</p>
 
 <p>For these problems, download a copy of <a href="extras.rkt"
 >extras.rkt</a> and put it in the folder with your solutions.  Then
@@ -87,6 +88,11 @@ the behavior of your system is unspecified.</p>
     <li> The screensaver is a universe program that displays two
     circles that move around a canvas.</li>
 
+    <li> Each circle is displayed as an outline blue circle with a
+    radius of 40 pixels. In addition, the circle's
+    current velocity is displayed as a string (vx, vy) in the center
+    of the circle.  </li>
+
     <li>The circles bounce smoothly off the edge of the
     canvas. Bouncing is defined as follows: if the circle in its
     normal motion would hit or go past one side of the canvas at the
@@ -94,14 +100,33 @@ the behavior of your system is unspecified.</p>
     to the edge of the canvas, travelling at the same speed, but in
     the opposite direction.  If the circle would go past a corner,
     then both the x- and y- velocities are reversed.  We call
-    this a <em>perfect bounce</em>.  </li>
+    this a <em>perfect bounce</em>.
 
+    <p>
+    <span
+    class="new">Here's a clarification (thanks to Professor Clinger):
 
-    <li> Each circle is displayed as an outline blue circle with a
-    radius of 40 pixels. In addition, the circle's
-    current velocity is displayed as a string (vx, vy) in the center
-    of the circle.  </li>
+    <p class="new">The x and y coordinates of a circle are constrained to keep the
+    entire circle within the canvas at all times.  If a circle's
+    position and velocity would cause any part of a circle to lie
+    outside of the canvas at the end of a tick, then its x and y
+    coordinates at the end of that tick are calculated as follows:
+    first calculate the new x and y coordinates without regard to the
+    boundaries, and then adjust those calculated coordinates
+    (separately) by the smallest adjustments that keep the entire
+    circle within the canvas.  If an x or y coordinate is adjusted
+    during that process, then the corresponding velocity component
+    is reversed as well.</p>
 
+    <p class="new">Example: A circle whose center is at x=45 and y=80, with
+    velocity components vx=-15 and vy=20 would appear at x=30, if
+    it were unconstrained by the wall.  So at the next tick, the
+    center should be at x=40 and y = 100, with velocity components
+    vx=15 and vy=20.</p>
+
+    </span>
+
+    </li>
 
     <li>The space bar pauses or unpauses the entire simulation.  The
     simulation is initially paused.
@@ -181,7 +206,7 @@ the behavior of your system is unspecified.</p>
 
     <li> Each circle is selectable and draggable.  Depressing the
     mouse button within a circle causes the circle to be
-    "selected".  When a circle is selected, it and its velocity
+    "selected".  When a circle is selected, it <span class="strike">and its velocity</span>
     are displayed in red instead of blue.</li>
 
     <p>When the mouse button is down, its location should be indicated
@@ -197,6 +222,18 @@ the behavior of your system is unspecified.</p>
     <li>We refer to this behavior as "smooth dragging."  We will be
     implementing other objects with this behavior in future problem
     sets.  </li>
+
+    <span class="new"><li>A selected circle may be dragged in a way that causes some of
+    it to be dragged outside the canvas.  If, when the circle is
+    unselected, some or all of it is outside the canvas, its motion is
+    determined by the same rules as in the previous question.
+    Example:  A circle is dragged so that its center  is at x=25
+    and y=80, with
+    velocity components vx=-15 and vy=20, and is then released.  At
+    the next tick, it should have its center at <span
+    class="strike">x=20</span> <span style="color:blue">x=40</span> and y=100, while its velocity
+    components would become vx=15 and vy=20.
+    </li></span>
 
     <li>All of this works whether or not the simulation is paused.
     </li>
@@ -249,7 +286,7 @@ the behavior of your system is unspecified.</p>
 <font size=-1>
 <p align=right>
 <!-- hhmts start -->
-Last modified: Sun Sep 25 10:04:12 Eastern Daylight Time 2016 <!-- hhmts end -->
+Last modified: Wed Sep 28 21:16:23 Eastern Daylight Time 2016 <!-- hhmts end -->
 </body> </html>
 
 
