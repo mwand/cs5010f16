@@ -33,7 +33,8 @@
 #|
 def f1(x):f1(x)           ; f1 is defined in the body of f1
 def f2 (x, y):f1(y)       ; f1 is defined in the body of f2
-def f3 (x z):f1(f2(z,f1)) ; f1 and f2 are defined in the body of f3
+def f3 (x,z): f1(f2(z,f1)) ; f1 and f2 are defined in the body of f3
+                           ; spaces are ignored
                           ; you can pass a function as an argument
 def f4 (x z):x(z,z)       ; you can call an argument as a function
 |#
