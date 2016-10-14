@@ -215,8 +215,10 @@ def f4(x,z):x(z,z)       ; f1, f2, f3, f4, x, and z are available in the body.
 
 
 ;; exp-all-defined? : Exp SetOfVariable -> Boolean
-;; GIVEN: A GarterSnake expression e and a set of variables vars
-;; WHERE: vars is the set of variables that are defined at e
+;; GIVEN: A GarterSnake expression e from some program p and a set of
+;; variables vars  
+;; WHERE: vars is the set of variables that are available at the
+;; occurrence of e in p
 ;; RETURNS: true iff all the variable in exp are defined
 ;; STRATEGY: Use template for Exp on e
 
