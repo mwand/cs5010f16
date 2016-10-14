@@ -1,6 +1,6 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
-#reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname 07-3-defs) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+#reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname 07-3-gartersnake) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
 (require rackunit)
 (require "extras.rkt")
 (require "sets.rkt")
@@ -60,10 +60,29 @@ def f3 (x,z):f1(f2(z,y),z) ; y is undefined
 ;;; Given a GarterSnake program p, determine whether there are any
 ;;; undefined variables in p.
 
-;; program-all-defined? : Program -> Bool
+;; program-undefined-variables : Program -> SetOfVariable
 ;; GIVEN: A GarterSnake program p
-;; RETURNS: true iff there every variable occurring in p is available at
-;; the place it occurs.
+;; RETURNS: the set of all variables that occur undefined at least
+;; once in the program.
+;; EXAMPLES:
+#|
+def f1(x):f1(x)           ; f1 is defined in the body of f1
+def f2 (x, y):f1(y)       ; f1 is defined in the body of f2
+def f3 (x,z): f1(f2(z,f1)) ; f1 and f2 are defined in the body of f3
+                           ; spaces are ignored
+                          ; you can pass a function as an argument
+def f4 (x, z):x(z,z)       ; you can call an argument as a function
+
+contains no occurrences of undefined variables, so
+program-undefined-variables should return the empty list
+
+def f1(x):f2(y)            ; f2 is undefined, and y is undefined
+def f2(x,y): f3(y,x)       ; f3 is undefined in the body of f2
+def f3 (x,z):f1(f2(z,y),z) ; y is undefined
+
+For this program, program-undefined-variables should return (list 'f2
+'y 'f3).  The elements of this list may appear in any order.
+|#
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -167,77 +186,106 @@ def f4(x,z):x(z,z)       ; f1, f2, f3, f4, x, and z are available in the body.
 
 ;; We'll have a family of functions that follow the data definitions;
 
-;; program-all-defined : Program                        -> Boolean
-;; lod-all-defined?    : ListOfDefinition SetOfVariable -> Boolean
-;; def-all-defined?    : Definition       SetOfVariable -> Boolean         
-;; exp-all-defined?    : Exp              SetOfVariable -> Boolean         
+;; program-undefined-variables: Program                        -> SetOfVariable
+;; lod-undefined-variables    : ListOfDefinition SetOfVariable -> SetOfVariable
+;; def-undefined-variables    : Definition       SetOfVariable -> SetOfVariable         
+;; exp-undefined-variables    : Exp              SetOfVariable -> SetOfVariable         
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; lod-all-defined? : ListOfDefinition SetOfVariable -> Boolean
+;; lod-undefined-variables : ListOfDefinition SetOfVariable -> SetOfVariable
 ;; GIVEN: a list of definitions 'defs' from some program p and a set of
 ;; variables 'vars'
 ;; WHERE: vars is the set of variables available at the start of defs in
 ;; p.
-;; RETURNS: true iff there are no undefined variables in defs.
+;; RETURNS: the set of variables that occur undefined at least once in defs.
 ;; EXAMPLES: See example above
 ;; STRATEGY: Use template for ListOfDefinition on defs.  The names
 ;; available in (rest defs) are those in vars, plus the variable
 ;; defined in (first defs).
 
-(define (lod-all-defined? defs vars)
+(define (lod-undefined-variables defs vars)
   (cond
-    [(null? defs) true]
+    [(null? defs) empty]
     [else
-     (and
-      (def-all-defined? (first defs) vars)
-      (lod-all-defined? (rest  defs)
+     (set-union
+      (def-undefined-variables (first defs) vars)
+      (lod-undefined-variables (rest  defs)
                         (set-cons (def-name (first defs))
                                   vars)))]))
 
 
-;; def-all-defined? : Definition SetOfVariable -> Boolean 
+;; def-undefined-variables : Definition SetOfVariable -> SetOfVariable 
 ;; GIVEN: A definition 'def' from some program p and a set of
 ;; variables 'vars'
 ;; WHERE: vars is the set of variables available at the start of def in
 ;; p.
-;; RETURNS: true if there are no undefined variables in the body of
-;; def.  The available variables in the body are the ones in def, plus
-;; the name and arguments of the definition.
+;; RETURNS: the set of variables that occur undefined at least once in
+;; the body of the definition.  The available variables in the body
+;; are the ones in def, plus the name and arguments of the definition.
 ;; EXAMPLES: See example above
 ;; STRATEGY: Use template for Definition on def
 
-(define (def-all-defined? def vars)
-  (exp-all-defined? (def-body def)
+(define (def-undefined-variables def vars)
+  (exp-undefined-variables (def-body def)
                     (set-cons
                      (def-name def)
                      (set-union (def-args def) vars))))
 
 
-;; exp-all-defined? : Exp SetOfVariable -> Boolean
-;; GIVEN: A GarterSnake expression e and a set of variables vars
-;; WHERE: vars is the set of variables that are defined at e
-;; RETURNS: true iff all the variable in exp are defined
-;; STRATEGY: Use template for Exp on e
+;; exp-undefined-variables : Exp SetOfVariable -> SetOfVariable
+;; GIVEN: A GarterSnake expression e from some program p and a set of variables vars
+;; WHERE: vars is the set of variables that are available at the
+;; occurrence of e in p
+;; RETURNS: the set of variables that occur undefined at least once in e.
+;; STRATEGY: Use template for Exp on e.
 
-(define (exp-all-defined? e vars)
+(define (exp-undefined-variables e vars)
   (cond
-    [(varexp? e) (my-member? (varexp-name e) vars)]
+    [(varexp? e) (var-undefined-variables (varexp-name e) vars)]
     [(appexp? e)
-     (and (my-member? (appexp-fn e) vars)
-          (andmap
-           (lambda (e1) (exp-all-defined? e1 vars))
-           (appexp-args e)))]))
+     (set-union
+      (var-undefined-variables (appexp-fn e) vars)
+      (loexp-undefined-variables (appexp-args e) vars))]))
 
+;; Here we combine the two occurrences of my-member? into a help
+;; function.  Note that it, too, follows the data definition.
 
-;; program-all-defined? : Program -> Bool
+;; var-undefined-variables: Variable SetOfVariable -> SetOfVariable
+;; GIVEN: A GarterSnake variable v from some program p and a set of variables vars
+;; WHERE: vars is the set of variables that are available at this
+;; occurrence of v in p.
+;; RETURNS: the set of variables that occur undefined at least once in e.
+;; STRATEGY: Combine simpler functions
+
+(define (var-undefined-variables v vars)
+  (if (my-member? v vars) empty (list v)))
+  
+;; loexp-undefined-variables : ListOfExp ListOfVariable -> ListOfVariable
+;; GIVEN: A list GarterSnake expression exps from some program p,
+;; WHERE: In p, all the expressions in exps have the same available
+;; variables, and vars is that set of available variables.
+;; occurrence of e in p
+;; RETURNS: the set of variables that occur undefined at least once in
+;; one of the expressions in exps.
+;; STRATEGY: Use template for ListOfExp on exps.
+
+(define (loexp-undefined-variables exps vars)
+  (cond
+    [(empty? exps) empty]
+    [else
+     (set-union
+      (exp-undefined-variables   (first exps) vars)
+      (loexp-undefined-variables (rest exps) vars))]))
+
+;; program-undefined-variables : Program -> Bool
 ;; GIVEN: A GarterSnake program p
 ;; RETURNS: true iff there every variable occurring in p is defined at
 ;; the place it occurs.
-;; STRATEGY: Initialize the invariant of lod-all-defined?
+;; STRATEGY: Initialize the invariant of lod-undefined-variables
 
-(define (program-all-defined? p)
-  (lod-all-defined? p empty))
+(define (program-undefined-variables p)
+  (lod-undefined-variables p empty))
 
 ;;; Let's turn our examples into tests
 
@@ -257,10 +305,51 @@ def f2 (x y) (f3 y x)        ; f3 is undefined in the body of f2
 def f3 (x z) (f1 (f2 z y) z) ; y is undefined
 |#
 
+;; well, my first pass didn't work.  I kept getting things like
+;; (list (list 'f3) (list 'y)).
+;; Here are the tests I used to debug.
+(begin-for-test
+  
+  (check-equal?
+   (var-undefined-variables 'y (list 'x 'z))
+   (list 'y))
+
+  (check-equal?
+   (loexp-undefined-variables (list (make-varexp 'x) (make-varexp 'y)) (list 'x))
+   (list 'y))
+
+  (check set-equal?
+         (exp-undefined-variables (make-appexp 'f (list (make-varexp 'x) (make-varexp 'y))) empty)
+         (list 'f 'x 'y))
+
+  (check set-equal?
+         (exp-undefined-variables (make-appexp 'f (list (make-varexp 'x) (make-varexp 'y))) (list 'x))
+         (list 'f 'y))
+
+  (check set-equal?
+         (def-undefined-variables
+           (make-def 'f3 (list 'x) (make-appexp 'f (list (make-varexp 'x) (make-varexp 'y))))
+           empty)
+         (list 'f 'y))
+
+  (check set-equal?
+         (lod-undefined-variables
+           (list (make-def 'f3 (list 'x) (make-appexp 'f (list (make-varexp 'x) (make-varexp 'y)))))
+           empty)
+         (list 'f 'y))
+  ;; this was the first test that failed, so I know the bug was in lod-undefined-variables.
+  ;; it used set-cons, when it should have used set-union.  
+  ;; An automated typechecker or contract checker would have caught this, I'm sorry to say. 
+ 
+
+  )
+
+;; the original tests, adapted from Examples/07-3-gartersnake.rkt
+
 (begin-for-test
 
-  (check-true
-   (program-all-defined?
+  (check set-equal?
+   (program-undefined-variables
     (list
      (make-def 'f1 (list 'x) (make-appexp 'f1 (list (make-varexp 'x))))
      (make-def 'f2 (list 'x 'y) (make-appexp 'f1 (list (make-varexp 'y))))
@@ -268,10 +357,11 @@ def f3 (x z) (f1 (f2 z y) z) ; y is undefined
                (make-appexp 'f1 (list (make-appexp 'f2
                                              (list (make-varexp 'z)
                                                    (make-varexp 'y)))
-                                   (make-varexp 'z)))))))
+                                      (make-varexp 'z))))))
+   empty)
 
-  (check-false
-   (program-all-defined?
+  (check set-equal?
+   (program-undefined-variables
     (list
      (make-def 'f1 (list 'x) (make-appexp 'f2 (list (make-varexp 'x))))
      (make-def 'f2 (list 'x 'y) (make-appexp 'f1 (list (make-varexp 'y))))
@@ -279,11 +369,11 @@ def f3 (x z) (f1 (f2 z y) z) ; y is undefined
                (make-appexp 'f1 (list (make-appexp 'f2
                                              (list (make-varexp 'z)
                                                    (make-varexp 'y)))
-                                   (make-varexp 'z))))))
-   "should find f2 undefined in body of f1")
+                                      (make-varexp 'z))))))
+   (list 'f2))
 
-  (check-false
-   (program-all-defined?
+  (check set-equal?
+   (program-undefined-variables
     (list
      (make-def 'f1 (list 'x) (make-appexp 'f1 (list (make-varexp 'x))))
      (make-def 'f2 (list 'x 'y) (make-appexp 'f3 (list (make-varexp 'y))))
@@ -292,10 +382,11 @@ def f3 (x z) (f1 (f2 z y) z) ; y is undefined
                                              (list (make-varexp 'z)
                                                    (make-varexp 'y)))
                                    (make-varexp 'z))))))
-   "should find f3 undefined in body of f2")
+   (list 'f3))
 
-  (check-false
-   (program-all-defined?
+
+  (check set-equal?
+   (program-undefined-variables
     (list
      (make-def 'f1 (list 'x) (make-appexp 'f1 (list (make-varexp 'x))))
      (make-def 'f2 (list 'x 'y) (make-appexp 'f1 (list (make-varexp 'y))))
@@ -303,8 +394,22 @@ def f3 (x z) (f1 (f2 z y) z) ; y is undefined
                (make-appexp 'f1 (list (make-appexp 'f2
                                              (list (make-varexp 'z)
                                                    (make-varexp 'y)))
-                                   (make-varexp 'z))))))
-   "should find y undefined in body of f3")
+                                      (make-varexp 'z))))))
+   (list 'y))
+
+  (check set-equal?
+         (program-undefined-variables
+          (list
+           (make-def 'f1 (list 'x) (make-appexp 'f1 (list (make-varexp 'y))))
+           (make-def 'f2 (list 'x 'y) (make-appexp 'f3 (list (make-varexp 'y))))
+           (make-def 'f3 (list 'x 'z)
+                     (make-appexp 'f1 (list (make-appexp 'f2
+                                                         (list (make-varexp 'z)
+                                                               (make-varexp 'y)))
+                                            (make-varexp 'z))))))
+         (list 'y 'f3))
+         
+         
 
   )
 
