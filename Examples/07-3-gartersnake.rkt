@@ -36,7 +36,7 @@ def f2 (x, y):f1(y)       ; f1 is defined in the body of f2
 def f3 (x,z): f1(f2(z,f1)) ; f1 and f2 are defined in the body of f3
                            ; spaces are ignored
                           ; you can pass a function as an argument
-def f4 (x z):x(z,z)       ; you can call an argument as a function
+def f4 (x, z):x(z,z)       ; you can call an argument as a function
 |#
 
 ;; If we use a variable in a place where it is not available, we say
@@ -52,11 +52,12 @@ def f3 (x,z):f1(f2(z,y),z) ; y is undefined
 
 
 
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;; The problem:
 
-;;; Given a GarterSnake program p, determine whether there any
+;;; Given a GarterSnake program p, determine whether there are any
 ;;; undefined variables in p.
 
 ;; program-all-defined? : Program -> Bool
@@ -179,11 +180,13 @@ def f4(x,z):x(z,z)       ; f1, f2, f3, f4, x, and z are available in the body.
 ;; lod-all-defined? : ListOfDefinition SetOfVariable -> Boolean
 ;; GIVEN: a list of definitions 'defs' from some program p and a set of
 ;; variables 'vars'
-;; WHERE: vars is the set of variables defined at the start of defs in
+;; WHERE: vars is the set of variables available at the start of defs in
 ;; p.
 ;; RETURNS: true iff there are no undefined variables in defs.
 ;; EXAMPLES: See example above
-;; STRATEGY: Use template for ListOfDefinition on defs
+;; STRATEGY: Use template for ListOfDefinition on defs.  The names
+;; available in (rest defs) are those in vars, plus the variable
+;; defined in (first defs).
 
 (define (lod-all-defined? defs vars)
   (cond
@@ -199,19 +202,19 @@ def f4(x,z):x(z,z)       ; f1, f2, f3, f4, x, and z are available in the body.
 ;; def-all-defined? : Definition SetOfVariable -> Boolean 
 ;; GIVEN: A definition 'def' from some program p and a set of
 ;; variables 'vars'
-;; WHERE: vars is the set of variables defined at the start of def in
+;; WHERE: vars is the set of variables available at the start of def in
 ;; p.
 ;; RETURNS: true if there are no undefined variables in the body of
-;; def.  The defined variables in the body are the ones in def, plus
+;; def.  The available variables in the body are the ones in def, plus
 ;; the name and arguments of the definition.
 ;; EXAMPLES: See example above
 ;; STRATEGY: Use template for Definition on def
 
 (define (def-all-defined? def vars)
   (exp-all-defined? (def-body def)
-                   (set-cons
-                    (def-name def)
-                    (set-union (def-args def) vars))))
+                    (set-cons
+                     (def-name def)
+                     (set-union (def-args def) vars))))
 
 
 ;; exp-all-defined? : Exp SetOfVariable -> Boolean
