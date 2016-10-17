@@ -67,8 +67,47 @@ href="../Info/master-rubric-public.txt" >here</a>.
   GarterSnake.  As part of their compiler, they need to translate
   GarterSnake programs into an intermediate representation, in which
   every use of a variable is replaced by an index into tables of local
-  and global variables.  For example, in the program
+  and global variables.
 
+  <p>The intermediate representation is defined as follows:</p>
+
+<pre>
+;; An IRProgram is a ListOfIRDefinition
+
+;; An IRDefinition is a (make-ir-definition NonNegInt IRExpression)
+;; Interpretation:
+;; (make-ir-definition nargs body) represents a GarterSnake definition
+;; of a funtion where
+;;   nargs is the number of arguments this function takes
+;;   body is an IRExpression that represents the body of the function
+
+;; An IRExpression is one of
+;; -- (make-localvar-exp PosInt)
+;; -- (make-globalvar-exp PosInt)
+;; -- (make-undefinedvar-exp Variable)
+;; -- (make-ir-app-exp IRExpression PosInt ListOfIRExpression)
+;;    WHERE the first IRExpresion is the IR for a variable
+
+;; Interpretation:
+
+;; (globalvar-exp i)
+;; refers to the i-th function definition (starting at 1)
+
+;; (localvar-exp i)
+;; refers to the i-th argument of the current function (starting at 1); 
+
+;; (undefined-varexp name)
+;; is a reference to an undefined variable called 'name'.
+
+;; (make-appexp i (list ir1 ... irn))
+;; represents a call to the i-th function, with arguments represented
+;; by ir1,..,irn.
+</pre>
+  
+<p>
+For example, in the program
+  </p>
+  
 <pre>
 def f1(x):f1(x)          
 def f2(u,y):f1(y)        
@@ -192,5 +231,5 @@ level of performance.
 <font size=-1>
 <p align=right>
 <!-- hhmts start -->
-Last modified: Sun Oct 16 23:08:51 Eastern Daylight Time 2016 <!-- hhmts end -->
+Last modified: Sun Oct 16 23:23:22 Eastern Daylight Time 2016 <!-- hhmts end -->
 </body> </html>
