@@ -5,59 +5,19 @@
 </head>
 
 <body>
-<h1>Guided Practice 6.6: Descendent Trees</h1>
+<h1>Guided Practice 6.6: (Used to be) Descendent Trees</h1>
 
-<p><strong>Question 1:</strong> Design a function person-double-name
-that takes a Person and returns a Person just like the given one,
-except that the Person and all of his descendants have their names
-doubled.  For example, </p>
+<p> There is no
+Guided Practice 6.6.  Go on to <a href="../gp06-7-folds/index.html" >Guided Practice 6.7</a></p>
 
-<pre>
-(person-double-name
-  (make-person "chuck" 
-               (list (make-person "alice" empty) 
-                     (make-person "bob" empty))))
-=
-(make-person "chuckchuck" 
-             (list (make-person "alicealice" empty) 
-                   (make-person "bobbob" empty)))
-</pre>
 
-<p>Try doing it by straightforward structural decomposition, and then
-try it again using HOFs for the portion of the data that is
-represented as a list.  Remember that you will only learn something if
-you actually do it yourself.</p>
-
-<p><a href="06-6-double-names.rkt" >[Solution to Question 1]</a></p>
-
-<strong>Question 2:</strong> Design the following function:
-
-<pre>
-;; person-descendant? : Person String -> Boolean
-;; GIVEN: a person and a name
-;; RETURNS: true iff that person or any of his/her descendants has
-;; that name.
-</pre>
-
-<pre>
-;; EXAMPLES:
-;; Given the persons in the lesson:
-(begin-for-test
-  (check-true (person-descendant? fred "bob"))
-  (check-true (person-descendant? chuck "bob"))
-  (check-false (person-descendant? chuck "eddie"))
-  (check-false (person-descendant? fred "eve")))
-</pre>
-
-<p>Try doing it by straightforward structural decomposition, and then
-try it again using HOFs.</p>
-
-<p><a href="06-6-find-descendant.rkt" >[Solution to Question 2]</a></p>
+<p>There shouldn't be any links to this page.  If you get here, please
+let Dr. Wand know how you got here.</p>
 
 <hr>
 <address></address>
 <font size=-1>
 <p align=right>
 <!-- hhmts start -->
-Last modified: Tue Sep  6 17:25:27 Eastern Daylight Time 2016 <!-- hhmts end -->
+Last modified: Sat Oct 15 14:10:02 Eastern Daylight Time 2016 <!-- hhmts end -->
 </body> </html>

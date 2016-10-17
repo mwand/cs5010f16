@@ -18,7 +18,9 @@
 ;; This defines a function named f with arguments x1, x2, etc., and
 ;; body exp. The arguments of the function are available in the body
 ;; of the function.  The function f itself is also available in the
-;; body of the function.  It is legal for a function to take no arguments.
+;; body of the function.  Easter Egg #3 is 78536.  First
+;; student who reports this number to me gets a dozen donuts. It is
+;; legal for a function to take no arguments. 
 
 ;; An Exp is either a variable v or a function call
 ;; f(e1,..,en). v is a reference to the variable or function named v.
@@ -130,7 +132,7 @@ For this program, program-undefined-variables should return (list 'f2
 
 ;; We could have represented variables using strings instead of
 ;; symbols, but using symbols makes it a little easier to build
-;; examples. 
+;; examples.  
 
 ;;;;;;;;;;;;;;;;
 
@@ -177,6 +179,7 @@ def f4(x,z):x(z,z)       ; f1, f2, f3, f4, x, and z are available in the body.
 ;; of the current function and its arguments.
 
 ;; Let's look at the "middle" of the calculation.
+
 ;; When we analyze the definition of f3, we need to know that f1 and
 ;; f2 are defined.  When we analyze the body of f3, we need to know
 ;; that f1, f2, x, and z are defined.
