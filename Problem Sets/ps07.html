@@ -1,0 +1,196 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html> <head>
+<title>CS 5010: Problem Set 7</title>
+<link type="text/css" rel="stylesheet" href="../css/course.css">
+
+</head>
+
+<body>
+<h1>CS 5010: Problem Set 7</h1>
+
+<!-- Be sure to change the problem set number both in the title and -->
+<!-- the h1! -->
+
+<p>
+<strong>Out:</strong> Monday, October 24, 2016
+
+<p><strong>Due:</strong> Monday, October 31, 2016
+at 600pm local time.
+</p>
+
+
+<p>
+The goal of this problem set is to give you practice using context
+arguments and invariants.
+</p>
+
+<p>Remember that you must follow the design recipe, and write
+invariants (as WHERE clauses) whenever an argument represents context
+information. </p>
+
+<p>You must use DrScheme's HtDP Intermediate Student Language with
+  Lambda. Use list abstractions like filter, fold, and map whenever
+  they are helpful. As before, you will be penalized for failing to
+use these when they are "obviously" applicable. </p>
+
+<p>Note: not everything on this problem set requires the use of
+invariants; some may only require generalization.  Part of your task
+is to figure out when you need an invariant and when you do not.
+Remember, it is the purpose statement that determines whether or not
+you need to state an invariant.</p>
+
+<p>The quality of your purpose statements, invariants, and halting
+measures will be an important part of the evaluation of your
+submission.</p>
+
+<p>Remember that you must follow the design recipe.  Your <a
+  href="../Info/homework.html" >deliverables</a> include the data
+  definitions (including interpretation and templates), contract and
+  purpose header, strategies, code, and tests.  Be sure to sync your
+  work and fill out a Work Session Report at the end of every work
+  session.  Use the
+
+<a href="http://goo.gl/forms/Pi631A0QoO" >[need to update] Work Session Report for
+  PS07</a>.</p> 
+
+
+<p>As usual, the rubric for grading is <a
+href="../Info/master-rubric-public.txt" >here</a>. 
+</p>
+
+
+<hr>
+<p/>
+
+<ol>
+  <li>You have taken a job with NextPython, Inc., the makers of
+  GarterSnake.  As part of their compiler, they need to translate
+  GarterSnake programs into an intermediate representation, in which
+  every use of a variable is replaced by an index into tables of local
+  and global variables.  For example, in the program
+
+<pre>
+def f1(x):f1(x)          
+def f2(u,y):f1(y)        
+def f3(x,u):f1(f2(u,f3)) 
+def f4(x,f2):x(f2,z)
+</pre>
+
+  <p>
+  any
+variables occurring in the body of f3 should be translated
+according to the following rules:
+
+<pre>
+f1 -> (globalvar-exp 1)
+f2 -> (globalvar-exp 2)
+f3 -> (globalvar-exp 3)
+x  -> (localvar-exp 1)
+z  -> (localvar-exp 2)
+name -> (undefinedvar-exp name) if name is anything else
+</pre>
+
+Hence the definition of f3 should be translated to
+
+<pre>
+(make-ir-definition 2
+  (make-ir-app-exp (make-global-varexp 1)
+    (list   
+     (make-ir-app-exp (make-global-varexp 2) 
+        (list (make-local-varexp 2)
+              (make-global-varexp 3)))
+     (make-undefined-varexp 'z))))
+</pre>
+
+<p>You are to deliver a file named <kbd>q27.rkt</kbd> that provides
+  the following function:</p>
+
+  <pre>
+translation-of-program : Program -> IRProgram
+GIVEN: A GarterSnake program p
+RETURNS: The intermediate representation of p
+EXAMPLE: See ps07-structs.rkt for example.
+</pre>
+
+  <p>Your file should <kbd>require</kbd> <kbd><a
+  href="ps07-structs.rkt" >ps07-structs.rkt</a></kbd>, which contains
+  the struct definitions and additional technical details for this problem.</p>
+
+  </li>
+
+  <li> The new model of the Pluto probe from ps02 is has just come out.
+The new probe is just like the one from Problem Set 02, except for the
+following:
+
+  <ol>
+    <li>It is programmable.  The programming language for the robot is
+    defined as follows: 
+
+<pre>
+A Program is a ListOfInstruction
+Interp: A sequence of instructions, to be executed from left to
+right. 
+
+An Instruction is one of
+-- (make-turn-left)            Interp: a turn-left instruction
+-- (make-turn-right)           Interp: a turn-right instruction
+-- (make-move-forward PosInt)  Interp: an instruction to move forward
+                                       the given number of steps.
+</pre>
+    </li>
+
+    <li>Alas, the new model is less reliable than the old one.  If you
+send it forward by some number of steps, it may take up TWO steps
+more than you told it to, or TWO steps less than you told it to.
+Thus, if the robot is facing east at x=20, then after a
+(make-move-forward 10) instruction, it may end at x=28, 29,
+30, 31, or 32.   As before, the probe never moves backward, nor
+will it ever turn by mistake.   Thus, if the robot is facing east
+at x=20, then after a (make-move-forward 1), it may end at
+x=20, 21, 22, or 23, but not x=19.
+    </li>
+  </ol>
+
+<p>  You are to write file named q2.rkt that provides the following
+function:
+</p>
+
+<pre>
+;; probe-possible-outcome? : Int Int Program Int Int -> Bool
+;; GIVEN: starting coordinates x0, y0, a robot program p, and ending
+;; coordinates x1, y1.
+;; RETURNS: true iff the robot, starting at (x0, y0) and facing north,
+;; and executing program p according to the tolerances given above,
+;; could end at (x1, y1).
+;; EXAMPLES:
+;; Let p1 = (list (make-turn-right)
+;;                (make-move-forward 10)
+;;                (make-turn-right)
+;;                (make-move-forward 5))
+;; then (probe-possible-outcome 20 100 p1 x1 y1) = true iff
+;; x1 is in the interval [28, 32] and y1 is in the interval
+;; [103,107]. 
+</pre>
+  
+<p>For this problem, your program needs to provide acceptable
+performance.  "Acceptable" means that it can provide answers for
+programs of length 20 in a few seconds-- the time it takes to take
+a sip of coffee.  If you are tempted to go get a fresh cup of
+coffee, your program is too slow.  If you are sufficiently clever
+about how you represent your data, it should be easy to attain this
+level of performance.
+  </p>
+  
+</li>
+
+
+</ol>
+
+
+<hr>
+<address></address>
+<font size=-1>
+<p align=right>
+<!-- hhmts start -->
+Last modified: Sun Oct 16 23:08:51 Eastern Daylight Time 2016 <!-- hhmts end -->
+</body> </html>

@@ -149,20 +149,20 @@ make-roster
 roster-classname
 roster-students
 
-behavior-correct? : ProposedSolution SetOfEnrollment -> Boolean
-GIVEN: a ProposedSolution soln-fn and a SetOfEnrollments se
+behavior-correct? : ProposedSolution SetOfEnrollmentAssertion -> Boolean
+GIVEN: a ProposedSolution soln-fn and a SetOfEnrollmentAssertion se
 RETURNS: true iff the output of soln-fn on se is an example of correct
 behavior by a ProposedSolution.
 EXAMPLE: See example above
 
-enrollments-to-rosters: SetOfEnrollment -> SetOfClassRoster
+enrollments-to-rosters: SetOfEnrollmentAssertion -> SetOfClassRoster
 GIVEN: a set of enrollments
 RETURNS: a correct set of class rosters for the given enrollments
 
-enrollments-to-rosters-bad-1: SetOfEnrollment -> SetOfClassRoster
-enrollments-to-rosters-bad-2: SetOfEnrollment -> SetOfClassRoster
-enrollments-to-rosters-bad-3: SetOfEnrollment -> SetOfClassRoster
-GIVEN: a set of enrollments
+enrollments-to-rosters-bad-1: SetOfEnrollmentAssertion -> SetOfClassRoster
+enrollments-to-rosters-bad-2: SetOfEnrollmentAssertion -> SetOfClassRoster
+enrollments-to-rosters-bad-3: SetOfEnrollmentAssertion -> SetOfClassRoster
+GIVEN: a set of enrollment assertions
 RETURN: an incorrect set of class rosters for the given enrollments.
 The three functions should return DIFFERENT incorrect sets of class
 rosters. 
@@ -198,12 +198,12 @@ codewalk.</p>
 
 </ol>
 
-
+ 
 <hr>
 
 
 <font size=-1>
 <p align=right>
 <!-- hhmts start -->
-Last modified: Thu Oct  6 09:31:42 Eastern Daylight Time 2016 <!-- hhmts end -->
+Last modified: Tue Oct 11 10:28:12 Eastern Daylight Time 2016 <!-- hhmts end -->
 </body> </html>
