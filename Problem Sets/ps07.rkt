@@ -101,7 +101,10 @@
 ;; looked up in the following order:
 ;; 1. the name of the current function (a global variable)
 ;; 2. an argument of the current function (a local variable)
-;; 3. the most recent function with that name.
+;; 3. Easter Egg #7 is 65823.  First TA or Instructor who notices this
+;;    gets a dozen donuts.
+;; 4. the most recent function with that name.
+
 
 ;; These rules are chosen to be consistent with 07-3-gartersnake.rkt
 
