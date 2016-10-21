@@ -64,102 +64,163 @@ href="../Info/master-rubric-public.txt" >here</a>.
 
 <ol>
   <li>You have taken a job with NextPython, Inc., the makers of
-  GarterSnake.  As part of their compiler, they need to translate
-  GarterSnake programs into an intermediate representation, in which
-  every use of a variable is replaced by an index into tables of local
-  and global variables.
+  GarterSnake.  They want to add a better user interface for their
+  development environment, so they want to add a pretty-printer which
+  will convert the GarterSnake syntax-tree representation, from Lesson
+  7.4, into a nicely indented format.
 
-  <p>The intermediate representation is defined as follows:</p>
-
-<pre>
-;; An IRProgram is a ListOfIRDefinition
-
-;; An IRDefinition is a (make-ir-definition NonNegInt IRExpression)
-;; Interpretation:
-;; (make-ir-definition nargs body) represents a GarterSnake definition
-;; of a funtion where
-;;   nargs is the number of arguments this function takes
-;;   body is an IRExpression that represents the body of the function
-
-;; An IRExpression is one of
-;; -- (make-localvar-exp PosInt)
-;; -- (make-globalvar-exp PosInt)
-;; -- (make-undefinedvar-exp Variable)
-;; -- (make-ir-app-exp IRExpression PosInt ListOfIRExpression)
-;;    WHERE the first IRExpresion is the IR for a variable
-
-;; Interpretation:
-
-;; (globalvar-exp i)
-;; refers to the i-th function definition (starting at 1)
-
-;; (localvar-exp i)
-;; refers to the i-th argument of the current function (starting at 1); 
-
-;; (undefined-varexp name)
-;; is a reference to an undefined variable called 'name'.
-
-;; (make-appexp i (list ir1 ... irn))
-;; represents a call to the i-th function, with arguments represented
-;; by ir1,..,irn.
-</pre>
-  
-<p>
-For example, in the program
-  </p>
-  
-<pre>
-def f1(x):f1(x)          
-def f2(u,y):f1(y)        
-def f3(x,u):f1(f2(u,f3)) 
-def f4(x,f2):x(f2,z)
-</pre>
-
-  <p>
-  any
-variables occurring in the body of f3 should be translated
-according to the following rules:
-
-<pre>
-f1 -> (globalvar-exp 1)
-f2 -> (globalvar-exp 2)
-f3 -> (globalvar-exp 3)
-x  -> (localvar-exp 1)
-z  -> (localvar-exp 2)
-name -> (undefinedvar-exp name) if name is anything else
-</pre>
-
-Hence the definition of f3 should be translated to
-
-<pre>
-(make-ir-definition 2
-  (make-ir-app-exp (make-global-varexp 1)
-    (list   
-     (make-ir-app-exp (make-global-varexp 2) 
-        (list (make-local-varexp 2)
-              (make-global-varexp 3)))
-     (make-undefined-varexp 'z))))
-</pre>
-
-<p>You are to deliver a file named <kbd>q27.rkt</kbd> that provides
-  the following function:</p>
+  <p>Recall that the syntax-tree representation of GarterSnake is
+  defined as follows:</p>
 
   <pre>
-translation-of-program : Program -> IRProgram
-GIVEN: A GarterSnake program p
-RETURNS: The intermediate representation of p
-EXAMPLE: See ps07-structs.rkt for example.
+;; A Program is a ListOfDefinition.
+
+(define-struct def (name args body))
+;; A Definition is a (make-def Variable ListOfVariable Exp)
+;; INTERPRETATION:
+;; name is the name of the function being defined
+;; args is the list of arguments of the function
+;; body is the body of the function.
+
+(define-struct varexp (name))
+(define-struct appexp (fn args))
+
+;; An Exp is one of
+;; -- (make-varexp Variable)
+;; -- (make-appexp Variable ListOfExp)
+;; INTERPRETATION;
+;; (make-varexp v)                   represents a use of the variable v
+;; (make-appexp f (list e1 ... en))  represents a call to the function
+;;                                   named f, with arguments e1,..,en
+
+;; A Variable is a Symbol.
 </pre>
 
-  <p>Your file should <kbd>require</kbd> <kbd><a
-  href="ps07-structs.rkt" >ps07-structs.rkt</a></kbd>, which contains
-  the struct definitions and additional technical details for this problem.</p>
+  <p>Your task is to write</p>
 
-  </li>
+  <pre>
+;; program-to-strings : Program PosInt -> ListOfString
+;; GIVEN: GarterSnake program and a width
+;; RETURNS: a representation of the program as a sequence of lines,
+;;         following the formatting rules described below.
+  </pre>
+
+  <p>The detailed formatting rules will be given below, but here's an
+  example of the function:</p>
+
+  <pre>
+(define sample-program
+  (list
+   (make-def 'a-very-long-function-name
+             (list 'x)
+             (make-appexp 'f1 (list (make-varexp 'x))))
+   (make-def 'f2 (list 'x 'y 'a-very-long-variable-name)
+             (make-appexp 'f1 (list (make-varexp 'y))))
+   (make-def 'f3 (list 'x 'z 't 'u)
+             (make-appexp
+              'f1
+              (list (make-appexp
+                     'f2 (list (make-varexp 'z)
+                               (make-varexp 'y)))
+                    (make-varexp 'z)
+                    (make-appexp
+                     'f1 (list (make-appexp
+                                'f2 (list (make-varexp 'z)
+                                          (make-varexp 'y)))
+                               (make-varexp 'z))))))))
+
+(program-to-strings sample-program 20)
+=>
+(list
+ "def a-very-long-function-name (x) :"
+ "    f1(x)"
+ "def f2 (x,"
+ "        a-very-long-variable-name,"
+ "        y) :"
+ "    f1(y)"
+ "def f3 (x,z,t,u) :"
+ "    f1(f2(z, y),"
+ "       z,"
+ "       f1(f2(z, y),"
+ "          z))")
+</pre>
+
+<p>The formatting rules are as follows:</p>
+
+<pre>
+Layout of Programs:
+Each definition should appear on one or more lines.
+Lines should always be of length less than or equal to the given
+width, except for a few cases listed below.
+Insert a blank line between each definition.
+
+Layout of Definitions:
+Each definition should start with one line laid out as
+def fnname (arg1,arg2,arg3) :
+If there are 0 or 1 arguments, it should always be laid out this
+way. If this doesn't fit and there are two or more arguments, it
+should be laid out as 
+def fnname (arg1,
+            arg2,
+            ..
+            argn) :
+if this doesn't fit, it is acceptable.
+the body of the definition should start on the next line, indented
+by exactly 4 spaces
+
+
+Layout of Expressions:
+Lay out an expression horizontally if possible, e.g.
+foo(e1, e2, e3)
+if there are 0 arguments, it should always be laid out this
+way. If this doesn't fit and there are one or more arguments, it
+should be laid out as
+foo(e1,
+    e2,
+    e3)
+The first expression begins on the first line.  The closing paren is always
+on the last line.  Here "e1," stands for a set of lines with a
+comma at the and of the last line.
+
+Pay attention to the spaces and the commas.  There is no space
+after the colon in a definition, nor is there any space after the
+right paren on the last line.
+
+It is possible that a single variable, with the correct number of
+right parentheses (and possibly a comma), does not fit on one line.
+That is acceptable.
+
+For any given program and width, these rules determine one and only
+one layout.
+</pre>
+
+<p>Turn in your solution is a file named <kbd>q1.rkt</kbd>.  You also must turn
+in a call graph for your solution, as in the last few problem sets.
+Call this file <kbd>call-graph-1</kbd> with an appropriate suffix.  Be
+sure your code includes a halting measure for every function that appears in a
+cycle in your call graph.</p>
+
+<p>This problem reuires careful analysis of the context.  For example,
+when your program generates the string
+
+<pre>
+ "       f1(f2(z, y),"
+</pre>
+
+what information does it need to know about the context?  If there is
+more than one thing that it needs to know, you can introduce multiple
+context variables to keep track of them.
+</p>
+
+
+
+<p></p>
+
+</li>
 
   <li> The new model of the Pluto probe from ps02 is has just come out.
 The new probe is just like the one from Problem Set 02, except for the
-following:
+following:</p>
 
   <ol>
     <li>It is programmable.  The programming language for the robot is
@@ -178,19 +239,21 @@ An Instruction is one of
 </pre>
     </li>
 
-    <li>Alas, the new model is less reliable than the old one.  If you
-send it forward by some number of steps, it may take up TWO steps
-more than you told it to, or TWO steps less than you told it to.
-Thus, if the robot is facing east at x=20, then after a
-(make-move-forward 10) instruction, it may end at x=28, 29,
-30, 31, or 32.   As before, the probe never moves backward, nor
-will it ever turn by mistake.   Thus, if the robot is facing east
-at x=20, then after a (make-move-forward 1), it may end at
-x=20, 21, 22, or 23, but not x=19.
-    </li>
-  </ol>
+    <li>Alas, the new model of the Pluto probe is less reliable than
+the old one.  If you send it forward by some number of steps, it may
+take up to TWO steps more than you told it to, or TWO steps less than you
+told it to.  As before, the probe never moves backward, nor will it ever turn
+by mistake. 
 
-<p>  You are to write file named q2.rkt that provides the following
+<p>Thus, if the robot is facing east at x=20, then after a
+<kbd>(make-move-forward 10)</kbd> instruction, it will end still facing east,
+with its x-coordinate in the interval [28,32]  (that is, 30 plus or minus
+    2), and  its y-coordinate unchanged.  If the instruction were
+    instead <kbd>(make-move-forward 1)</kbd>, then afterwards the x coordinate
+    would be in the interval [20,23] (not [19,23]).
+</p>  </li> </ol>
+
+<p>  You are to write file named <kbd>q2.rkt</kbd> that provides the following
 function:
 </p>
 
@@ -213,12 +276,12 @@ function:
   
 <p>For this problem, your program needs to provide acceptable
 performance.  "Acceptable" means that it can provide answers for
-programs of length 20 in a few seconds-- the time it takes to take
-a sip of coffee.  If you are tempted to go get a fresh cup of
-coffee, your program is too slow.  If you are sufficiently clever
-about how you represent your data, it should be easy to attain this
-level of performance.
-  </p>
+programs of length 20 in a few seconds-- the time it takes to take a
+sip of coffee.  If you are tempted to go get a fresh cup of coffee,
+your program is too slow.  HINT: Small changes in your code will
+probably not help.  You will need to devise a good
+representation for the possible states of the robot in the middle of
+the program execution.  </p>
   
 </li>
 
@@ -231,5 +294,5 @@ level of performance.
 <font size=-1>
 <p align=right>
 <!-- hhmts start -->
-Last modified: Sun Oct 16 23:23:22 Eastern Daylight Time 2016 <!-- hhmts end -->
+Last modified: Fri Oct 21 14:48:47 Eastern Daylight Time 2016 <!-- hhmts end -->
 </body> </html>
