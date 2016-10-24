@@ -10,74 +10,67 @@
 <p>Consider the computation of</p>
 
 <pre>
-(free-vars
-  (make-app
-    (make-lam
-      'x
-      (make-app
-        'x
-        (make-lam
-          'y
-          (make-app
-            'x
-            (make-app 'y 'z)))))
-    (make-lam
-      'y
-      (make-app
-        'u
-        (make-lam
-          'z
-          (make-app
-            'x
-            (make-app 'y 'z)))))))
+(program-all-defined?
+    (list
+     (make-def 'f1 (list 'x) (make-appexp 'f2 (list (make-varexp 'x))))
+     (make-def 'f2 (list 'x 'y) (make-appexp 'f2
+                                             (list (make-varexp 'z)
+                                                   (make-varexp 'y))))
+     (make-def 'f3 (list 'x 'y 'z)
+               (make-appexp 'f1 (list (make-appexp 'f2
+                                                   (list (make-varexp 'z)
+                                                         (make-varexp 'y)))
+                                   (make-varexp 'x))))))
 </pre>
 
-<p>Which of the following will appear as calls to free-vars-in-subexp during
+<p>Which of the following will appear as calls during
 this computation?
 </p>
 
 <ol>
-  <li><kbd>(free-vars-in-subexp (make-app 'y 'z) (list 'z 'y))</kbd></li>
-  <li><kbd>(free-vars-in-subexp (make-app 'y 'z) (list 'x 'y)) </kbd></li>
-  <li><kbd>(free-vars-in-subexp (make-app 'y 'z) (list 'y 'x)) </kbd></li>
-  <li><kbd>(free-vars-in-subexp (make-app 'y 'z) (list 'x 'z)) </kbd></li>
+  <li><kbd>(exp-all-defined? (make-varexp 'z) (list 'f1 'x))</kbd></li>
+  
+  <li><kbd>(exp-all-defined? (make-varexp 'z) (list 'f3 'x 'y 'z 'f2 'f1))</kbd></li>
+
+  <li><kbd>(exp-all-defined? (make-varexp 'z) (list 'f2 'x 'y 'z 'f1))</kbd></li>
+
+  <li><kbd>(exp-all-defined? (make-varexp 'z) (list 'f3 'x 'y 'f1 'f2 'z))</kbd></li>
 
 </ol>
 
 <h2>ANSWER</h2>
 
-Answer:  1 and 3.  According to the invariant, the first argument to
-free-vars-in-subexp is the list of lambda-variables that the expression
-occurs inside of.  There are two  occurences of   
- 
-<pre>
-(make-app 'y 'z)
-</pre>
-
-<p>in this fredexp.  The first is inside
+<p>Answer:  There are two occurrences of <kbd>(make-varexp 'z)</kbd> in
+this program-- one in the definition of <kbd>f2</kbd> and one in the
+definition of definition of <kbd>f3</kbd>.
 </p>
 
-<pre>
-(make-lam 'x
-   ...  
-  (make-lam 'y 
-    ...)) 
-</pre>
-and the second is inside
+<p>According to the definition of <kbd>defs-all-defined?</kbd>, the variables appear in <kbd>vars</kbd>
+in the following order:
+<ol>
+  <li>the name of the function being defined</li>
+  <li>the arguments of the function being defined</li>
+  <li>the functions defined above the current one, in reverse order.</li>
+</ol>
+However, the invariant does not require that the variables appear in this order.
+</p>
 
-<pre>
-(make-lam 'y  
-  ... 
-  (make-lam 'z 
-    ...)) 
-</pre>
+<p>Answer (1) does not occur and does not satisfy the invariant,
+because <kbd>z</kbd> does not occur in the definition of
+<kbd>f1</kbd>.</p>
 
-<p>If we look at the code for free-vars-in-subexp, we see that the innermost
-lambda variable always occurs first.  So the right answers are 1
-(corresponding to the first occurrence with the lambda variables
-listed inside out) and 3 (corresponding to the second occurrence with
-the lambda variables listed inside out). </p>
+<p>Answer (2) occurs for the use of <kbd>z</kbd> in <kbd>f3</kbd>.  It
+satisfies the invariant.
+</p>
 
+<p>Answer (3) does not occur and does not satisfy the invariant.
+There is no occurrence of <kbd>z</kbd> for which these are the available
+variables. </p>
+
+<p>Answer (4) does not occur, but it does satisfy the invariant.
+These are exactly the variables that are available for the occurrence
+of <kbd>z</kbd> in <kbd>f3</kbd>, but this is not the order in which
+the variables are listed in the algorithm (compare with answer (2)).</p>
 
 
 
@@ -87,5 +80,5 @@ the lambda variables listed inside out). </p>
 <font size=-1>
 <p align=right>
 <!-- hhmts start -->
-Last modified: Sat Oct 31 12:30:11 Eastern Daylight Time 2015 <!-- hhmts end -->
+Last modified: Mon Oct 17 16:38:34 Eastern Daylight Time 2016 <!-- hhmts end -->
 </body> </html>

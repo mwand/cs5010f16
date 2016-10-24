@@ -10,37 +10,31 @@
 <p>Consider the computation of</p>
 
 <pre>
-(free-vars
-  (make-app
-    (make-lam
-      'x
-      (make-app
-        'x
-        (make-lam
-          'y
-          (make-app
-            'x
-            (make-app 'y 'z)))))
-    (make-lam
-      'y
-      (make-app
-        'u
-        (make-lam
-          'z
-          (make-app
-            'x
-            (make-app 'y 'z)))))))
+(program-all-defined?
+    (list
+     (make-def 'f1 (list 'x) (make-appexp 'f2 (list (make-varexp 'x))))
+     (make-def 'f2 (list 'x 'y) (make-appexp 'f2
+                                             (list (make-varexp 'z)
+                                                   (make-varexp 'y))))
+     (make-def 'f3 (list 'x 'y 'z)
+               (make-appexp 'f1 (list (make-appexp 'f2
+                                                   (list (make-varexp 'z)
+                                                         (make-varexp 'y)))
+                                   (make-varexp 'x))))))
 </pre>
 
-<p>Which of the following will appear as calls to free-vars-in-subexp during
-this computation?
+<p>Which of the following will appear as calls during
+this computation?  Which of the following satisfy the invariant?
 </p>
 
 <ol>
-  <li><kbd>(free-vars-in-subexp (make-app 'y 'z) (list 'z 'y))</kbd></li>
-  <li><kbd>(free-vars-in-subexp (make-app 'y 'z) (list 'x 'y)) </kbd></li>
-  <li><kbd>(free-vars-in-subexp (make-app 'y 'z) (list 'y 'x)) </kbd></li>
-  <li><kbd>(free-vars-in-subexp (make-app 'y 'z) (list 'x 'z)) </kbd></li>
+  <li><kbd>(exp-all-defined? (make-varexp 'z) (list 'f1 'x))</kbd></li>
+  
+  <li><kbd>(exp-all-defined? (make-varexp 'z) (list 'f3 'x 'y 'z 'f2 'f1))</kbd></li>
+
+  <li><kbd>(exp-all-defined? (make-varexp 'z) (list 'f2 'x 'y 'z 'f1))</kbd></li>
+
+  <li><kbd>(exp-all-defined? (make-varexp 'z) (list 'f3 'x 'y 'f1 'z))</kbd></li>
 
 </ol>
 
@@ -51,5 +45,5 @@ this computation?
 <font size=-1>
 <p align=right>
 <!-- hhmts start -->
-Last modified: Sat Oct 31 12:29:40 Eastern Daylight Time 2015 <!-- hhmts end -->
+Last modified: Mon Oct 17 16:39:07 Eastern Daylight Time 2016 <!-- hhmts end -->
 </body> </html>
