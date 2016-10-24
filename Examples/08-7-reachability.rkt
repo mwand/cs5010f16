@@ -127,28 +127,30 @@
 
 ;;; reachables: two versions
 
-;; reachables : SetOfNode Graph -> SetOfNode
-;; GIVEN: A set of nodes in a graph
-;; RETURNS: the set of nodes reachable from 'nodes'
-
-;;;;;;;;;;;;;;;; reachables.v1 ;;;;;;;;;;;;;;;;
-
 ;; reachables.v1 : SetOfNode Graph -> SetOfNode
-;; GIVEN: A set of nodes in a graph
-;; RETURNS: the set of nodes reachable from 'nodes'
+;; GIVEN: A set of nodes in a finite graph
+;; WHERE: nodes = the set of nodes reachable in graph g in at most
+;; steps from a set of nodes S, for some n and some set of nodes S.
+;; RETURNS: the set of nodes reachable from S.
 ;; STRATEGY: recur on nodes + their immediate successors
-;; HALTING MEASURE: the set of graph nodes NOT in nodes
+;; HALTING MEASURE: the number of graph nodes NOT in nodes
 
-(define (reachables.v1 nodes graph)
+(define (reachables.v1 nodes g)
   (local
-    ((define candidates (all-successors nodes graph)))
+    ((define candidates (all-successors nodes g)))
     (cond
       [(subset? candidates nodes) nodes]
       [else (reachables.v1
               (set-union candidates nodes)
-              graph)])))
+              g)])))
 
-;; TERMINATION ARGUMENT: At the recursive call, 'candidates' contains at
+;; CORRECTNESS REASONING: If 'nodes' is the set of nodes reachable
+;; from S in at most n steps, then 'candidates' is the set of nodes
+;; reachable from S in at most n+1 steps.  If there are no more nodes
+;; reachable in n+1 steps than there were in n steps, then we have
+;; found all the nodes reachable from S.
+
+;; TERMINATION REASONING: At the recursive call, 'candidates' contains at
 ;; least one element that is not in 'nodes' (otherwise the subset? test
 ;; would have returned true).  Hence the result of the set-union is at
 ;; least one element bigger than 'nodes'.  So the halting measure
@@ -162,6 +164,63 @@
 ;; added nodes. We'll do that in reachables.v2.
 
 ;;;;;;;;;;;;;;;; reachables.v2 ;;;;;;;;;;;;;;;;
+
+;; reachables1: SetOfNode SetOfNode Graph -> SetOfNode
+;; GIVEN: two sets of nodes and a finite graph g
+;; WHERE:
+;;  nodes is the set of nodes reachable in graph g in fewer than n steps
+;;        from a set of nodes S, for some S and n
+;;  recent is the set of nodes reachable from S in n steps but
+;;         not in n-1 steps.
+;; RETURNS: the set of nodes reachable from S in g.
+(define (reachables1 nodes recent g)
+  (local
+      ((define next
+         (set-diff (all-successors recent g)
+                   nodes)))
+    (cond
+      [(empty? next) nodes]
+      [else
+       (reachables1
+        (append next nodes)
+        next
+        g)])))
+
+;; CORRECTNESS REASONING: If the invariant is true, then 'next' is the
+;; set of the nodes reachable from S in fewer than n+1 steps but not
+;; in fewer than n steps.  If there are no more nodes reachable in n+1
+;; steps than in n steps, then we have found all the reachable nodes.
+
+;; Otherwise, since next and nodes are disjoint, then (append next
+;; nodes) is a set (that is, no duplications), and is the set of nodes
+;; reachable from S in fewer than n+1 steps.  So the recursive call to
+;; reachables1 satisfies the invariant.
+
+;; TERMINATION REASONING: If the invariant is true, then 'next' is
+;; non-empty, so at the recursive call the number of nodes _not_ in
+;; 'nodes' is smaller.
+
+;; reachables.v2 : SetOfNode Graph -> SetOfNode
+;; GIVEN: A set of nodes in a finite graph
+;; RETURNS: the set of nodes reachable from S.
+;; STRATEGY: Call a more general function
+
+(define (reachables.v2 nodes g)
+  (reachables1 empty nodes g))
+
+;; CORRECTNESS REASONING: There are no nodes reachable from 'nodes' in
+;; fewer than 0 steps.  The set of nodes reachable from 'nodes' in
+;; at most 0 steps is just 'nodes'.  So the call to reachables1
+;; satisfies reachable1's invariant.
+
+;; TERMINATION REASONING: No termination reasoning necessary because
+;; this function relies on the termination of reachables1, which we've
+;; already established.
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+
 
 ;; reachable-from? : SetOfNode SetOfNode Graph
 ;; GIVEN: two sets of nodes, 'newest' and 'nodes'
