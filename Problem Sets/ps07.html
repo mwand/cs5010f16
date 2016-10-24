@@ -148,50 +148,138 @@ href="../Info/master-rubric-public.txt" >here</a>.
 <p>The formatting rules are as follows:</p>
 
 <pre>
-Layout of Programs:
-Each definition should appear on one or more lines.
-Lines should always be of length less than or equal to the given
-width, except for a few cases listed below.
-Insert a blank line between each definition.
+1. Layout of Programs:
 
-Layout of Definitions:
-Each definition should start with one line laid out as
+The program is formatted by formatting each of definitions in
+sequence.
+
+2. Layout of Definitions:
+
+2.1 Definitions are formatted by formatting the header, consisting of
+the function name and arguments, followed by the function body,
+starting on a new line with 4 additional spaces of indentation.
+
+2.2 The function is header is formatted as
+
 def fnname (arg1,arg2,arg3) :
-If there are 0 or 1 arguments, it should always be laid out this
-way. If this doesn't fit and there are two or more arguments, it
-should be laid out as 
+
+if it will fit on a line no longer than the given width.
+
+2.3 If the function header as shown in 2.2 will not fit into the given
+width, then the function header should be laid out as
+
 def fnname (arg1,
             arg2,
             ..
             argn) :
-If this doesn't fit, it is acceptable.
-The body of the function should start on the next line, indented
-by exactly 4 spaces
 
+with each subsequent argument indented to line up under the first
+argument.
 
-Layout of Expressions:
-Lay out an expression horizontally if possible, e.g.
-foo(e1, e2, e3)
-if there are 0 arguments, it should always be laid out this
-way. If this doesn't fit and there are one or more arguments, it
-should be laid out as
+3. Layout of Expressions:
+
+3.1 If an expression will fit on a single line, including its
+indentation and closing parentheses (and comma if needed), then it is
+formatted that way.
+
+3.2 If a function application, including its indentation, closing
+parentheses and comma (if present), will not fit on a single line, but
+the
+
+fnname(e1,
+
+will fit, then that much of the call is placed on a single line and
+each of the remaining argument expressions begins on a separate line,
+indented to line up under e1, and the closing parenthesis is placed on
+the same line as the last argument expression. e.g.
+
 foo(e1,
     e2,
     e3)
-The first expression begins on the first line.  The closing paren is always
-on the last line.  Here "e1," stands for a set of lines with a
-comma at the and of the last line.
 
-Pay attention to the spaces and the commas.  There is no space
-after the colon in a definition, nor is there any space after the
-right paren on the last line.
+The closing paren is always on the last line.  Here "e2,", etc.
+stand for a set of lines with a comma at the end of the last line,
+and  "e2)" stand for a set of lines with a right parenthesis at the
+end of the last line.
 
-It is possible that a single variable, with the correct number of
-right parentheses (and possibly a comma), does not fit on one line.
-That is acceptable.
+3.3 If
 
-For any given program and width, these rules determine one and only
+fnname(e1,
+
+including its indentation, closing parentheses and comma, will not fit
+on a single line, then the function name is placed on a line by
+itself, and e1 is formatted beginning on the next line, indented with
+1 additional space and a left parenthesis.  Subsequent arguments are
+indented to line up under e1, e.g.
+
+fnname
+ (e1,
+  e2,
+  ..
+  en)
+
+Here "e2,", etc., stands for a set of lines with a comma at the end of
+the last line, and "e2)", etc., stands for a set of lines with a right
+parenthesis at the end of the last line.
+
+3.4 If the expression is a variable, then it is placed on a line by
+itself with its associated indentation, right parentheses and possible
+comma even if that does not fit on one line.
+
+4. General Properties
+
+These properties all follow from the rules above, but are stated here
+for reference. 
+
+4.1 There are no blank lines.
+
+4.2 No line ever ends with a space.
+
+4.3 No left parenthesis is ever followed by a space, and no left
+parenthesis ever appears at the end of a line.
+
+4.4 No right parenthesis is ever preceded by a space or a comma, and
+no right parenthesis ever appears at the start of a line.
+
+4.4 For any given program and width, these rules determine one and only
 one layout.
+
+4.5 Following these rules may result in some lines that are longer
+than the given width. For example, the name binary-search-helper-2
+(besides being a poor function name!) will never fit within a line of
+length 10.
+
+</pre>
+
+<p>To help you debug your program, we have provided in
+  <a href="extras.rkt"><kbd>extras.rkt</kbd></a> the function:</p>
+
+<pre>
+;; display-strings! : ListOfString -> Void
+;; GIVEN: a list of strings
+;; EFFECT: displays the strings on separate lines
+;; RETURNS: no value
+</pre>
+
+Here is a sample interaction:
+
+<pre>
+> (display-strings!
+   (cons "12345678901234567890"
+         (program-to-strings sample-program 20)))
+12345678901234567890
+def a-very-long-function-name (x) :
+    f1(x)
+def f2 (x,
+        y,
+        a-very-long-variable-name) :
+    f1(y)
+def f3 (x,z,t,u) :
+    f1(f2(z, y),
+       z,
+       f1(f2(z, y),
+          z))
+> 
 </pre>
 
 <p>Turn in your solution is a file named <kbd>q1.rkt</kbd>.  You also must turn
@@ -294,5 +382,5 @@ the program execution.  </p>
 <font size=-1>
 <p align=right>
 <!-- hhmts start -->
-Last modified: Sun Oct 23 21:25:16 Eastern Daylight Time 2016 <!-- hhmts end -->
+Last modified: Mon Oct 24 08:50:07 Eastern Daylight Time 2016 <!-- hhmts end -->
 </body> </html>
