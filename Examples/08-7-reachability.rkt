@@ -1,6 +1,6 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
-#reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname 08-3-reachability) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ())))
+#reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname 08-7-reachability) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
 (require rackunit)
 (require "extras.rkt")
 
@@ -21,6 +21,12 @@
     (make-edge 'a 'c)
     (make-edge 'b 'a)
     (make-edge 'b 'c)))
+
+(begin-for-test
+  (check-true
+   (reachable? 'a 'a graph1))
+  (check-true
+   (reachable? 'b 'b graph1)))
 
 ;; this is the graph from the slides
 (define graph2
@@ -81,33 +87,36 @@
 
 (begin-for-test
   (check-equal?
-   (path? graph2 'a 'a) 
+   (reachable? 'a 'a graph2) 
    true
    "there should be a path from a to a in graph2")
 
   (check-equal?
-   (path? graph2 'a 'g) 
+   (reachable? 'a 'g graph2) 
    true
    "there should be a path from a to g in graph2")
 
   (check-equal?
-   (path? graph2 'b 'd)
+   (reachable? 'b 'd graph2)
    false
    "should find no path from b to d")
+
+  (check-true
+   (reachable? 'b 'b graph2))
   
   (check-equal?
-   (path? graph2 'd 'g)
+   (reachable? 'd 'g graph2)
    true
    "should find a path from d to g")
   
   (check-equal?
-   (path? graph2 'e 'd)
+   (reachable? 'e 'd graph2)
    false
    "should find no path from e to d")
   
-  (check-equal? (path? graph1 'a 'b) false)
+  (check-equal? (reachable? 'a 'b graph1) false)
 
-  (check-equal? (path? graph1 'b 'c) true))
+  (check-equal? (reachable? 'b 'c graph1) true))
 
   
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -129,31 +138,31 @@
 
 ;; reachables.v1 : SetOfNode Graph -> SetOfNode
 ;; GIVEN: A set of nodes in a finite graph
-;; WHERE: nodes = the set of nodes reachable in graph g in at most
+;; WHERE: reached = the set of nodes reachable in graph g in at most
 ;; steps from a set of nodes S, for some n and some set of nodes S.
 ;; RETURNS: the set of nodes reachable from S.
-;; STRATEGY: recur on nodes + their immediate successors
-;; HALTING MEASURE: the number of graph nodes NOT in nodes
+;; STRATEGY: recur on reached + their immediate successors
+;; HALTING MEASURE: the number of graph nodes NOT in reached
 
-(define (reachables.v1 nodes g)
+(define (reachables.v1 reached g)
   (local
-    ((define candidates (all-successors nodes g)))
+    ((define candidates (all-successors reached g)))
     (cond
-      [(subset? candidates nodes) nodes]
+      [(subset? candidates reached) reached]
       [else (reachables.v1
-              (set-union candidates nodes)
+              (set-union candidates reached)
               g)])))
 
-;; CORRECTNESS REASONING: If 'nodes' is the set of nodes reachable
+;; CORRECTNESS REASONING: If 'reached' is the set of nodes reachable
 ;; from S in at most n steps, then 'candidates' is the set of nodes
 ;; reachable from S in at most n+1 steps.  If there are no more nodes
 ;; reachable in n+1 steps than there were in n steps, then we have
 ;; found all the nodes reachable from S.
 
 ;; TERMINATION REASONING: At the recursive call, 'candidates' contains at
-;; least one element that is not in 'nodes' (otherwise the subset? test
+;; least one element that is not in 'reached' (otherwise the subset? test
 ;; would have returned true).  Hence the result of the set-union is at
-;; least one element bigger than 'nodes'.  So the halting measure
+;; least one element bigger than 'reached'.  So the halting measure
 ;; decreases. 
 
 ;; This is called a CLOSURE ALGORITHM: we want to find the smallest
@@ -168,22 +177,23 @@
 ;; reachables1: SetOfNode SetOfNode Graph -> SetOfNode
 ;; GIVEN: two sets of nodes and a finite graph g
 ;; WHERE:
-;;  nodes is the set of nodes reachable in graph g in fewer than n steps
+;;  reached is the set of nodes reachable in graph g in fewer than n steps
 ;;        from a set of nodes S, for some S and n
 ;;  recent is the set of nodes reachable from S in n steps but
 ;;         not in n-1 steps.
 ;; RETURNS: the set of nodes reachable from S in g.
-(define (reachables1 nodes recent g)
+(define (reachables1 reached recent g)
   (local
-      ((define next
+      ((define next-reached (append recent reached))
+       (define next-recent 
          (set-diff (all-successors recent g)
-                   nodes)))
+                   next-reached)))
     (cond
-      [(empty? next) nodes]
+      [(empty? recent) reached]
       [else
        (reachables1
-        (append next nodes)
-        next
+        next-reached
+        next-recent
         g)])))
 
 ;; CORRECTNESS REASONING: If the invariant is true, then 'next' is the
@@ -191,14 +201,14 @@
 ;; in fewer than n steps.  If there are no more nodes reachable in n+1
 ;; steps than in n steps, then we have found all the reachable nodes.
 
-;; Otherwise, since next and nodes are disjoint, then (append next
-;; nodes) is a set (that is, no duplications), and is the set of nodes
+;; Otherwise, since next and reached are disjoint, then (append next
+;; reached) is a set (that is, no duplications), and is the set of nodes
 ;; reachable from S in fewer than n+1 steps.  So the recursive call to
 ;; reachables1 satisfies the invariant.
 
 ;; TERMINATION REASONING: If the invariant is true, then 'next' is
 ;; non-empty, so at the recursive call the number of nodes _not_ in
-;; 'nodes' is smaller.
+;; 'reached' is smaller.
 
 ;; reachables.v2 : SetOfNode Graph -> SetOfNode
 ;; GIVEN: A set of nodes in a finite graph
@@ -219,123 +229,103 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
-
-
-;; reachable-from? : SetOfNode SetOfNode Graph
-;; GIVEN: two sets of nodes, 'newest' and 'nodes'
-;; WHERE: newest is a subset of nodes.
-;; AND: newest is the most recently added set of nodes
-;; RETURNS: the set of nodes reachable from 'nodes'.
-;; STRATEGY: recur on successors of newest that are not already in
-;; nodes; halt when no more successors 
-;; HALTING MEASURE: the number of graph nodes _not_ in 'nodes'
-
-(define (reachable-from? newest nodes graph)
-  (local
-    ((define candidates (set-diff 
-                          (all-successors newest graph)
-                          nodes)))
-    (cond
-      [(empty? candidates) nodes]
-      [else (reachable-from?
-              candidates
-              (append candidates nodes)
-              graph)])))
-
-
-;; Since candidates is disjoint from nodes, we've replaced the
-;; set-union by append.
-
-;; TERMINATION ARGUMENT:
-;; At the recursive call, 'candidates' is disjoint from 'nodes', and
-;; it is non-empty.  So the new value of 'nodes' is at least one
-;; element larger than the old one.  Therefore the halting measure
-;; decreases. 
-
-;; What does it mean for 'newest' to be the "last set" added to
-;; 'nodes'?  It means that we've already added the successors of the
-;; all the previously added nodes, that is:
-
-;; INVARIANT: (all-successors (set-diff nodes newest)) is a subset of
-;; nodes. 
-
-;; Since candidates is disjoint from nodes, we've replaced the
-;; set-union by append.
-
-;; This is called the "worklist algorithm".  
-;; What we've called 'newest' is usually called the worklist.
-;; we have a set ('nodes').  We apply some function to the worklist and
-;; see if it discovers any new nodes,
-
-;; we initialize newest to nodes since initially all the nodes are new.
-
-(define (reachables.v2 nodes graph)
-  (reachable-from? nodes nodes graph))
-
 ;; uncomment all but one of these lines
 ; (define reachables reachables.v1) "using reachables.v1"
 (define reachables reachables.v2) "using reachables.v2"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; paths, 2 versions
+;;; reachable?, 2 versions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; path? : Graph Node Node -> Boolean
+;; reachable? : Graph Node Node -> Boolean
 ;; GIVEN: a graph and a source and a target node in the graph
 ;; RETURNS: true iff there is a path in g from src to tgt
 ;; EXAMPLES: See tests above
 
-;;;;;;;;;;;;;;;; path?.v1 ;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;; reachable?.v1 ;;;;;;;;;;;;;;;;
 
 ;; STRATEGY: call simpler function
 ;; [or more general function -- either would be OK
-(define (path?.v1 graph src tgt)
-  (member tgt (reachables.v2 (list src) graph)))
+(define (reachable?.v1 src tgt g)
+  (member tgt (reachables (list src) g)))
  
 ;; does this code depend on the representation of the graph?
 
-;;;;;;;;;;;;;;;; path?.v2 ;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;; reachable?.v2 ;;;;;;;;;;;;;;;;
 
 ;; better: instead of building the whole reachability set, 
 ;; just watch for tgt to show up:
 
-(define (path?.v2 graph src tgt)
+;; reachable-from? : SetOfNodes SetOfNodes Node Graph
+;; GIVEN: two sets of nodes, a node, and a graph
+;; WHERE:
+;;  reached is the set of nodes reachable in graph g in fewer than n steps
+;;        from some starting node 'src', for some n
+;;  recent is the set of nodes reachable from src in n steps but
+;;         not in n-1 steps.
+;; RETURNS: true iff tgt is reachable from src in g.
+
+(define (reachable-from? reached recent tgt g)
   (local
-    ((define (reachable-from? newest nodes)
-       ;; RETURNS: true iff there is a path from src to tgt in graph
-       ;; INVARIANT: newest is a subset of nodes
-       ;; AND:
-       ;;   (there is a path from src to tgt in graph)
-       ;;   iff (there is a path from newest to tgt)
-       ;; STRATEGY: recur on successors of newest; halt when tgt is
-       ;; found. 
-       ;; HALTING MEASURE: the number of graph nodes _not_ in 'nodes'
-       (cond
-         [(member tgt newest) true]
-         [else (local
-                 ((define candidates (set-diff 
-                                       (all-successors newest graph)
-                                       nodes)))
-                 (cond
-                   [(empty? candidates) false]
-                   [else (reachable-from?
-                           candidates
-                           (append candidates nodes))]))])))
-    (reachable-from? (list src) (list src))))
-
-;; We use conds here because the pattern for general recursion uses a
-;; cond.  You could use an 'if' if you preferred.
+      ((define next-reached (append recent reached))
+       (define next-recent 
+         (set-diff (all-successors recent g)
+                   next-reached)))
+    (cond
+      [(member tgt recent) true]
+      [(empty? recent) false]
+      [else
+       (reachable-from?
+        next-reached
+        next-recent
+        tgt
+        g)])))
 
 
-;; uncomment one of these lines:
-;; (define path? path?.v1) "using path?.v1"
-(define path? path?.v2) "using path?.v2"
+;; CORRECTNESS REASONING: If the invariant is true, then 'next' is the
+;; set of the nodes reachable from src in fewer than n+1 steps but not
+;; in fewer than n steps.  If 'tgt' appears in 'next', then tgt is
+;; reachable from src.  Otherwise, if 'next' is empty, we have found all the
+;; reachable nodes, and tgt was not among them.
+
+;; Otherwise, since next and reached are disjoint, then (append next
+;; reached) is a set (that is, no duplications), and is the set of nodes
+;; reachable from src in fewer than n+1 steps.  So the recursive call to
+;; reachables1 satisfies the invariant.
+
+;; TERMINATION REASONING: If the invariant is true, then 'next' is
+;; non-empty, so at the recursive call the number of nodes _not_ in
+;; 'reached' is smaller.
+
+;;;;;;;;;;;;;;;;
+
+;; reachable?.v2 : Node Node Graph -> Boolean
+;; GIVEN: Two nodes and a finite graph
+;; RETURNS: true iff tgt is reachable from src
+;; STRATEGY: Call a more general function
+
+(define (reachable?.v2 src tgt g)
+  (reachable-from? empty (list src) tgt g))
+
+;; CORRECTNESS REASONING: There are no nodes reachable from src in
+;; fewer than 0 steps.  The set of nodes reachable from src in
+;; at most 0 steps is just (list src).  So the call to reachable-from?
+;; satisfies reachable-from?'s invariant.
+
+;; TERMINATION REASONING: No termination reasoning necessary because
+;; this function relies on the termination of reachable-from?, which we've
+;; already established.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; not provided by sets.rkt
-(define (set-diff set1 set2)
+;; uncomment one of these lines:
+; (define reachable? reachable?.v1) "using reachable?.v1"
+(define reachable? reachable?.v2) "using reachable?.v2"
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; now provided by sets.rkt
+#;(define (set-diff set1 set2)
   (filter
     (lambda (x) (not (my-member? x set2)))
     set1))
