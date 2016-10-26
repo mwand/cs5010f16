@@ -18,8 +18,11 @@
 at 600pm local time.
 </p>
 
-<p><strong>Updated:</strong> Mon Oct 24 18:47:58 2016 (numbered rules
-and added rule 3.3) </p>
+<p><strong>Update 1:</strong> Numbered rules
+and added rule 3.3 (Mon Oct 24 18:47:58 2016)</p>
+
+<p><strong>Update 2:</strong> Added <kbd>make-turn-left</kbd>, etc. to
+deliverables. (Wed Oct 26 16:56:46 2016) </p> 
 
 <hr>
 
@@ -343,9 +346,9 @@ with its x-coordinate in the interval [28,32]  (that is, 30 plus or minus
     2), and  its y-coordinate unchanged.  If the instruction were
     instead <kbd>(make-move-forward 1)</kbd>, then afterwards the x coordinate
     would be in the interval [20,23] (not [19,23]).
-</p>  </li> </ol>
+</p>  
 
-<p>  You are to write file named <kbd>q2.rkt</kbd> that provides the following
+<p> You are to write file named <kbd>q2.rkt</kbd> that provides the following
 function:
 </p>
 
@@ -363,7 +366,13 @@ function:
 ;;                (make-move-forward 5))
 ;; then (probe-possible-outcome 20 100 p1 x1 y1) = true iff
 ;; x1 is in the interval [28, 32] and y1 is in the interval
-;; [103,107]. 
+;; [103,107].
+
+;; make-turn-right : -> Instruction
+;; make-turn-left  : -> Instruction
+;; make-move-forward : PosInt -> Instruction
+;; As usual, if these are defined by define-struct, you need not
+;; write any of the other deliverables (purpose statement, tests, etc.)
 </pre>
   
 <p>For this problem, your program needs to provide acceptable
@@ -386,5 +395,5 @@ the program execution.  </p>
 <font size=-1>
 <p align=right>
 <!-- hhmts start -->
-Last modified: Tue Oct 25 10:08:42 Eastern Daylight Time 2016 <!-- hhmts end -->
+Last modified: Wed Oct 26 17:03:13 Eastern Daylight Time 2016 <!-- hhmts end -->
 </body> </html>
