@@ -32,20 +32,31 @@ give you practice using the list abstractions and higher-order functions.
 href="../Info/master-rubric-public.txt" >here</a>. Remember that you must follow the design recipe.  Your <a
   href="../Info/deliverables.html" >deliverables</a> include the data
   definitions (including interpretation and templates), contract and
-  purpose header, <span class="">strategy,</span> code, and tests.  Be sure to sync your work and fill
+  purpose header, halting measure (when needed), <span class="">strategy,</span> code, and tests.  Be sure to sync your work and fill
   out a Work Session Report at the end of every work session.  Use the
 
 <a href="https://goo.gl/forms/4alqgS5NGiEh4H4R2" >Work Session Report for
-  PS06</a>.</p>
+PS06</a>.</p>
+
+<p>You must also turn in a call graph for your program.  As in the
+preceding problem set, this consists of a diagram showing which
+functions call which, so we (and you) can see the overall structure of
+your program.  You may draw the diagram using a tool or by hand. Turn
+this in as a text file, pdf, jpg, or Racket file.  Call your file
+<kbd>call-tree</kbd> with an appropriate suffix, and bring a paper
+copy to your codewalk.</p>
+
+<p>You must include a halting measure for every function that calls
+itself either directly or indirectly. Be prepared to explain how your
+halting measure decreases around every cycle in the call graph for
+that function. </p>
 
 
-<p><strong>Note:</strong> For all universe programs, you may assume
+<p>For all universe programs, you may assume
 that the mouse is never dragged or moved outside of the canvas.  Once
 the mouse enters the canvas, if the mouse ever leaves the canvas, then
 the behavior of your system is unspecified.</p>
 </p> 
-
-
 
 <hr>
 
@@ -105,7 +116,7 @@ the behavior of your system is unspecified.</p>
     the new node created is a square instead of a circle.</li>
 
     <li> Hitting "d" when a node is selected deletes the selected
-    node.  whole subtree. When a node is deleted, its sons become the
+    node.  When a node is deleted, its sons become the
     sons of the parent of the deleted node.  If the deleted node is a
     root node (and therefore has no parent), then its sons become root
     nodes.  See the video for examples.</li>
@@ -202,13 +213,11 @@ RETURNS: true iff the given node is selected.
 <ul>
   
   <li> You will find this problem much easier if you follow the slogan
-  "The Structure of the Program Follows the Structure of the Data".
+  "The Structure of the Program Follows the Structure of the Data"
+  (Lesson 3.4). 
   If you write good data definitions, and follow the templates, you
   will be led to a good solution.  If you stray from the templates,
-  you <strong>will</strong> create a mess.  Draw a call tree, like you
-  did for Problem Set 5.  This is not required, but you are likely to
-  find it useful.  If you have a call tree, bring it to your codewalk
-  so you and the TAs can use it to help navigate your program. </li>
+  you <strong>will</strong> create a mess.  </li>
 
   <li>Use the System Design Recipe: get a small subset of your system
   working first, and then add the other required features, one at a time.</li>
@@ -254,8 +263,5 @@ RETURNS: true iff the given node is selected.
 <font size=-1>
 <p align=right>
 <!-- hhmts start -->
-Last modified: Thu Oct 13 22:50:11 Eastern Daylight Time 2016 <!-- hhmts end -->
-=======
-Last modified: Fri Sep 23 15:35:59 Eastern Daylight Time 2016 <!-- hhmts end -->
->>>>>>> ps06
+Last modified: Thu Oct 20 11:07:28 Eastern Daylight Time 2016 <!-- hhmts end -->
 </body> </html>
