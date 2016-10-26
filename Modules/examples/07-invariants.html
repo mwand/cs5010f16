@@ -15,7 +15,7 @@ definition.</p>
 following pages:
 </p>
 
-<ul>
+<ul class="condensed">
   <li><a href="https://bitly.com/cs5010f14-solutions-1"
   >solutions-1</a></li> 
 
@@ -27,16 +27,21 @@ following pages:
 <ol>
   <li>Consider the following constructor template for binary trees:
 
-  <pre>
+<pre>
 A Bintree is one of
--- (leaf-node Number)
--- (tree-node Number Bintree Bintree)
-  </pre>
+-- (make-leaf-node Number)
+-- (make-tree-node Number Bintree Bintree)
+</pre>
 
-  Design a function called <kbd>tree-with-leaf-sums</kbd> which, given a
-  Bintree, returns a Bintree like the original, except that each leaf
-  node is replaced by the sum of all the numbers on the path from the
-  root to the leaf.
+<p>  First, complete the data definition for Bintree by writing the struct
+  definitions and the observer template.
+</p>
+
+
+<p>  Then, design a function called <kbd>tree-with-sums-in-leaves</kbd>
+  which, given a Bintree, returns a Bintree like the original, except
+  that each leaf node is replaced by the sum of all the numbers on the
+  path from the root to the leaf.</p>
 
   <pre>
 Example:
@@ -53,28 +58,33 @@ Example:
       #(struct:leaf-node 12)   ; 3 + 4 + 5 = 12
       #(struct:leaf-node 17))  ; 3 + 4 + 10 = 17
    #(struct:leaf-node 5))      ; 3 + 2 = 5
-</pre>
+  </pre>
+
+    <p>You'll need a help function.  Make sure you give a suitable
+  contract, purpose statement, and invariants both for
+  <kbd>tree-with-sums-in-leaves</kbd> and for your help function.</p>
+  
   </li>
 
-  <li>Do the same thing, except the data is defined by:
+<!--   <li>Do the same thing, except the data is defined by: -->
 
-  <pre>
-A Bintree is one of
--- Number
--- (list Number Bintree Bintree)
-</pre>
+<!--   <pre> -->
+<!-- A Bintree is one of -->
+<!-- -- Number -->
+<!-- -- (list Number Bintree Bintree) -->
+<!-- </pre> -->
 
-<p>Here we are using a list in place of a struct, like we do in ps06.
-  In this representation, the tree in the example above would be
-  represented (in <kbd>write</kbd> output mode) by:</p>
+<!-- <p>Here we are using a list in place of a struct. -->
+<!--   In this representation, the tree in the example above would be -->
+<!--   represented (in <kbd>write</kbd> output mode) by:</p> -->
 
-  <pre>
-(3
-  (4 12 17)
-  5)
-</pre>
+<!--   <pre> -->
+<!-- (3 -->
+<!--   (4 12 17) -->
+<!--   5) -->
+<!-- </pre> -->
 
-</li>
+<!-- </li> -->
 
   <li>Do the same thing, except for the data type defined by the
   constructor template
@@ -105,6 +115,10 @@ is the list
 and your function should return the list
 (0 10 12 17)
 </pre>
+
+  <p>As before, make sure you give a suitable contract, purpose
+  statement, and invariants both for <kbd>distances-so-far</kbd> and
+  for your help function.</p>
 
   </li>
 
@@ -146,5 +160,5 @@ and your function should return the list
 <font size=-1>
 <p align=right>
 <!-- hhmts start -->
-Last modified: Wed Nov  4 21:06:23 Eastern Standard Time 2015 <!-- hhmts end -->
+Last modified: Tue Oct 25 21:06:46 Eastern Daylight Time 2016 <!-- hhmts end -->
 </body> </html>
