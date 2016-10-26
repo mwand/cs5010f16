@@ -183,25 +183,26 @@
 ;;         not in n-1 steps.
 ;; RETURNS: the set of nodes reachable from S in g.
 (define (reachables1 reached recent g)
-  (local
-      ((define next-reached (append recent reached))
-       (define next-recent 
-         (set-diff (all-successors recent g)
-                   next-reached)))
-    (cond
-      [(empty? recent) reached]
-      [else
-       (reachables1
-        next-reached
-        next-recent
-        g)])))
+  (cond
+    [(empty? recent) reached]
+    [else
+     (local
+         ((define next-reached (append recent reached))
+          (define next-recent 
+            (set-diff (all-successors recent g)
+                      next-reached)))
+       (reachables1 next-reached next-recent g)])))
 
-;; CORRECTNESS REASONING: If the invariant is true, then 'next' is the
+;; CORRECTNESS REASONING:  If the invariant is true and recent is
+;; empty, then there are no more nodes reachable in n steps than in
+;; n-1 steps.  So 'reached' contains all the reachable nodes.
+
+;; Otherwise, if the invariant is true, then 'next-reached' is the
+;; set of nodes reachable from S in fewer than n+1 steps. 'next-recent'
 ;; set of the nodes reachable from S in fewer than n+1 steps but not
-;; in fewer than n steps.  If there are no more nodes reachable in n+1
-;; steps than in n steps, then we have found all the reachable nodes.
+;; in fewer than n steps.  
 
-;; Otherwise, since next and reached are disjoint, then (append next
+;; Since next and reached are disjoint, then (append next
 ;; reached) is a set (that is, no duplications), and is the set of nodes
 ;; reachable from S in fewer than n+1 steps.  So the recursive call to
 ;; reachables1 satisfies the invariant.
@@ -266,20 +267,16 @@
 ;; RETURNS: true iff tgt is reachable from src in g.
 
 (define (reachable-from? reached recent tgt g)
-  (local
-      ((define next-reached (append recent reached))
-       (define next-recent 
-         (set-diff (all-successors recent g)
-                   next-reached)))
-    (cond
+   (cond
       [(member tgt recent) true]
       [(empty? recent) false]
       [else
-       (reachable-from?
-        next-reached
-        next-recent
-        tgt
-        g)])))
+       (local
+           ((define next-reached (append recent reached))
+            (define next-recent 
+              (set-diff (all-successors recent g)
+                        next-reached)))
+         (reachable-from? next-reached next-recent tgt g)])))
 
 
 ;; CORRECTNESS REASONING: If the invariant is true, then 'next' is the
