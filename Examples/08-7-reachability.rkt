@@ -191,15 +191,15 @@
           (define next-recent 
             (set-diff (all-successors recent g)
                       next-reached)))
-       (reachables1 next-reached next-recent g)])))
+       (reachables1 next-reached next-recent g))]))
 
 ;; CORRECTNESS REASONING:  If the invariant is true and recent is
 ;; empty, then there are no more nodes reachable in n steps than in
 ;; n-1 steps.  So 'reached' contains all the reachable nodes.
 
 ;; Otherwise, if the invariant is true, then 'next-reached' is the
-;; set of nodes reachable from S in fewer than n+1 steps. 'next-recent'
-;; set of the nodes reachable from S in fewer than n+1 steps but not
+;; set of nodes reachable from S in fewer than n+1 steps. 'next-recent' is the
+;; set of nodes reachable from S in fewer than n+1 steps but not
 ;; in fewer than n steps.  
 
 ;; Since next and reached are disjoint, then (append next
@@ -264,6 +264,7 @@
 ;;        from some starting node 'src', for some n
 ;;  recent is the set of nodes reachable from src in n steps but
 ;;         not in n-1 steps.
+;; AND tgt is not in reached
 ;; RETURNS: true iff tgt is reachable from src in g.
 
 (define (reachable-from? reached recent tgt g)
@@ -276,21 +277,25 @@
             (define next-recent 
               (set-diff (all-successors recent g)
                         next-reached)))
-         (reachable-from? next-reached next-recent tgt g)])))
+         (reachable-from? next-reached next-recent tgt g))]))
 
 
-;; CORRECTNESS REASONING: If the invariant is true, then 'next' is the
-;; set of the nodes reachable from src in fewer than n+1 steps but not
-;; in fewer than n steps.  If 'tgt' appears in 'next', then tgt is
-;; reachable from src.  Otherwise, if 'next' is empty, we have found all the
-;; reachable nodes, and tgt was not among them.
+;; CORRECTNESS REASONING: If the invariant is true and tgt is in
+;; recent, then tgt is reachable from src.  If the invariant is true
+;; and recent is empty, then reached consists of all the nodes that
+;; are reachable from src.  According to the invariant, tgt is not in
+;; reached, so tgt is not reachable from src.
 
-;; Otherwise, since next and reached are disjoint, then (append next
+;; Otherwise, we need to check that the recursive call satisfies the
+;; invariant.  Since next and reached are disjoint, then (append next
 ;; reached) is a set (that is, no duplications), and is the set of nodes
-;; reachable from src in fewer than n+1 steps.  So the recursive call to
+;; reachable from src in fewer than n+1 steps.  next-recent is exactly
+;; the set of nodes reachable from src in n+1 steps but not in n steps
+;; (because of the set-diff).  Last, tgt is not in reached or in
+;; recent, so it is not in next-reached. So the recursive call to
 ;; reachables1 satisfies the invariant.
 
-;; TERMINATION REASONING: If the invariant is true, then 'next' is
+;; TERMINATION REASONING: If the invariant is true, then recent is
 ;; non-empty, so at the recursive call the number of nodes _not_ in
 ;; 'reached' is smaller.
 

@@ -6,7 +6,6 @@
 
 ;; Node = Int
 
-
 ;; Int -> SetOfInt
 ;; GIVEN: an integer
 ;; RETURNS: the list of its successors in the implicit graph.
