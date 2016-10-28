@@ -257,7 +257,7 @@
 ;; better: instead of building the whole reachability set, 
 ;; just watch for tgt to show up:
 
-;; reachable-from? : SetOfNodes SetOfNodes Node Graph
+;; reachable-from? : SetOfNodes SetOfNodes Node Graph -> Boolean
 ;; GIVEN: two sets of nodes, a node, and a graph
 ;; WHERE:
 ;;  reached is the set of nodes reachable in graph g in fewer than n steps
