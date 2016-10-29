@@ -18,8 +18,17 @@
 at 600pm local time.
 </p>
 
-<p><strong>Updated:</strong> Mon Oct 24 18:47:58 2016 (numbered rules
-and added rule 3.3) </p>
+<p><strong>Update 1:</strong> Numbered rules
+and added rule 3.3 (Mon Oct 24 18:47:58 2016)</p>
+
+<p><strong>Update 2:</strong> Added <kbd>make-turn-left</kbd>, etc. to
+deliverables. (Wed Oct 26 16:56:46 2016) </p>
+
+<p><strong>Update 3:</strong> Fixed bug in example for
+<kbd>f2</kbd>. (Wed Oct 26 23:04:38 2016) </p>
+
+<p><strong>Update 4:</strong> Clarified rule for spaces between
+arguments in Rule 3.1 (Thu Oct 27 14:44:36 2016)</p>
 
 <hr>
 
@@ -54,7 +63,7 @@ submission.</p>
   work and fill out a Work Session Report at the end of every work
   session.  Use the
 
-<a href="http://goo.gl/forms/Pi631A0QoO" >[need to update] Work Session Report for
+<a href="https://goo.gl/forms/QtHm3IggEVCu5VJa2" >Work Session Report for
   PS07</a>.</p> 
 
 
@@ -118,7 +127,7 @@ href="../Info/master-rubric-public.txt" >here</a>.
    (make-def 'a-very-long-function-name
              (list 'x)
              (make-appexp 'f1 (list (make-varexp 'x))))
-   (make-def 'f2 (list 'x 'y 'a-very-long-variable-name)
+   (make-def 'f2 (list 'x 'a-very-long-variable-name 'y)
              (make-appexp 'f1 (list (make-varexp 'y))))
    (make-def 'f3 (list 'x 'z 't 'u)
              (make-appexp
@@ -182,9 +191,12 @@ argument.
 
 3. Layout of Expressions:
 
-3.1 If an expression will fit on a single line, including its
-indentation and closing parentheses (and comma if needed), then it is
-formatted that way.
+3.1 For a function application, if the string
+
+fnname(e1, e2, e3)
+
+will fit on a single line, including its indentation and closing
+parentheses (and comma if needed), then it is formatted that way.
 
 3.2 If a function application, including its indentation, closing
 parentheses and comma (if present), will not fit on a single line, but
@@ -275,8 +287,8 @@ Here is a sample interaction:
 def a-very-long-function-name (x) :
     f1(x)
 def f2 (x,
-        y,
-        a-very-long-variable-name) :
+        a-very-long-variable-name,
+        y) :
     f1(y)
 def f3 (x,z,t,u) :
     f1(f2(z, y),
@@ -343,9 +355,9 @@ with its x-coordinate in the interval [28,32]  (that is, 30 plus or minus
     2), and  its y-coordinate unchanged.  If the instruction were
     instead <kbd>(make-move-forward 1)</kbd>, then afterwards the x coordinate
     would be in the interval [20,23] (not [19,23]).
-</p>  </li> </ol>
+</p>  
 
-<p>  You are to write file named <kbd>q2.rkt</kbd> that provides the following
+<p> You are to write file named <kbd>q2.rkt</kbd> that provides the following
 function:
 </p>
 
@@ -363,7 +375,13 @@ function:
 ;;                (make-move-forward 5))
 ;; then (probe-possible-outcome 20 100 p1 x1 y1) = true iff
 ;; x1 is in the interval [28, 32] and y1 is in the interval
-;; [103,107]. 
+;; [103,107].
+
+;; make-turn-right : -> Instruction
+;; make-turn-left  : -> Instruction
+;; make-move-forward : PosInt -> Instruction
+;; As usual, if these are defined by define-struct, you need not
+;; write any of the other deliverables (purpose statement, tests, etc.)
 </pre>
   
 <p>For this problem, your program needs to provide acceptable
@@ -386,5 +404,5 @@ the program execution.  </p>
 <font size=-1>
 <p align=right>
 <!-- hhmts start -->
-Last modified: Mon Oct 24 18:49:17 Eastern Daylight Time 2016 <!-- hhmts end -->
+Last modified: Thu Oct 27 14:44:38 Eastern Daylight Time 2016 <!-- hhmts end -->
 </body> </html>
