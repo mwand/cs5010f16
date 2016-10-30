@@ -182,7 +182,9 @@ make-varexp
 make-appexp
 
 any-loops? : Program -> Boolean
-GIVEN: a SGS program p
+GIVEN: a GS program p
+WHERE: p is a valid SGS program (that is, it obeys the restrictions
+listed above).
 RETURNS: true iff there is some function f in p that calls itself
 either directly or indirectly, as in the example above.
 </pre>
@@ -275,7 +277,7 @@ algorithm.)</p>
 (d &or; b)  <br>
 (&not;a &or; c) <br>
 b <br>
-&not:c <br>
+&not;c <br>
 
 <p>From these clauses we can derive the empty clause, as follows:</p>
 
@@ -353,5 +355,5 @@ to document your data definitions in the usual way.</p>
 <font size=-1>
 <p align=right>
 <!-- hhmts start -->
-Last modified: Sat Oct 29 18:56:38 Eastern Daylight Time 2016 <!-- hhmts end -->
+Last modified: Sat Oct 29 21:54:59 Eastern Daylight Time 2016 <!-- hhmts end -->
 </body> </html>
