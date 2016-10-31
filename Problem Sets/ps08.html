@@ -182,35 +182,51 @@ make-varexp
 make-appexp
 
 any-loops? : Program -> Boolean
-GIVEN: a GS program p
-WHERE: p is a valid SGS program (that is, it obeys the restrictions
-listed above).
+GIVEN: a valid SGS program p (that is, a GS program that obeys the
+restrictions listed above).
 RETURNS: true iff there is some function f in p that calls itself
 either directly or indirectly, as in the example above.
 </pre>
 
 </li>
 
-<li> (Resolution Theorem-Proving) Imagine that we have a number of boolean variables a, b, c, d, etc.,
-which can either be true or false.  You probably know that any boolean
-formula can be expressed in <em>conjunctive normal form</em>, that is,
-as a formula that looks like</p>
+<li> (Resolution Theorem-Proving) The motivation for this problem is
+something called the <em>satisfiability problem</em> and
+<em>resolution theorem-proving</em>.
+
+<p>Here's the set-up:</p>
+
+<p>
+Imagine that we have a number of
+boolean variables a, b, c, d, etc., which can either be true or false.
+You probably know that any boolean formula can be expressed in
+<em>conjunctive normal form</em>, that is, as a formula that looks
+like</p>
 
 (a &or; &not;b &or; c) &amp;
 (d &or; b) &amp;
 (&not;a &or; c)
 
 
-<p>We will use  conventional terminology for formulas in conjunctive normal
-form, in whicha disjunction like (a &or; &not;b &or; c) is called a
+<p>We will use conventional terminology for formulas in conjunctive normal
+form, in which a disjunction like (a &or; &not;b &or; c) is called a
 <em>clause</em>, and each of its disjuncts, which are either variables
 or their negations, are called <em>literals.</em>  For example, the
 clause (a &or; &not;b &or; c) contains the literals a, &not;b, and c.</p>
 
+<p>Given a choice of truth values for each variable, a clause is true
+if and only if at least one of its literals is true.  Thus, the empty
+clause, which contains no literals, is always false.  Similarly, a a
+choice of truth values for each variable, a formula is true if and
+only if all of its clauses are true. So the empty formula, which
+contains no clauses, is always true.</p>
 
 <p>The question we want to answer is: given a formula in conjunctive
 normal form, is there a choice of truth values for its variables that
-makes the formula true?  This is called the<em>satisfiability</em>
+makes the formula true?  For any choice of truth values for the
+variables, 
+
+This is called the<em>satisfiability</em>
 problem. For our example, the assignment</p>
 
 
@@ -233,42 +249,54 @@ say that F is <em>unsatisfiable</em>.
 contradiction from a formula, if one exists.  This is called the rule
 of <em>resolution</em>.  It says: </p>
 
+<pre>
+(a1 &or; a2 &or; ... b)         (&not;b &or; c1 &or; c2 &or; ...)
+-----------------------------------------------
+      (a1 &or; a2 &or; ... &or; c1 &or; c2 &or; ...)
+</pre>
 
-<div style="background-color:#eeeed0">
-From:<br>
-(a1 &or; a2 &or; ... b) <br>
-and <br>
-(&not;b &or; c1 &or; c2 &or; ...), <br>
-conclude:<br>
-(a1 &or; a2 &or; ... &or; c1 &or; c2 &or; ...) <br>
-</div>
 
-<p>Both the b and the &not;b are deleted in the conclusion.  We call b
-and &not;b <em>complementary</em> literals.
-Disjunctions like (a1 &or; a2 &or; ... b) are treated as sets, so the
-b and the &not;b may appear anywhere in their clauses. </p>
+<p>This rule says that if we have the two formulas above the line,
+then we can derive the formula below the line.  Both the b and the
+&not;b are deleted in the conclusion.
 
-<p>In our example, (a &or; &not;b &or; c) &amp; (d &or; b) &amp;
+<p>In our example clauses above, (a &or; &not;b &or; c) &amp; (d &or; b) &amp;
 (&not;a &or; c) , the first two clauses resolve on the b to get (a
 &or; c &or; d), and the first and third clauses resolve on a to get
-(&not;b &or; c).  It is possible for a pair of clauses to have more
-than one pair of complementary literals, in which case the rule
-applies in two ways, yielding more than one conclusion.
+(&not;b &or; c). 
+
+<p>We call b and &not;b <em>complementary</em> literals,  Disjunctions like (a1
+&or; a2 &or; ... b) are treated as sets, so the b and the &not;b may
+appear anywhere in their clauses.  It is possible for a pair of
+clauses to have more than one pair of complementary literals, in which
+case the rule applies in two ways, yielding more than one conclusion.
 </p>
 
-<p>Observe that the conclusion of this rule is implied by its
-hypotheses: if both of the original clauses are true and b is true,
-then one of the c's must be true in order to make the second clause
-true.  Similarly, if b is false, then one of the a's must be true in
-order to make the first clause true.   So if both clauses are true,
-then either one of the a's is true or one of the c's is true and this
-is what the conclusion says.</p>
+<p>Observe that the conclusion of the rule of resolution, as written
+in the box above, is implied by its hypotheses: if both of the
+original clauses are true and b is true, then one of the c's must be
+true in order to make the second clause true.  Similarly, if b is
+false, then one of the a's must be true in order to make the first
+clause true.  So if both clauses are true, then either one of the a's
+is true or one of the c's is true and this is what the conclusion
+says. </p>
 
-<p>So to solve the original problem, we start with a set of clauses,
+<p>So, if you can derive the empty clause (which is always false) from
+some set of clauses F, then you've shown that your set of clauses F
+implies the empty clause, and therefore that it's unsatisfiable.
+
+<p>Further, there is a theorem that says that this is an "if and only
+if": a formula form is unsatisfiable if and only if the empty clause
+is derivable from the formula. </p>
+
+<p>So to solve the satisfiability problem, we start with a set of clauses,
 and repeatedly apply the resolution rule until we either derive the
 empty clause or run out of new clauses to generate.  (This always
 halts.  Why?  One of your deliverables is a halting measure for this
-algorithm.)</p>
+algorithm.)  If we derive the empty clause, we know our original set
+of clauses was unsatisfiable.  If we derive all the clauses it is
+possible to derive, and we know then we know (by the theorem above)
+that it is unsatisfiable. </p>
 
 <p>For example, consider the following set of clauses:
 </p>
@@ -294,6 +322,20 @@ b <br>
 <p>In general, you will have to consider all generated clauses at
 every step, not just ones from the original set.</p>
 
+<p>Most of the preceding discussion is the motivation for this
+problem.  We've presented the problem in terms of for propositional
+(boolean) logic, but the technique extends to first-order logic.  This
+is all standard material dating back to at least 1965; if you want to
+understand it better, go look it up on the internet. However, if you
+rely on anything you found on the internet, or elsewhere, you must
+cite it in a footnote, just as you would for any other term paper.</p>
+
+
+
+<p>Now we can get to specifics:</p>
+
+
+
 <p>Here are the specified pieces of the data definitions.  You may not
 need all of these.  </p>
 
@@ -310,7 +352,8 @@ A Clause is a SetOfLiteral
 
 <p>(Note that <kbd>make-pos</kbd> is analogous to
 <kbd>make-varexp</kbd> in GarterSnake: it provides a way of injecting
-a variable into a boolean expression.)</p>
+a variable into a boolean expression. <kbd>make-neg</kbd> injects the
+variable and puts a negation on it at the same time.)</p>
 
 
 <p>You are to turn in a file named <kbd>q2.rkt</kbd> that provides the
@@ -321,7 +364,7 @@ following function:
 is-null-derivable? : ListOfClause -> Boolean
 GIVEN: a list of clauses
 RETURNS: true iff the empty clause is derivable from the given
-clauses.
+clauses using the rule of resolution as given above.
 </pre>
 
 <p>In addition, you must provide the following functions that we need
@@ -355,5 +398,5 @@ to document your data definitions in the usual way.</p>
 <font size=-1>
 <p align=right>
 <!-- hhmts start -->
-Last modified: Sat Oct 29 21:54:59 Eastern Daylight Time 2016 <!-- hhmts end -->
+Last modified: Mon Oct 31 12:57:25 Eastern Daylight Time 2016 <!-- hhmts end -->
 </body> </html>
