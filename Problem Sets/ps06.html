@@ -25,7 +25,7 @@ give you practice using the list abstractions and higher-order functions.
 
 <p>Remember that you must follow the design recipe. </p>
 
-<p>You must use DrScheme's HtDP Intermediate Student Language with
+<p>You must use DrRacket's HtDP Intermediate Student Language with
   Lambda.</p>
 
 <p>As usual, the rubric for grading is <a
@@ -56,7 +56,7 @@ that function. </p>
 that the mouse is never dragged or moved outside of the canvas.  Once
 the mouse enters the canvas, if the mouse ever leaves the canvas, then
 the behavior of your system is unspecified.</p>
-</p> 
+</p>
 
 <hr>
 
@@ -121,7 +121,7 @@ the behavior of your system is unspecified.</p>
     root node (and therefore has no parent), then its sons become root
     nodes.  See the video for examples.</li>
 
- 
+
   </ol> <!-- end requirements list -->
 
     <p>Here's a demo.   </p>
@@ -149,7 +149,7 @@ RETURNS: the state of the world as it should be following the given mouse event 
 world-after-key-event : World KeyEvent -> World
 GIVEN: a World and a key event
 RETURNS: the state of the world as it should be following the given key event
- 
+
 world-to-trees : World -> ListOfTree
 GIVEN: a World
 RETURNS: a list of all the trees in the given world.
@@ -178,7 +178,7 @@ whether you have chosen to represent nodes differently from trees.
 tree-to-sons : Tree -> ListOfTree
 GIVEN: a tree
 RETURNS: the data associated with the immediate subtrees of the given
-tree. 
+tree.
 EXAMPLE: In the situation above, if tree-to-sons is given the subtree
 rooted at C, it should return a list consisting of the subtree rooted
 at F and the subtree rooted at G.
@@ -211,10 +211,10 @@ RETURNS: true iff the given node is selected.
 <p><strong>Hints:</strong></p>
 
 <ul>
-  
+
   <li> You will find this problem much easier if you follow the slogan
   "The Structure of the Program Follows the Structure of the Data"
-  (Lesson 3.4). 
+  (Lesson 3.4).
   If you write good data definitions, and follow the templates, you
   will be led to a good solution.  If you stray from the templates,
   you <strong>will</strong> create a mess.  </li>
@@ -226,7 +226,7 @@ RETURNS: true iff the given node is selected.
   students may wish to implement these as different data definitions.
   If you wish to represent Trees and Nodes as the SAME data structure,
   that is also permissible. </li>
-  
+
   <li>The built-in abstraction functions, like map, foldr, and filter,
   are your friends.  Use them wherever it is feasible to do so.  As
   before, you may want to write your functions using explicit
@@ -258,10 +258,9 @@ RETURNS: true iff the given node is selected.
 
 </ol>
 
-<hr> 
+<hr>
 <address></address>
 <font size=-1>
 <p align=right>
-<!-- hhmts start -->
-Last modified: Thu Oct 20 11:07:28 Eastern Daylight Time 2016 <!-- hhmts end -->
+<!-- hhmts start --> Last modified: Sun Oct 30 23:31:06 Pacific Daylight Time 2016 <!-- hhmts end -->
 </body> </html>
