@@ -5,22 +5,24 @@
 ;; the world will consist of a list of Widget<%>'s, and a tick
 ;; counter to indicate the current time.
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; start with (run framerate).  Typically: (run 0.25)
+
+;; Press "b" to drop a new bomb.  
+;; Bombs fall at a constant rate. 
+
+;; Helicopter rises at a constant rate.
+;; the helicopter is smoothly draggable
+
+;; there is no interaction between the helicopter and the bombs.
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require rackunit)
 (require 2htdp/universe)
 (require 2htdp/image)
 (require "extras.rkt")
-
-
-;; Press space to drop a new bomb.  
-;; Bombs fall at a constant rate. 
-;; Bombs are draggable. 
-
-;; Helicopter just rises at a constant rate.
-
-;; start with (run framerate).  Typically: (run 0.25)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;; CONSTANTS
 
@@ -46,15 +48,14 @@
 
 ;; A Time is a NonNegative Integer
 
-;; A Widget is an object whose class implements Widget<%>
+;; A Widget is an object whose class implements the Widget<%>
+;; interface. 
 
-(define-struct world-state (widgets time))
+(define-struct world (widgets time))
 
-;; A WorldState is a (make-world-state ListOfWidget Time)
-
-;; INTERP: (make-world-state lst t) represents a world containing the
+;; A World is a (make-world ListOfWidget Time)
+;; INTERP: (make-world lst t) represents a world containing the
 ;; widgets in lst at time t (in ticks).
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -96,11 +97,10 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
-;; initial-world : -> WorldState
+;; initial-world : -> World
 ;; RETURNS: a world with a helicopter and no bombs
 (define (initial-world)
-  (make-world-state
+  (make-world
     (list (new-heli))
     0))
 
@@ -121,18 +121,18 @@
 ;; GP: Let's say the world should launch a new helicopter every 10
 ;; ticks.  How could we accomplish that?
 
-;; world-after-tick : WorldState -> WorldState
+;; world-after-tick : World -> World
 ;; Use HOFC map on the Widget's in w
 (define (world-after-tick w)
-  (let ((objs (world-state-widgets w))
-        (t (world-state-time w)))
-    (make-world-state
+  (let ((objs (world-widgets w))
+        (t (world-time w)))
+    (make-world
       (map
         (lambda (obj) (send obj after-tick))
         objs)
       (+ 1 t))))
 
-;; world-to-scene : WorldState -> Scene
+;; world-to-scene : World -> Scene
 ;; Use HOFC foldr on the Widgets in w
 (define (world-to-scene w)
   (foldr
@@ -140,34 +140,35 @@
     (lambda (obj scene)
       (send obj add-to-scene scene))
     EMPTY-CANVAS
-    (world-state-widgets w)))
+    (world-widgets w)))
 
 
-;; world-after-key-event : WorldState KeyEvent -> WorldState
+;; world-after-key-event : World KeyEvent -> World
 ;; STRATEGY: Cases on kev
-;; "b" and "h" create new bomb and new helicopter;
+;; "b" creates a new bomb
+;; "h" creates a new heli
 ;; other keystrokes are passed on to the widgets in the world.
 
 (define (world-after-key-event w kev)
-  (let ((objs (world-state-widgets w))
-        (t (world-state-time w)))
+  (let ((objs (world-widgets w))
+        (t (world-time w)))
     (cond
       [(key=? kev NEW-BOMB-EVENT)
-       (make-world-state
+       (make-world
         (cons (new-bomb t) objs)
         t)]
       [(key=? kev NEW-HELI-EVENT)
-       (make-world-state
+       (make-world
         (cons (new-heli) objs)
         t)]
       [else
-       (make-world-state
+       (make-world
         (map
          (lambda (obj) (send obj after-key-event kev))
-         (world-state-widgets w))
+         (world-widgets w))
         t)])))
 
-;; world-after-mouse-event : WorldState Nat Nat MouseEvent -> WorldState
+;; world-after-mouse-event : World Nat Nat MouseEvent -> World
 ;; STRATGY: Cases on mev
 (define (world-after-mouse-event w mx my mev)
   (cond
@@ -179,12 +180,12 @@
      (world-after-button-up w mx my)]
     [else w]))
 
-; WorldState Nat Nat -> WorldState
+; World Nat Nat -> World
 ; STRATEGY: Use HOF map on the widgets in w
 (define (world-after-button-down w mx my)
-  (let ((objs (world-state-widgets w))
-        (t (world-state-time w)))
-    (make-world-state
+  (let ((objs (world-widgets w))
+        (t (world-time w)))
+    (make-world
       (map
         (lambda (obj) (send obj after-button-down mx my))
         objs)
@@ -192,18 +193,18 @@
     
      
 (define (world-after-button-up w mx my)
-  (let ((objs (world-state-widgets w))
-        (t (world-state-time w)))
-    (make-world-state
+  (let ((objs (world-widgets w))
+        (t (world-time w)))
+    (make-world
       (map
         (lambda (obj) (send obj after-button-up mx my))
         objs)
       t)))
 
 (define (world-after-drag w mx my)
-  (let ((objs (world-state-widgets w))
-        (t (world-state-time w)))
-    (make-world-state
+  (let ((objs (world-widgets w))
+        (t (world-time w)))
+    (make-world
       (map
         (lambda (obj) (send obj after-drag mx my))
         objs)
@@ -222,14 +223,17 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;; We have two classes of Widget<%>s:  Helicopters and Bombs
+;;; We have two classes that implement Widget<%>: Heli% and Bomb%
 
-;; Helicopters start at the bottom of the screen and rise slowly.
+;; Helicopters start near the bottom of the screen and rise slowly.
 ;; They are selectable and draggable.
 
-;; A Heli is a (new Heli% [x Integer][y Integer]
-;;                        [selected? Boolean][mx Integer][my Integer])  ;; these 3 are optional
-;; A Heli represents a heli.
+;; Constructor template for Heli%:
+;; (new Heli% [x Integer][y Integer]
+;;            [selected? Boolean][mx Integer][my Integer])
+;; the last 3 arguments are optional
+;; Interpretation: An object of class Heli% represents a helicopter.
+
 (define Heli%
   (class* object% (Widget<%>)
 
@@ -260,7 +264,7 @@
        
     (super-new)
     
-    ;; after-tick : -> Heli
+    ;; after-tick : -> Widget
     ;; RETURNS: A heli like this one, but as it should be after a tick
     ;; a selected heli doesn't move.
     ;; STRATEGY: Cases on selected?
@@ -349,19 +353,34 @@
     
     ))
 
-;; make-heli: -> Heli
-;; RETURNS: a new heli near the bottom of the screen
+;; make-heli: -> Widget
+;; GIVEN: no arguments
+;; RETURNS: a new object of class Heli% near the bottom of the screen.
+
+;; NOTE: the contract says Widget, because our contracts are ALWAYS in
+;; terms of interfaces (remember, a Widget is an object that
+;; implements Widget<%>).  The purpose statement gives the additional
+;; information that the Widget returned by make-heli happens to be an
+;; object of class Heli%.
+
 (define (new-heli)
   (new Heli% [x HELI-INITIAL-X][y HELI-INITIAL-Y]))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; Bombs start near the top of the screen.  They just fall.
 
-;; A Bomb is a (new Bomb% [x Integer][y Integer])
-;; A Bomb represents a bomb.
-;; in this version, the bomb just falls.
+;; Constructor template for Bomb%:
+;; (new Bomb% [x Integer][y Integer])
+;; Interpretation: An object of class Bomb% represents a bomb.
 
-;; Handy to have a functional interface.
-;; We don't use t, now but we might do so later.
+;; make-bomb : Time -> Widget
+;; GIVEN: A time t
+;; RETURNS: a new object of class Bomb% near the top of the screen.
+;; The time argument is ignored.
+
+;; SEE NOTE ABOVE ABOUT THIS CONTRACT
+
 (define (new-bomb t)
   (new Bomb% [x BOMB-INITIAL-X][y BOMB-INITIAL-Y]))
 
@@ -379,7 +398,7 @@
    
     (super-new)
     
-    ;; after-tick : -> Bomb
+    ;; after-tick : -> Widget
     ;; RETURNS: A bomb like this one, but as it should be after a tick
     ;; DETAILS: the bomb moves vertically by BOMB-SPEED
     (define/public (after-tick)
@@ -404,68 +423,6 @@
     ))
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;;; Testing Framework
-
-;; bomb-equal? : Bomb Bomb -> Boolean
-;; GIVEN: two bombs
-;; RETURNS: true iff they have the same x, y, and selected? fields
-;; STRATEGY: morally, this is SD on the two bombs
-(define (bomb-equal? b1 b2)
-  (and
-    (= 
-      (send b1 for-test:x)
-      (send b2 for-test:x))
-    (=
-      (send b1 for-test:y)
-      (send b2 for-test:y))))  
-
-
-;; Heli Heli -> Boolean
-(define (heli-equal? heli1 heli2)
-  (and
-    (= (send heli1 for-test:x) (send heli2 for-test:x))
-    (= (send heli1 for-test:y) (send heli2 for-test:y))))
-
-(define (world-equal? w1 w2)
-  (and
-     (heli-equal? (send w1 for-test:heli) (send w2 for-test:heli))
-     (andmap
-      (lambda (b1 b2) (bomb-equal? b1 b2))
-      (send w1 for-test:bombs)
-      (send w2 for-test:bombs))))
-
-;; here we've used the 2-argument version of andmap, which is available in
-;; #lang racket.
-
-;; In what way does world-equal? equate two worlds that might be different?
-
-;; In what way does world-equal? fail to equate two worlds that might
-;; reasonably considered similar? 
-
-(begin-for-test
-  
-  ;; using check-equal? as we would in the functional version
-  (local
-    ((define b1 (new Bomb% [x 20][y 30])))
-    (check-equal? 
-     (send b1 after-tick)
-     (new Bomb% [x 20][y (+ 30 8)])  ; BOMB-SPEED is local
-     "Surprise!"))
-                  
- 
-
-  (local
-    ((define b1 (new Bomb% [x 20][y 30]))
-     (define b2 (send b1 after-button-down 21 31))
-     (define b3 (send b1 after-tick)))
-    (check bomb-equal? b1 (new Bomb% [x 20][y 30]))
-    (check bomb-equal? b2 (new Bomb% [x 20][y 30]))               
-    (check bomb-equal? b3 (new Bomb% [x 20][y (+ 30 8)])))
-                               
-
-  )
 
 
 

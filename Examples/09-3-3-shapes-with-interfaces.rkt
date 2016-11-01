@@ -20,7 +20,9 @@
 ;;; INTERFACE:
 
 ;; all geometric shapes support these methods in all contexts
+
 ;; a Shape is an object of a class that implements Shape<%>.
+
 (define Shape<%> 
   (interface ()
 

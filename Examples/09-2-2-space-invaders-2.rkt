@@ -2,29 +2,30 @@
 
 ;; space-invaders-2.rkt
 
-;; in this version, the world will be an object
+;; just like space-invaders-1, but in this version, the world will be an object
 
-;; this version will use interfaces.
-
-;; the world will consist of a list of WorldObj<%>'s, and a tick
+;; the world will consist of a list of Widget<%>'s, and a tick
 ;; counter to indicate the current time.
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; start with (run framerate).  Typically: (run 0.25)
+
+;; Press "b" to drop a new bomb.  
+;; Bombs fall at a constant rate. 
+
+;; Press "h" to start a new helicopter
+;; Helicopter rises at a constant rate.
+;; the helicopter is smoothly draggable
+
+;; there is no interaction between the helicopter and the bombs.
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require rackunit)
 (require 2htdp/universe)
 (require 2htdp/image)
 (require "extras.rkt")
-
-
-;; Press space to drop a new bomb.  
-;; Bombs fall at a constant rate. 
-;; Bombs are draggable. 
-
-;; Helicopter just rises at a constant rate.
-
-;; start with (run framerate).  Typically: (run 0.25)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;; CONSTANTS
 
@@ -50,18 +51,46 @@
 
 ;; A Time is a NonNegative Integer
 
-;; A Widget is an object whose class implements Widget<%>
+;; A Widget is an object whose class implements the Widget<%>
+;; interface. 
 
-;; A WorldState is a (make-world-state ListOf(Widget) Time)
-
-;; INTERP: (make-world-state lst t) represents a world containing the
-;; objects in lst at time t (in ticks).
-;; Note:  this is still accurate, even though we don't use a define-struct here.
-
+;; A World is an object whose class implements the World<%>
+;; interface. 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; INTERFACES
+
+;; big-bang will communicate with the world through the World<%>
+;; interface. 
+
+(define World<%>
+  (interface ()
+
+    ; -> World
+    ; GIVEN: no arguments
+    ; RETURNS: the state of the world at the next tick
+    after-tick          
+
+    ; Integer Integer MouseEvent-> World
+    ; GIVEN: a location
+    ; RETURNS: the state of the world that should follow the
+    ; given mouse event at the given location.
+    after-mouse-event
+
+
+    ; KeyEvent : KeyEvent -> Widget
+    ; GIVEN: a key event
+    ; RETURNS: the state of the world that should follow the
+    ; given key event
+    after-key-event     
+
+    ; -> Scene
+    ; GIVEN: a scene
+    ; RETURNS: a scene that depicts this World
+    to-scene
+    ))
+
 
 ;; Every object that lives in the world must implement the Widget<%>
 ;; interface.
@@ -95,42 +124,14 @@
     add-to-scene
     ))
 
-;; The World implements the WorldState<%> interface
-
-(define WorldState<%>
-  (interface ()
-
-    ; -> World
-    ; GIVEN: no arguments
-    ; RETURNS: the state of the world at the next tick
-    after-tick          
-
-    ; Integer Integer MouseEvent-> World
-    ; GIVEN: a location
-    ; RETURNS: the state of the world that should follow the
-    ; given mouse event at the given location.
-    after-mouse-event
-
-
-    ; KeyEvent : KeyEvent -> Widget
-    ; GIVEN: a key event
-    ; RETURNS: the state of the world that should follow the
-    ; given key event
-    after-key-event     
-
-    ; -> Scene
-    ; GIVEN: a scene
-    ; RETURNS: a scene that depicts this World
-    to-scene
-    ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-;; initial-world : -> WorldState
+;; initial-world : -> World
 ;; RETURNS: a world with a helicopter and no bombs
 (define (initial-world)
-  (make-world-state
+  (make-world
     (list (new-heli))
     0))
 
@@ -159,13 +160,23 @@
 
 ;; The World% class
 
-;; A WorldState is a (make-world-state ListOfWidget Time)
+;; We will have only one class that implements World<%>: World%
 
-(define (make-world-state objs t)
-  (new WorldState% [objs objs][t t]))
+;; Constructor template for World%:
+;; (new World% [objs ListOfWidget][t Time])
+;; Interpretation: An object of class World% takes signals from
+;; big-bang and distributes them to its objects as appropriate.
 
-(define WorldState%
-  (class* object% (WorldState<%>)
+
+;; make-world : ListOfWidget Time -> World
+;; GIVEN: a list of widgets and a time
+;; RETURNS: an object of class World% containing the given list of
+;; widgets and time.
+(define (make-world objs t)
+  (new World% [objs objs][t t]))
+
+(define World%
+  (class* object% (World<%>)
 
     (init-field objs) ;  ListOfWidget
     (init-field t)    ;  Time
@@ -174,15 +185,17 @@
 
     ;; after-tick : -> World
     ;; Use HOFC map on the Widget's in this World
+
     (define/public (after-tick)
-      (make-world-state
+      (make-world
         (map
           (lambda (obj) (send obj after-tick))
           objs)
         (+ 1 t)))
 
     ;; to-scene : -> Scene
-    ;; Use HOFC foldr on the Widget's in this World
+    ;; Use HOFC foldr on the Widgets in this World
+
     (define/public (to-scene)
       (foldr
         (lambda (obj scene)
@@ -191,7 +204,7 @@
         objs))
 
 
-    ;; after-key-event : KeyEvent -> WorldState
+    ;; after-key-event : KeyEvent -> World
     ;; STRATEGY: Cases on kev
     ;; "b" and "h" create new bomb and new helicopter;
     ;; other keystrokes are passed on to the objects in the world.
@@ -199,21 +212,21 @@
     (define/public (after-key-event kev)
       (cond
         [(key=? kev NEW-BOMB-EVENT)
-         (make-world-state
+         (make-world
            (cons (new-bomb t) objs)
            t)]
         [(key=? kev NEW-HELI-EVENT)
-         (make-world-state
+         (make-world
            (cons (new-heli) objs)
            t)]
         [else
-          (make-world-state
+          (make-world
             (map
               (lambda (obj) (send obj after-key-event kev))
               objs)
             t)]))
 
-    ;; world-after-mouse-event : Nat Nat MouseEvent -> WorldState
+    ;; world-after-mouse-event : Nat Nat MouseEvent -> World
     ;; STRATGY: Cases on mev
     (define/public (after-mouse-event mx my mev)
       (cond
@@ -228,7 +241,7 @@
     ;; the next few functions are local functions, not in the interface.
 
     (define (world-after-button-down mx my)
-      (make-world-state
+      (make-world
         (map
           (lambda (obj) (send obj after-button-down mx my))
           objs)
@@ -236,14 +249,14 @@
     
      
     (define (world-after-button-up mx my)
-      (make-world-state
+      (make-world
         (map
           (lambda (obj) (send obj after-button-up mx my))
           objs)
         t))
 
     (define (world-after-drag mx my)
-      (make-world-state
+      (make-world
         (map
           (lambda (obj) (send obj after-drag mx my))
           objs)
@@ -254,22 +267,19 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Here's what a class definition looks like:
-
-;; classes are like data definitions.  They should have a purpose statement
-;; describing what information they are supposed to represent, and
-;; interpretations of the fields describing the meaning of each piece of data.
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 ;;; We have two classes of Widget<%>s:  Helicopters and Bombs
 
-;; Helicopters start at the bottom of the screen and rise slowly.
+;; Helicopters start near the bottom of the screen and rise slowly.
 ;; They are selectable and draggable.
 
-;; A Heli is a (new Heli% [x Integer][y Integer]
-;;                        [selected? Boolean][mx Integer][my Integer])  ;; these 3 are optional
-;; A Heli represents a heli.
+;; Constructor template for Heli%:
+;; (new Heli% [x Integer][y Integer]
+;;            [selected? Boolean][mx Integer][my Integer])
+;; the last 3 arguments are optional
+;; Interpretation: An object of class Heli% represents a helicopter.
+
+
+;; unchanged from 09-2-1.
 (define Heli%
   (class* object% (Widget<%>)
 
@@ -389,16 +399,37 @@
     
     ))
 
-;; make-heli: -> Heli
-;; RETURNS: a new heli near the bottom of the screen
+;; make-heli: -> Widget
+;; GIVEN: no arguments
+;; RETURNS: a new object of class Heli% near the bottom of the screen.
+
+;; NOTE: the contract says Widget, because our contracts are ALWAYS in
+;; terms of interfaces (remember, a Widget is an object that
+;; implements Widget<%>).  The purpose statement gives the additional
+;; information that the Widget returned by make-heli happens to be an
+;; object of class Heli%.
+
 (define (new-heli)
   (new Heli% [x HELI-INITIAL-X][y HELI-INITIAL-Y]))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; Bombs start near the top of the screen.  They just fall.
 
-;; A Bomb is a (new Bomb% [x Integer][y Integer])
-;; A Bomb represents a bomb.
-;; in this version, the bomb just falls.
+;; Constructor template for Bomb%:
+;; (new Bomb% [x Integer][y Integer])
+;; Interpretation: An object of class Bomb% represents a bomb.
+
+;; make-bomb : Time -> Widget
+;; GIVEN: A time t
+;; RETURNS: a new object of class Bomb% near the top of the screen.
+;; The time argument is ignored.
+
+;; SEE NOTE ABOVE ABOUT THIS CONTRACT
+
+(define (new-bomb t)
+  (new Bomb% [x BOMB-INITIAL-X][y BOMB-INITIAL-Y]))
+
 (define Bomb%
   (class* object% (Widget<%>)
     (init-field x y)  ; the bomb's x and y position
@@ -413,7 +444,7 @@
    
     (super-new)
     
-    ;; after-tick : Time -> Bomb
+    ;; after-tick : Time -> Widget
     ;; RETURNS: A bomb like this one, but as it should be after a tick
     ;; DETAILS: the bombcopter moves vertically by BOMB-SPEED
     (define/public (after-tick)
@@ -437,8 +468,6 @@
 
     ))
 
-;; In later versions, we'll use the Time argument
-(define (new-bomb t)
-  (new Bomb% [x BOMB-INITIAL-X][y BOMB-INITIAL-Y]))
+
 
 
