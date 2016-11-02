@@ -120,7 +120,8 @@
   (define correct-folder-name (string-append "set" NN))
   (cond
     [(>= path-len 3)
-     (define actual-file-name (path->string (last path-elements)))
+     (define actual-file-name (path->string
+                               (list-ref path-elements (- path-len 1))))
      (define set-folder (path->string (list-ref path-elements (- path-len 2))))
      (define pdp-folder (path->string (list-ref path-elements (- path-len 3))))
      (define set-regexp (regexp correct-folder-name))
