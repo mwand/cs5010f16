@@ -78,7 +78,6 @@
     ; given mouse event at the given location.
     after-mouse-event
 
-
     ; KeyEvent : KeyEvent -> Widget
     ; GIVEN: a key event
     ; RETURNS: the state of the world that should follow the
@@ -283,36 +282,36 @@
 (define Heli%
   (class* object% (Widget<%>)
 
-    ;; the init-fields are the values that may vary from one heli to
+    ;; the init-fields are the values that may vary from one helicopter to
     ;; the next.
 
-    ; the x and y position of the center of the heli
+    ; the x and y position of the center of the helicopter
     (init-field x y)   
 
-    ; is the heli selected? Default is false.
+    ; is the helicopter selected? Default is false.
     (init-field [selected? false]) 
 
-    ;; if the heli is selected, the position of
-    ;; the last button-down event inside the heli, relative to the
-    ;; heli's center.  Else any value.
+    ;; if the helicopter is selected, the position of
+    ;; the last button-down event inside the helicopter, relative to the
+    ;; helicopter's center.  Else any value.
     (init-field [saved-mx 0] [saved-my 0])
 
     ;; private data for objects of this class.
     ;; these can depend on the init-fields.
 
-    ; the heli's radius
+    ; the helicopter's radius
     (field [r 15])   
 
-    ; image for displaying the heli
+    ; image for displaying the helicopter
     (field [HELI-IMG (circle r "outline" "blue")])
-    ; the heli's speed, in pixels/tick
+    ; the helicopter's speed, in pixels/tick
     (field [HELISPEED -4])                      
        
     (super-new)
     
-    ;; after-tick : Time -> Heli
-    ;; RETURNS: A heli like this one, but as it should be after a tick
-    ;; a selected heli doesn't move.
+    ;; after-tick : Time -> Widget
+    ;; RETURNS: A helicopter like this one, but as it should be after a tick
+    ;; a selected helicopter doesn't move.
     ;; STRATEGY: Cases on selected?
     (define/public (after-tick)
       (if selected?
@@ -324,14 +323,14 @@
           [saved-mx saved-mx]
           [saved-my saved-my])))
     
-    ;; after-key-event : KeyEvent -> Heli
+    ;; after-key-event : KeyEvent -> Widget
     ;; RETURNS: A world like this one, but as it should be after the
     ;; given key event.
-    ;; DETAILS: a heli ignores key events
+    ;; DETAILS: a helicopter ignores key events
     (define/public (after-key-event kev)
       this)      
     
-    ; after-button-down : Integer Integer -> Heli
+    ; after-button-down : Integer Integer -> Widget
     ; GIVEN: the location of a button-down event
     ; STRATEGY: Cases on whether the event is in the helicopter
     (define/public (after-button-down mx my)
@@ -343,10 +342,10 @@
           [saved-my (- my y)])
         this))
 
-    ; after-button-up : Integer Integer -> Heli
+    ; after-button-up : Integer Integer -> Widget
     ; GIVEN: the location of a button-up event
     ; STRATEGY: Cases on whether the event is in the helicopter.
-    ; If the heli is selected, then unselect it.
+    ; If the helicopter is selected, then unselect it.
     (define/public (after-button-up mx my)
       (if (in-heli? mx my)
         (new Heli%
@@ -356,9 +355,9 @@
           [saved-my saved-my])
         this))   
 
-    ; after-drag : Integer Integer -> Heli
+    ; after-drag : Integer Integer -> Widget
     ; GIVEN: the location of a drag event
-    ; STRATEGY: Cases on whether the heli is selected.
+    ; STRATEGY: Cases on whether the helicopter is selected.
     ; If it is selected, move it so that the vector from the center to
     ; the drag event is equal to (mx, my)
     (define/public (after-drag mx my)
@@ -373,19 +372,19 @@
 
 
     ;; to-scene : Scene -> Scene
-    ;; RETURNS: a scene like the given one, but with this heli painted
+    ;; RETURNS: a scene like the given one, but with this helicopter painted
     ;; on it.
     (define/public (add-to-scene scene)
       (place-image HELI-IMG x y scene))
     
     ;; in-heli? : Integer Integer -> Boolean
     ;; GIVEN: a location on the canvas
-    ;; RETURNS: true iff the location is inside this heli.
+    ;; RETURNS: true iff the location is inside this helicopter.
     (define (in-heli? other-x other-y)
       (<= (+ (sqr (- x other-x)) (sqr (- y other-y)))
           (sqr r)))
 
-    ;; test methods, to probe the heli state.  Note that we don't have
+    ;; test methods, to probe the helicopter state.  Note that we don't have
     ;; a probe for radius.
     ;; -> Int
     (define/public (for-test:x) x)
@@ -444,7 +443,7 @@
    
     (super-new)
     
-    ;; after-tick : Time -> Widget
+    ;; after-tick : -> Widget
     ;; RETURNS: A bomb like this one, but as it should be after a tick
     ;; DETAILS: the bombcopter moves vertically by BOMB-SPEED
     (define/public (after-tick)

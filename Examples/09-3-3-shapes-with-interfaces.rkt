@@ -19,8 +19,6 @@
 
 ;;; INTERFACE:
 
-;; all geometric shapes support these methods in all contexts
-
 ;; a Shape is an object of a class that implements Shape<%>.
 
 (define Shape<%> 
@@ -47,8 +45,10 @@
 
 ;;; Circles
 
-;; A Circle is a (new Circle% [x Integer][y Integer][r Integer][c ColorString])
-;; REPRESENTS: a circle on the canvas
+;; Constructor Template for Circle%:
+;; (new Circle% [x Integer][y Integer][r Integer][c ColorString])
+;; Interpretation: a circle on the canvas.
+
 (define Circle%
   (class* object% (Shape<%>)
     (init-field 
@@ -80,8 +80,11 @@
 
     ))
 
-;; A Square is a (new Square% [x Integer][y Integer][l Integer][c ColorString])
-;; REPRESENTS: a square parallel to sides of canvas 
+;; Constructor Template for Square%:
+;; (new Square% [x Integer][y Integer][l Integer][c ColorString])
+;; Interpretation: a square parallel to sides of canvas 
+
+
 (define Square%
   (class* object% (Shape<%>)
     (init-field x  ; Integer, x pixels of center from left
@@ -108,8 +111,10 @@
 
     ))
 
-;; A Composite is a (new Composite% [front Shape][back Shape])
-;; a composite of front and back
+;; Constructor Template for Composite%:
+;; a (new Composite% [front Shape][back Shape])
+;; Interpretation: a composite of front and back shapes
+
 (define Composite%
   (class* object% (Shape<%>)
     (init-field 

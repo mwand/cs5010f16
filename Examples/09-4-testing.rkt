@@ -3,15 +3,18 @@
 (require "extras.rkt")
 (require rackunit)
 
-;; A StupidRobot represents a robot moving along a one-dimensional line, 
-;; starting at position 0.
+;; A StupidRobot is an object of any class that implements
+;; StupidRobot<%>
+
+;; Interpretation: A StupidRobot represents a robot moving along a
+;; one-dimensional line, starting at position 0.
 
 (define StupidRobot<%>
   (interface ()
 
     ;; a new StupidRobot<%> is required to start at position 0
     
-    ;; -> StupidRobot<%>
+    ;; -> StupidRobot
     ;; RETURNS: a Robot just like this one, except moved one 
     ;; position to the right
     move-right
@@ -33,8 +36,6 @@
     [else (move-right-by-distance
             (send r move-right)
             (- n 1))])) 
-
-
 
 ;;; tests
 
@@ -76,6 +77,10 @@
 
 ;;; Implementations
 
+;; Constructor Template for Robot1%:
+;; (new Robot1% [x NonNegInt])
+;; x is optional; default is 0
+
 (define Robot1%
   (class* object% (StupidRobot<%>)
 
@@ -91,6 +96,10 @@
       x)
 
     ))
+
+;; Constructor Template for Robot2%:
+;; (new Robot2% [blerch NonNegInt])
+;; blerch is optional; default is 0
 
 (define Robot2%
   (class* object% (StupidRobot<%>)
@@ -108,6 +117,11 @@
 
     ))
 
+;; Constructor Template for Robot3%:
+;; (new Robot3% [y NonNegInt])
+;; y is the negative of the position of the robot
+;; y is optional; default is 0
+
 (define Robot3%
   (class* object% (StupidRobot<%>)
 
@@ -124,6 +138,12 @@
       (- y))
 
     ))
+
+;; Constructor Template for Robot4%:
+;; (new Robot4% [y ListOfRacketValue])
+;; x is any Racket list whose length is equal to the position of the
+;; robot. 
+;; x is optional; default is 0
 
 (define Robot4%
   (class* object% (StupidRobot<%>)
