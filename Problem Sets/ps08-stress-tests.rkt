@@ -69,11 +69,14 @@
 
 (define (stress-benchmark1 n)
   (time (any-loops? (make-stress-input-without-loops n))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  
 ;; For the second question:
  
 ;;; Note: The original version of this benchmark defined a function
-;;; that didn't satisfy its contract.  That function was not needed
+;;; that didn't satisfy its contract.  That function
+;;; (make-stress-input-unsat) was not needed
 ;;; by the benchmark and has been removed.  I have also added a call
 ;;; to make-clause.
 
@@ -113,6 +116,51 @@
                    nums)))
            nums))))
 
+
+;;; make-stress-input-unsat : PosInt -> ListOfClause
+;;; GIVEN: an integer n
+;;; RETURNS: an unsatisfiable set of clauses of length 2n
+
+;;; EXAMPLES:
+;;;     (make-stress-input-unsat 3)
+;;;  => (list (make-clause (list (make-neg 'p1)
+;;;                              (make-neg 'p2)
+;;;                              (make-neg 'p3)))
+;;;           (make-clause (list (make-pos 'p1)
+;;;                              (make-neg 'p2)
+;;;                              (make-neg 'p3)))
+;;;           (make-clause (list (make-neg 'p1)
+;;;                              (make-pos 'p2)
+;;;                              (make-neg 'p3)))
+;;;           (make-clause (list (make-neg 'p1)
+;;;                              (make-neg 'p2)
+;;;                              (make-pos 'p3))))
+
+(define (make-stress-input-unsat n)
+  (local ((define (reverse-iota k)
+            (if (= k 0)
+                empty
+                (cons k (reverse-iota (- k 1)))))
+          (define (iota k)
+            (reverse (reverse-iota k))))
+    (let* ((nums (iota n))
+           (syms (map (lambda (k)
+                        (string->symbol (string-append "p"
+                                                       (number->string k))))
+                      nums)))
+      (cons (make-clause (list (make-neg (first syms))))
+            (append
+             (map (lambda (sym)
+                    (make-clause (list (make-pos sym))))
+                  (rest syms))
+             (map (lambda (k)
+                    (make-clause
+                     (map (lambda (i)
+                            ((if (= i k) make-pos make-neg)
+                             (list-ref syms (- i 1))))
+                          nums)))
+                  nums))))))
+ 
 ;;; stress-benchmark2 : NonNegInt -> Boolean
 ;;; GIVEN: a non-negative integer n
 ;;; RETURNS: false
