@@ -181,11 +181,20 @@
 
     <li>Interface names should end in <kbd>&lt;%&gt;</kbd> .</li>
     
-    <li>A purpose statement for the interface</li>
+    <li>A purpose statement for the interface.</li>
+
+    <li>A data definition of the form
+   <pre>
+A DataItem is an object of any class that implements DataItem<%>
+    </pre>
+
+    (replace <kbd>DataItem</kbd> with the name of your interface.)
+</li>
     
     <li>For each method in the interface, a contract and purpose
     statement of the method.  Contracts should always be written in
-    terms of interfaces, not classes.
+    terms of data definitions, not interfaces or classes
+    (e.g. DataItem, not DataItem&lt;%&gt; or DataItem%).
 
     <!-- You may write <kbd>Widget</kbd> -->
     <!-- in place of <kbd>Widget&lt;%&gt;</kbd> in contracts if you -->
@@ -262,5 +271,5 @@
 <font size=-1>
 <p align=right>
 <!-- hhmts start -->
-Last modified: Sat Oct 29 10:31:57 Eastern Daylight Time 2016 <!-- hhmts end -->
+Last modified: Thu Nov  3 23:31:05 Eastern Daylight Time 2016 <!-- hhmts end -->
 </body> </html>
