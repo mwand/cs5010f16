@@ -32,7 +32,7 @@
 (define CANVAS-WIDTH 200)
 (define CANVAS-HEIGHT 400)
 
-(define EMPTY-CANVAS (empty-scene 200 400))
+(define EMPTY-CANVAS (empty-scene CANVAS-WIDTH CANVAS-HEIGHT))
 
 ;; some arbitrary choices
 (define BOMB-INITIAL-X 75)  
@@ -226,7 +226,7 @@
             t)]))
 
     ;; world-after-mouse-event : Nat Nat MouseEvent -> World
-    ;; STRATGY: Cases on mev
+    ;; STRATEGY: Cases on mev
     (define/public (after-mouse-event mx my mev)
       (cond
         [(mouse=? mev "button-down")
