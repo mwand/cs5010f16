@@ -14,7 +14,7 @@
 <p>
 <strong>Out:</strong> Monday, October 31, 2016
 
-<p><strong>Due:</strong> Monday, November 7, 2015
+<p><strong>Due:</strong> Monday, November 7, 2016
 at 600pm local time.
 </p>
 
@@ -69,6 +69,11 @@ copy of each of these to your codewalk.</p>
 mutually-recursive functions using general recursion. If you do this, you need
 make sure that your halting measure decreases on EVERY recursive call
 to the function, even if that call comes via the other function.</p>
+
+<span class="new"><p>In addition to <kbd>rackunit</kbd> and <kbd>"extras.rkt"</kbd>, you
+may also require <kbd>sets.rkt</kbd> (but be careful-- make sure that
+the functions of <kbd>sets.rkt</kbd> apply correctly to your data!)
+</p></span>
 
 <p>Note: not everything on this problem set requires the use of
 invariants or  the use of general recursion.  Part of your task
@@ -295,8 +300,8 @@ empty clause or run out of new clauses to generate.  (This always
 halts.  Why?  One of your deliverables is a halting measure for this
 algorithm.)  If we derive the empty clause, we know our original set
 of clauses was unsatisfiable.  If we derive all the clauses it is
-possible to derive, and we know then we know (by the theorem above)
-that it is unsatisfiable. </p>
+possible to derive, then we know (by the theorem above)
+that it is <span class="new">satisfiable</span>. </p>
 
 <p>For example, consider the following set of clauses:
 </p>
@@ -398,5 +403,5 @@ to document your data definitions in the usual way.</p>
 <font size=-1>
 <p align=right>
 <!-- hhmts start -->
-Last modified: Mon Oct 31 13:01:07 Eastern Daylight Time 2016 <!-- hhmts end -->
+Last modified: Tue Nov  1 17:09:12 Eastern Daylight Time 2016 <!-- hhmts end -->
 </body> </html>
