@@ -33,23 +33,13 @@
 
 (define INITIAL-WALL-POSITION 300)
 
-
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; Data Definitions
-
-;; A Widget is an object whose class implements Widget<%>
-
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; INTERFACES
 
-;; The World implements the StatefulWorld<%> interface
+;; An SWorld is an object of any class that implements SWorld<%>
 
-(define StatefulWorld<%>
+(define SWorld<%>
   (interface ()
 
     ; -> Void
@@ -86,9 +76,7 @@
 
     ))
 
-
-;; Every functional object that lives in the world must implement the
-;; Widget<%> interface.
+;; A Widget is an object of any class that implements Widget<%>
 
 (define Widget<%>
   (interface ()
@@ -119,8 +107,10 @@
     add-to-scene
     ))
 
-;; Every stable (stateful) object that lives in the world must implement the
-;; SWidget<%> interface.
+;; An SWidget is an object of any class that implements the SWidget<%>
+;; interface.
+
+;; A SWidget is like a Widget, but it is stable (stateful).
 
 (define SWidget<%>
   (interface ()
@@ -153,7 +143,13 @@
     ))
 
 
-;; Additional method for Ball:
+;; An SBall is an object of any class that implements SBall<%>.
+
+;; An SBall is like a Ball, but it is stateful (stable), so its
+;; interface extends SWidget<%> rather than Widget<%>.
+
+;; It has one extra method, which updates the ball's copy of the
+;; wall's position.
 
 (define SBall<%>
   (interface (SWidget<%>)
@@ -164,13 +160,27 @@
 
     ))
 
-;; Additional method for Wall:
+;; The wall will be stable (stateful), so its interface
+;; extends SWidget<%> instead of Widget<%>.
+
+;; An SWall is an object of any class that implements SWall<%>.
+;; There will be only one such class.
+
+;; SWall<%> extends SWidget<%> instead of Widget<%>.
+
+;; Instead of waiting to be asked, in this version the wall publishes
+;; its position to anyone who puts themselves on the list to be
+;; notified.  It does so by calling the the recipient's
+;; 'update-wall-pos' method.
+
+;; So SWall<%> has a 'register' method, which allows any SBall to sign up
+;; for notifications.
 
 (define SWall<%>
   (interface (SWidget<%>)
 
-    ; SBall<%> -> Int
-    ; GIVEN: An SBall<%>
+    ; SBall -> Int
+    ; GIVEN: An SBall
     ; EFFECT: registers the ball to receive position updates from this wall.
     ; RETURNS: the x-position of the wall
     register
@@ -231,14 +241,17 @@
 
 ;; The World% class
 
+;; Like the World% class in 10-4, but is stateful itself.
 
+;; It needs to be stable so the ball factory will know where to put
+;; a new ball.
 
-; ListOfWidget -> WorldState
-(define (make-world-state objs sobjs)
-  (new WorldState% [objs objs][sobjs sobjs]))
+; ListOfWidget ListOfSWidget -> World
+(define (make-world objs sobjs)
+  (new World% [objs objs][sobjs sobjs]))
 
-(define WorldState%
-  (class* object% (StatefulWorld<%>)
+(define World%
+  (class* object% (SWorld<%>)
     
     (init-field objs)  ; ListOfWidget
     (init-field sobjs)  ; ListOfSWidget
@@ -251,7 +264,7 @@
    (define/public (add-stateful-widget w)
       (set! sobjs (cons w sobjs)))
 
-    ;; (Widget or SWidget -> Void) -> Void
+    ;; ((Widget -> Widget) && (SWidget -> Void)) -> Void
     (define (process-widgets fn)
       (begin
         (set! objs (map fn objs))
@@ -276,14 +289,14 @@
         EMPTY-CANVAS
         (append objs sobjs)))
 
-    ;; after-key-event : KeyEvent -> WorldState
+    ;; after-key-event : KeyEvent -> World
     ;; STRATEGY: Pass the KeyEvents on to the objects in the world.
 
     (define/public (after-key-event kev)
       (process-widgets
         (lambda (obj) (send obj after-key-event kev))))
 
-    ;; world-after-mouse-event : Nat Nat MouseEvent -> WorldState
+    ;; world-after-mouse-event : Nat Nat MouseEvent -> World
     ;; STRATGY: Cases on mev
     (define/public (after-mouse-event mx my mev)
       (cond
@@ -352,12 +365,12 @@
 
 ;; The Ball% class
 
-;; A Ball is a (new Ball% 
-;;               [x Int][y Int][speed Int]
-;;               [saved-mx Integer][saved-my Integer][selected? Boolean]
-;;               [w Wall])
+;; Constructor template for Ball%:
+;; (new Ball% [x Int][y Int][speed Int]
+;;            [saved-mx Integer][saved-my Integer][selected? Boolean]
+;;            [w Wall])
 
-;; the Ball is now a stateful widget
+;; As of 10-6, the Ball is now a stateful widget
 
 (define Ball%
   (class* object% (SWidget<%>)
@@ -483,7 +496,11 @@
         ;;                    ; false, you can put anything here.
         ;;   [w w])
         (set! selected? false)
-        this))
+        'error-276))
+
+    ;; In Racket, an 'if' must have two arms.  #lang racket also has a
+    ;; form called 'when', which only requires one arm.  You can use
+    ;; that in your code if you want.
 
     ; after-drag : Integer Integer -> Void
     ; GIVEN: the location of a drag event
@@ -503,7 +520,7 @@
         (begin
           (set! x (- mx saved-mx))
           (set! y (- my saved-my)))
-        this))   
+        'error-277))   
 
     ;; the ball ignores key events
     (define/public (after-key-event kev) this)
