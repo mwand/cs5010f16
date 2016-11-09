@@ -197,10 +197,10 @@
 
 (define (initial-world)
   (local
-    ((define the-wall (new Wall%))
-     (define the-ball (new Ball% [w the-wall]))
+    ((define the-wall (new SWall%))
+     (define the-ball (new SBall% [w the-wall]))
      (define the-world
-       (make-world-state 
+       (make-sworld 
          empty
          (list the-ball the-wall)))
      (define the-factory
@@ -247,13 +247,13 @@
 ;; a new ball.
 
 ; ListOfWidget ListOfSWidget -> World
-(define (make-world objs sobjs)
+(define (make-sworld objs sobjs)
   (new SWorld% [objs objs][sobjs sobjs]))
 
 (define SWorld%
   (class* object% (SWorld<%>)
     
-    (init-field objs)  ; ListOfWidget
+    (init-field objs)   ; ListOfWidget
     (init-field sobjs)  ; ListOfSWidget
 
     (super-new)
@@ -348,7 +348,7 @@
     (define/public (after-key-event kev)
       (cond
         [(key=? kev "b")
-         (send world add-stateful-widget (new Ball% [w wall]))]))
+         (send world add-stateful-widget (new SBall% [w wall]))]))
 
     ;; the Ball Factory has no other behavior
 
@@ -363,16 +363,16 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; The Ball% class
+;; The SBall% class
 
-;; Constructor template for Ball%:
-;; (new Ball% [x Int][y Int][speed Int]
+;; Constructor template for SBall%:
+;; (new SBall% [x Int][y Int][speed Int]
 ;;            [saved-mx Integer][saved-my Integer][selected? Boolean]
 ;;            [w Wall])
 
 ;; As of 10-6, the Ball is now a stateful widget
 
-(define Ball%
+(define SBall%
   (class* object% (SWidget<%>)
 
     (init-field w)  ;; the Wall that the ball should bounce off of
@@ -424,7 +424,7 @@
 
     ;; -> Integer
     ;; position of the ball at the next tick
-    ;; STRATEGY: use the square's cached copy of the wall position to
+    ;; STRATEGY: use the ball's cached copy of the wall position to
     ;; set the upper limit of motion    
     (define (next-x-pos)
       (limit-value
@@ -446,8 +446,9 @@
     (define (next-speed)
       (if (or
             (= (next-x-pos) radius)
-            (= (next-x-pos) (- wall-pos ; (send w get-pos) 
-                              radius)))
+            (= (next-x-pos) (-
+                             wall-pos ; was: (send w get-pos) 
+                             radius)))
         (- speed)
         speed))
 
@@ -525,9 +526,9 @@
     ;; the ball ignores key events
     (define/public (after-key-event kev) this)
 
-    (define/public (for-test:x) x)
-    (define/public (for-test:speed) speed)
-    (define/public (for-test:wall-pos) wall-pos)
+    (define/public (for-test:x)          x)
+    (define/public (for-test:speed)      speed)
+    (define/public (for-test:wall-pos)   wall-pos)
     (define/public (for-test:next-speed) (next-speed))
     (define/public (for-test:next-x)     (next-x-pos))
     
@@ -541,14 +542,15 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;; The Wall% class
+;;; The SWall% class
 
-;; A Wall is (new Wall% [pos Integer]
-;;                      [saved-mx Integer]
-;;                      [selected? Boolean])
-;; all these fields have default values.
+;; Constructor Template for SWall%
+;; (new SWall% [pos Integer]
+;;             [saved-mx Integer]
+;;             [selected? Boolean])
+;; all these fields have default values
 
-(define Wall%
+(define SWall%
   (class* object% (SWall<%>)
 
     (init-field [pos INITIAL-WALL-POSITION]) ; the x position of the wall
@@ -560,14 +562,16 @@
     ;; the last button-down event near the wall
     (init-field [saved-mx 0])
        
-    (field [balls empty])  ;; the list of registered balls
+    ;; the list of registered balls
+    ;; ListOfBall
+    (field [balls empty])  
 
     (super-new)
 
     ;; the extra behavior for Wall<%>
     ;; (define/public (get-pos) pos)
 
-    ;; SBall<%> -> Int
+    ;; SBall -> Int
     ;; EFFECT: registers the given ball
     ;; RETURNS: the current position of the wall
     (define/public (register b)
@@ -575,11 +579,9 @@
         (set! balls (cons b balls))
         pos))
 
-
-    
     ; after-button-down : Integer Integer -> Void
-    ; GIVEN: the location of a button-down event
-    ; EFFECT: makes the wall selected
+    ; GIVEN: the (x, y) location of a button-down event
+    ; EFFECT: if the event is near the wall, make the wall selected.
     ; STRATEGY: Cases on whether the event is near the wall
     (define/public (after-button-down mx my)
       (if (near-wall? mx)
@@ -642,22 +644,19 @@
 
     ;; test methods
     ;; don't need deliverables for these.
+
+    ;; in the push model, the wall doesn't have a get-pos method, so we
+    ;; need to add one for testing.
+    
     (define/public (for-test:get-pos) pos)
     
     ))
-
-;;   (new Wall% [pos Integer]
-;;                      [saved-mx Integer]
-;;                      [selected? Boolean])
-
-;; in the push model, the wall doesn't have a get-pos method, so we
-;; need to add one for testing.
 
 ;; select wall, then drag
 (begin-for-test
   (local
     ;; create a wall
-    ((define wall1 (new Wall% [pos 200])))
+    ((define wall1 (new SWall% [pos 200])))
     ;; check to see that it's in the right place
     (check-equal? (send wall1 for-test:get-pos) 200)
     ;; now select it, then drag it 40 pixels 
@@ -670,7 +669,7 @@
 (begin-for-test
   (local
     ;; create a wall
-    ((define wall1 (new Wall% [pos 200])))
+    ((define wall1 (new SWall% [pos 200])))
     ;; check to see that it's in the right place
     (check-equal? (send wall1 for-test:get-pos) 200)
     ;; button-down, but not close enough
@@ -682,8 +681,8 @@
 ;; test bouncing ball
 (begin-for-test
   (local
-    ((define wall1 (new Wall% [pos 200]))
-     (define ball1 (new Ball% [x 170][speed 50][w wall1])))
+    ((define wall1 (new SWall% [pos 200]))
+     (define ball1 (new SBall% [x 170][speed 50][w wall1])))
 
     ;; ball created ok?
     (check-equal? (send ball1 for-test:speed) 50)
@@ -700,8 +699,8 @@
 ;; one that failed.  
 (begin-for-test
   (local
-    ((define wall1 (new Wall% [pos 200]))
-     (define ball1 (new Ball% [x 110][speed 50][w wall1])))
+    ((define wall1 (new SWall% [pos 200]))
+     (define ball1 (new SBall% [x 110][speed 50][w wall1])))
 
     (check-equal? (send ball1 for-test:speed) 50)
     (check-equal? (send ball1 for-test:wall-pos) 200)
@@ -723,8 +722,8 @@
 
 (begin-for-test
   (local
-    ((define wall1 (new Wall% [pos 200]))
-     (define ball1 (new Ball% [x 110][speed 50][w wall1])))
+    ((define wall1 (new SWall% [pos 200]))
+     (define ball1 (new SBall% [x 110][speed 50][w wall1])))
 
     (check-equal? (send ball1 for-test:speed) 50)
     (check-equal? (send ball1 for-test:wall-pos) 200)

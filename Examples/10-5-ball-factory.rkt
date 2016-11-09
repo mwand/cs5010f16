@@ -175,7 +175,7 @@
     ((define the-wall (new SWall%))
      (define the-ball (new Ball% [w the-wall]))
      (define the-world
-       (make-world (list the-ball) (list the-wall)))
+       (make-sworld (list the-ball) (list the-wall)))
      (define the-factory
        (new BallFactory% [wall the-wall][world the-world])))
     (begin
@@ -219,7 +219,7 @@
 ;; a new ball.
 
 ; ListOfWidget ListOfSWidget -> World
-(define (make-world objs sobjs)
+(define (make-sworld objs sobjs)
   (new SWorld% [objs objs][sobjs sobjs]))
 
 (define SWorld%

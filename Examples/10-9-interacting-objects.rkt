@@ -1,13 +1,15 @@
 #lang racket
 
-;; 10-6-push-model
+;; 10-8-interacting-objects.
 
-;; Instead of every ball pulling information from the wall at every
-;; tick, the wall notifies each ball, but only when the wall moves.
+;; Based on 10-7-push-model-fixed.rkt
 
-;; To do this, each ball will have to have a stable identity, so the
-;; wall can send it messages.
+;; In this version, we'll allow the balls to interact with the wall
+;; directly. When a ball is selected, "a" attracts the wall-- moves
+;; the wall 50% closer to the ball; "r" repels the wall-- moves the
+;; wall 50% farther away.
 
+;; To do this, we'll add a move-to method to the wall
 
 (require rackunit)
 (require 2htdp/universe)
@@ -29,7 +31,9 @@
 
 (define INIT-BALL-X (/ CANVAS-HEIGHT 2))
 (define INIT-BALL-Y (/ CANVAS-WIDTH 3))
-(define INIT-BALL-SPEED 30)
+
+;; balls will move slower to make them easier to select.
+(define INIT-BALL-SPEED 20)
 
 (define INITIAL-WALL-POSITION 300)
 
@@ -176,6 +180,10 @@
 ;; So SWall<%> has a 'register' method, which allows any SBall to sign up
 ;; for notifications.
 
+;; for 10-9-interacting-objects, we add a move-to method, which allows
+;; any object that knows about the wall to move it to a given
+;; x-position.
+
 (define SWall<%>
   (interface (SWidget<%>)
 
@@ -184,6 +192,11 @@
     ; EFFECT: registers the ball to receive position updates from this wall.
     ; RETURNS: the x-position of the wall
     register
+
+    ; Int -> Void
+    ; EFFECT: moves the wall to the given position.  Notifies all the
+    ; registered balls about the change.
+    move-to
 
     ))
 
@@ -208,6 +221,8 @@
     (begin
       ;; put the factory in the world
       (send the-world add-stateful-widget the-factory)
+      ;; tell the factory to start a ball
+      (send the-factory after-key-event "b")
       the-world)))
      
      
@@ -241,10 +256,7 @@
 
 ;; The SWorld% class
 
-;; Like the World% class in 10-4, but is stateful itself.
 
-;; It needs to be stable so the ball factory will know where to put
-;; a new ball.
 
 ; ListOfWidget ListOfSWidget -> World
 (define (make-sworld objs sobjs)
@@ -531,10 +543,24 @@
         (begin
           (set! x (- mx saved-mx))
           (set! y (- my saved-my)))
-        'error-277))   
+        this))   
 
-    ;; the ball ignores key events
-    (define/public (after-key-event kev) 'error-278)
+    ;; KeyEvent -> Void
+    (define/public (after-key-event kev)
+      (if selected?
+        (cond
+          [(key=? kev "a") (attract-wall)]
+          [(key=? kev "r") (repel-wall)])
+        this))
+      
+    ;; -> Void
+    (define (attract-wall)
+      (send w move-to (- wall-pos (/ (- wall-pos x) 2))))
+
+    ;; -> Void
+    (define (repel-wall)
+      (send w move-to (+ wall-pos (/ (- wall-pos x) 2))))
+
 
     (define/public (for-test:x)          x)
     (define/public (for-test:speed)      speed)
@@ -680,6 +706,19 @@
             (lambda (b) (send b update-wall-pos pos))
             balls))
         this))
+
+    ; move-to : Integer -> Void
+    ; EFFECT: moves the wall to the specified position, and report the
+    ; new position to the registered balls
+    (define/public (move-to n)
+      (set! pos n)
+      (for-each
+        (lambda (b) (send b update-wall-pos pos))
+        balls))
+
+
+    ;; probably should combine these for-each's into a single private
+    ;; function. 
 
 
     ;; add-to-scene : Scene -> Scene
