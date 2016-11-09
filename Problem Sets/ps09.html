@@ -71,7 +71,8 @@ href="../Info/deliverables.html#oo-deliverables"
 
 <li>Please restrict yourself to the language features discussed in
 class.  In particular, you may NOT use state (<kbd>set!</kbd>)
-or inheritance.</li> 
+or inheritance <span class="new">of classes. You may, however, use
+  interface inheritance (see the examples below).</span></li> 
 
 <li>You must use <kbd>#lang racket</kbd>, <kbd>rackunit</kbd>,
 <kbd>"extras.rkt"</kbd>, <kbd>2htdp/universe</kbd>, and
@@ -228,18 +229,14 @@ Interfaces:
 ;; (You will only need one such class)
 
 (define Metatoy<%>
-  (interface (World<%>) ;; this means: include all the methods in
-                        ;; World<%> from
-                        ;; Examples/09-2-2-space-invaders-2.rkt
-
-    ;; -> Integer
-    ;; RETURN: the x and y coordinates of the target
-    target-x
-    target-y
-
-    ;; -> Boolean
-    ;; Is the target selected?
-    target-selected?
+  (interface 
+  <span class="new">
+   ;; the (World<%>) says that Metatoy<%> <em>inherits</em> from World<%>
+   ;; This means that any class that implements Metatoy<%> must
+   ;; implement all the methods from World<%> plus all the methods
+   ;; defined here. In this case, there is just one additional method,
+   ;; called get-toys.
+   </span>(World<%>)
 
     ;; -> ListOfToy
     get-toys
@@ -250,8 +247,13 @@ Interfaces:
 ;; You will probably have three such classes, one for each kind of toy. 
 
 (define Toy<%> 
-  (interface (Widget<%>)  ;; this means: include all the methods in
-                          ;;  Widget<%>.
+  (interface
+  <span class="new">
+   ;; The interface Toy<%> inherits from the interface Widget<%>.
+   ;; This means that any class that implements Toy<%> must implement
+   ;; all the methods from Widget<%> plus all the methods defined here.
+   </span>(Widget<%>)
+
 
     ;; Note: the Widgets of the space-invader-examples don't respond
     ;; to mouse "move" events, but some of our toys do.  So we add an
@@ -271,8 +273,6 @@ Interfaces:
     ;; -> Int
     ;; RETURNS: some data related to the toy.  The interpretation of
     ;; this data depends on the class of the toy.
-    ;; for a square, it is the velocity of the square (rightward is
-    ;; positive)
     ;; for a throbber, it is the current radius of the throbber
     ;; for the clock, it is the current value of the clock
     ;; for a politician, it is the current distance to the mouse
@@ -303,6 +303,6 @@ provides all of your interfaces and then one file for each class you define.
 <font size=-1>
 <p align=right>
 <!-- hhmts start -->
-Last modified: Fri Nov  4 00:18:11 Eastern Daylight Time 2016 <!-- hhmts end -->
+Last modified: Wed Nov  9 13:35:22 Eastern Standard Time 2016 <!-- hhmts end -->
 </body> </html>  
  
