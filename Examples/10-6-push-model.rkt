@@ -239,7 +239,7 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; The World% class
+;; The SWorld% class
 
 ;; Like the World% class in 10-4, but is stateful itself.
 
@@ -248,9 +248,9 @@
 
 ; ListOfWidget ListOfSWidget -> World
 (define (make-world objs sobjs)
-  (new World% [objs objs][sobjs sobjs]))
+  (new SWorld% [objs objs][sobjs sobjs]))
 
-(define World%
+(define SWorld%
   (class* object% (SWorld<%>)
     
     (init-field objs)  ; ListOfWidget
