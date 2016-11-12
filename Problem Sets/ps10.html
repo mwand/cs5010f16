@@ -51,7 +51,20 @@ in multiple files. See details below. </p>
 <ol>
   <li> Your boss at the toy factory has been taking PDP, and he has
   been persuaded to buy a "framework" from WidgetWorks International.
-  The framework was delivered as a file called <a href="WidgetWorks.rkt"
+  The salesman told him that the WidgetWorks framework eliminates the
+  need for your developers to deal with big-bang.  You, of course,
+  know that's not so hard, but your boss, still hungover from his
+  party, is pretty gullible.
+
+  The salesman explains that with WidgetWorks, call you do is create
+  a WidgetWorks Container(TM), load it up with your widgets and
+  swidgets, and send it a 'run' message.  You can even add additional
+  widgets and swidgets while it's running.
+
+  Your boss is convinced, and tells you to reimplement your Metatoy
+  using the WidgetWorks framework.
+
+  The framework is delivered as a file called <a href="WidgetWorks.rkt"
   >WidgetWorks.rkt</a> that provides three interfaces and one
   function, as follows:
 
@@ -159,10 +172,10 @@ in multiple files. See details below. </p>
 </pre>
 
 <p>You are relieved to see that these interfaces are much like the
-ones you've been working with.  The difference is that you will run
-the objects by creating a Container, adding your widgets to it, and
-then calling the <kbd>run</kbd> method on your container.  You no
-longer need to call big-bang yourself.</p>
+ones you've been working with.  Just as the salesman said, you run
+your widgets and swidgets by creating a Container, adding your widgets
+and swidgets to it, and then calling the <kbd>run</kbd> method on your
+container.  You no longer need to call big-bang yourself.</p>
 
 <p>Your job is to reimplement the toy from problem set 9, but using
 the WidgetWorks framework and stateful objects. The specifications and
@@ -263,7 +276,7 @@ deliverables are exactly the same, except that:
   provides the following two functions and one interface:</p>
 
   <pre>
-container-init : -> Container
+cubelets-init : -> Container
 GIVEN: no arguments
 RETURNS: a Container, initially with no blocks, which when run, will
 run in a 600x500 canvas and process the events in the description above.
@@ -317,8 +330,13 @@ rules:
   <li>Your directory must include a copy of WidgetWorks.rkt and
   extras.rkt .</li>
 
-  <li>Running the file q1.rkt or q2.rkt should run the solution to
-  each question.</li>
+  <li>Running the file q1.rkt or q2.rkt should load the solution to
+  each question.  As in the past, loading this file should not run the
+  interactive system.  You'll need to include in each of
+  these files a function (typically called 'run' or similar) that
+  actually runs the code interactively.  Be sure to include
+  instructions near the top of your file so the TA can run your system
+  visually.</li>
 
   <li>You may organize your files in any way that is coherent.  You
   will need to defend your organization at codewalk.  However, we
@@ -349,6 +367,6 @@ rules:
 <font size=-1>
 <p align=right>
 <!-- hhmts start -->
-Last modified: Thu Nov 10 21:56:30 Eastern Standard Time 2016 <!-- hhmts end -->
+Last modified: Sat Nov 12 09:23:30 Eastern Standard Time 2016 <!-- hhmts end -->
 </body> </html>
  
