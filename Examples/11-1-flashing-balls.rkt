@@ -88,7 +88,7 @@
     after-button-up
     after-drag
 
-    ; KeyEvent : KeyEvent -> Widget
+    ; KeyEvent -> Widget
     ; GIVEN: a key event and a time
     ; RETURNS: the state of this object that should follow the
     ; given key event
@@ -556,6 +556,14 @@
 
 ;; FlashingBall% is like a SBall%, but it displays differently: it
 ;; changes color on every fourth tick
+
+;; Constructor Template for FlashingBall% :
+;; Constructor template for SBall%:
+;; (new FlashingBall%
+;;            [x Int][y Int][speed Int]
+;;            [saved-mx Integer][saved-my Integer][selected? Boolean]
+;;            [w Wall])
+
 (define FlashingBall%
   (class* 
     SBall%            ; inherits from SBall%

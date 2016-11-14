@@ -10,14 +10,14 @@
 ;; Factor common parts of implementation of Ball% and Square%
 ;; into a superclass DraggableWidget%
 
-;; We'll do this by simply copying Ball% to DraggableWidget% and
-;; commenting out the parts that differ between Ball% and Square%.
+;; We'll do this by simply copying SBall% to DraggableWidget% and
+;; commenting out the parts that differ between SBall% and Square%.
 
 ;; 11-2-squares.rkt
 ;; adds squares ("s")
 
 ;; 11-1-flashing-balls.rkt :
-;; extends 10-6-push-model by adding a flashing ball ("f")
+;; extends 10-7-push-model-fixed by adding a flashing ball ("f")
 
 (require rackunit)
 (require 2htdp/universe)
@@ -45,18 +45,11 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Data Definitions
-
-;; A Widget is an object whose class implements Widget<%>
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 ;; INTERFACES
 
-;; The World implements the StatefulWorld<%> interface
+;; An SWorld is an object of any class that implements SWorld<%>
 
-(define StatefulWorld<%>
+(define SWorld<%>
   (interface ()
 
     ; -> Void
@@ -93,9 +86,7 @@
 
     ))
 
-
-;; Every functional object that lives in the world must implement the
-;; Widget<%> interface.
+;; A Widget is an object of any class that implements Widget<%>
 
 (define Widget<%>
   (interface ()
@@ -113,7 +104,7 @@
     after-button-up
     after-drag
 
-    ; KeyEvent : KeyEvent -> Widget
+    ; KeyEvent -> Widget
     ; GIVEN: a key event and a time
     ; RETURNS: the state of this object that should follow the
     ; given key event
@@ -126,8 +117,10 @@
     add-to-scene
     ))
 
-;; Every stable (stateful) object that lives in the world must implement the
-;; SWidget<%> interface.
+;; An SWidget is an object of any class that implements the SWidget<%>
+;; interface.
+
+;; A SWidget is like a Widget, but it is stable (stateful).
 
 (define SWidget<%>
   (interface ()
@@ -162,7 +155,7 @@
 ;; while we're at it, we'll rename the interfaces to reflect their
 ;; generic nature.
 
-;; Additional method for Ball and other classes that receive messages
+;; Additional method for SBall% and other classes that receive messages
 ;; from the wall:
 
 (define SWidgetListener<%>
@@ -174,13 +167,14 @@
 
     ))
 
-;; Additional method for Wall:
+;; Additional method for classes that send messages to
+;; SWidgetListeners. In our example, SWall% is the only such class. 
 
 (define SWidgetPublisher<%>
   (interface (SWidget<%>)
 
-    ; SWidgetListener<%> -> Int
-    ; GIVEN: An SWidgetListener<%>
+    ; SWidgetListener -> Int
+    ; GIVEN: An SWidgetListener
     ; EFFECT: registers the listener to receive position updates from this wall.
     ; RETURNS: the current x-position of the wall
     register
@@ -192,14 +186,15 @@
 
 ;; initial-world : -> WorldState
 ;; RETURNS: a world with a wall, a ball, and a factory
+
 (define (initial-world)
   (local
-    ((define the-wall (new Wall%))
-     (define the-ball (new Ball% [w the-wall]))
+    ((define the-wall (new SWall%))
+     (define the-ball (new SBall% [w the-wall]))
      (define the-world
-       (make-world-state 
-         empty ; (list the-ball)  -- the ball is now stateful
-         (list the-wall)))
+       (make-sworld 
+         empty
+         (list the-ball the-wall)))
      (define the-factory
        (new WidgetFactory% [wall the-wall][world the-world])))
     (begin
@@ -238,16 +233,21 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; The World% class
+;; The SWorld% class
 
-; ListOfWidget ListOfWidget -> WorldState
-(define (make-world-state objs sobjs)
-  (new WorldState% [objs objs][sobjs sobjs]))
+;; Like the World% class in 10-4, but is stateful itself.
 
-(define WorldState%
-  (class* object% (StatefulWorld<%>)
+;; It needs to be stable so the ball factory will know where to put
+;; a new ball.
+
+; ListOfWidget ListOfSWidget -> World
+(define (make-sworld objs sobjs)
+  (new SWorld% [objs objs][sobjs sobjs]))
+
+(define SWorld%
+  (class* object% (SWorld<%>)
     
-    (init-field objs)  ; ListOfWidget
+    (init-field objs)   ; ListOfWidget
     (init-field sobjs)  ; ListOfSWidget
 
     (super-new)
@@ -258,7 +258,7 @@
    (define/public (add-stateful-widget w)
       (set! sobjs (cons w sobjs)))
 
-    ;; (Widget or SWidget -> Void) -> Void
+    ;; ((Widget -> Widget) && (SWidget -> Void)) -> Void
     (define (process-widgets fn)
       (begin
         (set! objs (map fn objs))
@@ -283,15 +283,15 @@
         EMPTY-CANVAS
         (append objs sobjs)))
 
-    ;; after-key-event : KeyEvent -> WorldState
+    ;; after-key-event : KeyEvent -> Void
     ;; STRATEGY: Pass the KeyEvents on to the objects in the world.
 
     (define/public (after-key-event kev)
       (process-widgets
         (lambda (obj) (send obj after-key-event kev))))
 
-    ;; world-after-mouse-event : Nat Nat MouseEvent -> WorldState
-    ;; STRATGY: Cases on mev
+    ;; world-after-mouse-event : Nat Nat MouseEvent -> Void
+    ;; STRATEGY: Cases on mev
     (define/public (after-mouse-event mx my mev)
       (cond
         [(mouse=? mev "button-down")
@@ -342,7 +342,7 @@
     (define/public (after-key-event kev)
       (cond
         [(key=? kev "b")
-         (send world add-stateful-widget (new Ball% [w wall]))]
+         (send world add-stateful-widget (new SBall% [w wall]))]
          [(key=? kev "f")
          (send world add-stateful-widget (new FlashingBall% [w wall]))]
          [(key=? kev "s")
@@ -362,32 +362,24 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; A DraggableWidget is a (new DraggableWidget% [w Wall]) 
-
-;; the methods implemented by DraggableWidget%.
-;; This includes all the methods in SWidgetListener<%> EXCEPT
-;; for add-to-scene, which is defined in the subclass
-
-(define DraggableWidget<%>
-  (interface ()
-    update-wall-pos
-    after-tick
-    after-button-down
-    after-button-up
-    after-drag))
-
+;; Constructor Template for DraggableWidget%:
+;;(new DraggableWidget% 
+;;     [x Int][y Int][speed Int]
+;;     [saved-mx Integer][saved-my Integer][selected? Boolean]
+;;     [w Wall])
 
 (define DraggableWidget%
   (class* object%
 
     ;; the methods implemented in the superclass
-    (DraggableWidget<%>)  
+    ; (DraggableWidget<%>)
+    (SWidgetListener<%>)
 
     ;; the methods to be supplied by each subclass
-    (abstract 
-      next-x-pos
-      next-speed
-      in-this?)
+    (abstract add-to-scene
+              next-x-pos
+              next-speed
+              in-this?)
    
 
     ;; the Wall that the ball should bounce off of
@@ -423,7 +415,7 @@
     (define/public (after-tick)
       (if selected?
         this
-        (let ((x1 (send this next-x-pos))
+        (let ((x1     (send this next-x-pos))
               (speed1 (send this next-speed)))
           (begin
             (set! speed speed1)
@@ -453,7 +445,7 @@
         ;; (in-this? mx my)
         (send this in-this? mx my)
         (set! selected? false)
-        this))
+        'error-276))
 
     ; after-drag : Integer Integer -> Void
     ; GIVEN: the location of a drag event
@@ -465,10 +457,11 @@
         (begin
           (set! x (- mx saved-mx))
           (set! y (- my saved-my)))
-        this))   
+        'error-277))   
 
     ;; the widget ignores key events
     (define/public (after-key-event kev) this)
+
     (define/public (for-test:x)          x)
     (define/public (for-test:speed)      speed)
     (define/public (for-test:wall-pos)   wall-pos)
@@ -488,7 +481,7 @@
     in-this?
 
     ;; -> Int
-    ;; RETURN: the next x position or speed of this widget
+    ;; RETURNS: the next x position or speed of this widget
     next-x-pos
     next-speed
 
@@ -496,17 +489,21 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; The Ball% class
+;; The SBall% class
 
-;; A Ball is a (new Ball% [w Wall])
+;; Constructor template for SBall%:
+;; (new SBall% [x Int][y Int][speed Int]
+;;            [saved-mx Integer][saved-my Integer][selected? Boolean]
+;;            [w Wall])
 
-(define Ball%
+(define SBall%
   (class*
 
     ;; inherit method implementations from DraggableWidget%
     DraggableWidget%
     
-    ;; must implement SBall + the open hooks from the superclass
+    ;; must implement the interface(s) of DraggableWidget% + the open
+    ;; hooks from the superclass 
     (SWidgetListener<%> DraggableWidgetHooks<%>)
 
     ;; inherit all these fields from the superclass:
@@ -563,7 +560,7 @@
 
     
 
-    (define/public (add-to-scene s)
+    (define/override (add-to-scene s)
       (place-image
         (circle radius 
           "outline"
@@ -583,8 +580,8 @@
 
 (begin-for-test
   (local
-    ((define wall1 (new Wall% [pos 200]))
-     (define ball1 (new Ball% [x 110][speed 50][w wall1])))
+    ((define wall1 (new SWall% [pos 200]))
+     (define ball1 (new SBall% [x 110][speed 50][w wall1])))
 
     (check-equal? (send ball1 for-test:speed) 50)
     (check-equal? (send ball1 for-test:wall-pos) 200)
@@ -606,8 +603,8 @@
 
 (begin-for-test
   (local
-    ((define wall1 (new Wall% [pos 200]))
-     (define ball1 (new Ball% [x 160][speed 50][w wall1])))
+    ((define wall1 (new SWall% [pos 200]))
+     (define ball1 (new SBall% [x 160][speed 50][w wall1])))
 
     (check-equal? (send ball1 for-test:x) 160)
     (check-equal? (send ball1 for-test:speed) 50)
@@ -627,11 +624,18 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; FlashingBall% is like a Ball%, but it displays differently: it
+;; A FlashingBall% is like a SBall%, but it displays differently: it
 ;; changes color on every fourth tick
 
+;; Constructor Template for FlashingBall% :
+;; Constructor template for SBall%:
+;; (new FlashingBall%
+;;            [x Int][y Int][speed Int]
+;;            [saved-mx Integer][saved-my Integer][selected? Boolean]
+;;            [w Wall])
+
 (define FlashingBall%
-  (class* Ball% (SWidgetListener<%>)                        ; 
+  (class* SBall% (SWidgetListener<%>)                        ; 
 
     ;; here are fields of the superclass that we need.
     ;; we should copy the interpretations here so we'll know what they mean.
@@ -650,7 +654,7 @@
     ;; FlashingBall% behaves just like Ball%, except for add-to-scene.
     ;; so we'll find on-tick, on-key, on-mouse methods in Ball%
 
-     ;; Scene -> Scene
+    ;; Scene -> Scene
     ;; RETURNS: a scene like the given one, but with the flashing ball
     ;; painted on it.
     ;; EFFECT: decrements time-left and changes colors if necessary
@@ -666,6 +670,8 @@
             (if selected? "solid" "outline")
             (first colors))
           x y s)))
+
+;; the place-image could be replaced by (super add-to-scene s)
 
     ;; -> Void
     ;; EFFECT: rotate the list of colors, and reset time-left
@@ -736,7 +742,7 @@
         speed
         (- speed)))
 
-    (define/public (add-to-scene s)
+    (define/override (add-to-scene s)
       (place-image
         (square size 
          (if selected? "solid" "outline")
@@ -757,14 +763,15 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;; The Wall% class
+;;; The SWall% class
 
-;; A Wall is (new Wall% [pos Integer]
-;;                      [saved-mx Integer]
-;;                      [selected? Boolean])
-;; all these fields have default values.
+;; Constructor Template for SWall%
+;; (new SWall% [pos Integer]
+;;             [saved-mx Integer]
+;;             [selected? Boolean])
+;; all these fields have default values
 
-(define Wall%
+(define SWall%
   (class* object% (SWidgetPublisher<%>)
 
     (init-field [pos INITIAL-WALL-POSITION]) ; the x position of the wall
@@ -785,7 +792,7 @@
     ;; the extra behavior for Wall<%>
     ;; (define/public (get-pos) pos)
 
-    ;; Ball<%> -> Int
+    ;; SWidgetListener -> Int
     ;; EFFECT: registers the given ball
     ;; RETURNS: the current position of the wall
     (define/public (register b)
@@ -802,7 +809,8 @@
         (begin
           (set! selected? true)
           (set! saved-mx (- mx pos)))
-        this))  ;; if needs an else clause :-(
+          ;; don't need to worry about returning this
+        this))  ;; but an if needs an else clause :-(
 
     ; after-button-up : Integer Integer -> Void
     ; GIVEN: the (x,y) location of a button-up event

@@ -98,7 +98,7 @@
     after-button-up
     after-drag
 
-    ; KeyEvent : KeyEvent -> Widget
+    ; KeyEvent -> Widget
     ; GIVEN: a key event and a time
     ; RETURNS: the state of this object that should follow the
     ; given key event
@@ -349,6 +349,7 @@
 
     (super-new)
 
+    ; KeyEvent -> Void
     (define/public (after-key-event kev)
       (cond
         [(key=? kev "b")
@@ -357,7 +358,7 @@
          (send world add-stateful-widget (new FlashingBall% [w wall]))]
          [(key=? kev "s")
          (send world add-stateful-widget (new Square% [w wall]))]
-))
+         ))
 
     ;; the Ball Factory has no other behavior
 
@@ -372,14 +373,14 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;;; ******** this is as far as I got ******
 
-;; A DraggableWidget is a (new DraggableWidget% 
-;;               [x Int][y Int][speed Int]
-;;               [saved-mx Integer][saved-my Integer][selected? Boolean]
-;;               [w Wall])
+;; The DraggableWidget% class
 
-;; the Ball is now a stateful widget
+;; Constructor Template for DraggableWidget%:
+;;(new DraggableWidget% 
+;;     [x Int][y Int][speed Int]
+;;     [saved-mx Integer][saved-my Integer][selected? Boolean]
+;;     [w Wall])
 
 (define DraggableWidget%
   (class* object%
@@ -430,6 +431,7 @@
             (set! speed speed1)
             (set! x x1)))))
 
+    ;; circle-specific
     ;; -> Integer
     ;; position of the object at the next tick
     ;; (define (next-x-pos)
@@ -499,7 +501,7 @@
     (define/public (after-button-up mx my)
       (if (in-this? mx my)
         (set! selected? false)
-        this))
+        'error-276))
 
     ; after-drag : Integer Integer -> Void
     ; GIVEN: the location of a drag event
@@ -511,7 +513,7 @@
         (begin
           (set! x (- mx saved-mx))
           (set! y (- my saved-my)))
-        this))   
+        'error-277))   
 
     ;; the widget ignores key events
     (define/public (after-key-event kev) this)
@@ -529,19 +531,19 @@
 
 ;; The Ball% class
 
-;; A Ball is a (new Ball% 
-;;               [x Int][y Int][speed Int]
-;;               [saved-mx Integer][saved-my Integer][selected? Boolean]
-;;               [w Wall])
+;; The SBall% class
 
-;; the Ball is now a stateful widget
+;; Constructor template for SBall%:
+;; (new SBall% [x Int][y Int][speed Int]
+;;            [saved-mx Integer][saved-my Integer][selected? Boolean]
+;;            [w Wall])
 
+;; As of 10-6, the Ball is now a stateful widget
 
-
-(define Ball%
+(define SBall%
   (class*
 
-    ;; inherit from
+    ;; inherit method implementations from DraggableWidget%
     DraggableWidget%
     
     (SBall<%>)
@@ -685,8 +687,8 @@
 
 (begin-for-test
   (local
-    ((define wall1 (new Wall% [pos 200]))
-     (define ball1 (new Ball% [x 110][speed 50][w wall1])))
+    ((define wall1 (new SWall% [pos 200]))
+     (define ball1 (new SBall% [x 110][speed 50][w wall1])))
 
     (check-equal? (send ball1 for-test:speed) 50)
     (check-equal? (send ball1 for-test:wall-pos) 200)
@@ -708,8 +710,8 @@
 
 (begin-for-test
   (local
-    ((define wall1 (new Wall% [pos 200]))
-     (define ball1 (new Ball% [x 160][speed 50][w wall1])))
+    ((define wall1 (new SWall% [pos 200]))
+     (define ball1 (new SBall% [x 160][speed 50][w wall1])))
 
     (check-equal? (send ball1 for-test:x) 160)
     (check-equal? (send ball1 for-test:speed) 50)
@@ -729,12 +731,20 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; FlashingBall% is like a Ball%, but it displays differently: it
+;; A FlashingBall% is like a SBall%, but it displays differently: it
 ;; changes color on every fourth tick
+
+;; Constructor Template for FlashingBall% :
+;; Constructor template for SBall%:
+;; (new FlashingBall%
+;;            [x Int][y Int][speed Int]
+;;            [saved-mx Integer][saved-my Integer][selected? Boolean]
+;;            [w Wall])
+
 (define FlashingBall%
   (class* 
-    Ball%                               ; inherits from Ball%
-    (SBall<%>)                        ; 
+    SBall%            ; inherits from SBall%
+    (SBall<%>)        ; still implements SBall<%>, so every object of class FlashingBall% is an SBall 
 
     (field [color-change-interval 4])   ; how much time between color changes?
     (field [time-left color-change-interval])  ; how much time left
@@ -928,14 +938,15 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;; The Wall% class
+;;; The SWall% class
 
-;; A Wall is (new Wall% [pos Integer]
-;;                      [saved-mx Integer]
-;;                      [selected? Boolean])
-;; all these fields have default values.
+;; Constructor Template for SWall%
+;; (new SWall% [pos Integer]
+;;             [saved-mx Integer]
+;;             [selected? Boolean])
+;; all these fields have default values
 
-(define Wall%
+(define SWall%
   (class* object% (SWall<%>)
 
     (init-field [pos INITIAL-WALL-POSITION]) ; the x position of the wall
@@ -956,7 +967,7 @@
     ;; the extra behavior for Wall<%>
     ;; (define/public (get-pos) pos)
 
-    ;; Ball<%> -> Int
+    ;; SBall -> Int
     ;; EFFECT: registers the given ball
     ;; RETURNS: the current position of the wall
     (define/public (register b)
