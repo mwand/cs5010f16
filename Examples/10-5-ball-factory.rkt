@@ -261,7 +261,7 @@
         EMPTY-CANVAS
         (append sobjs objs)))
 
-    ;; after-key-event : KeyEvent -> World
+    ;; after-key-event : KeyEvent -> Void
     ;; STRATEGY: Pass the KeyEvents on to the objects in the world.
 
     (define/public (after-key-event kev)
