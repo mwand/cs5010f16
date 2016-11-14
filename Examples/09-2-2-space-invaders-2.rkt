@@ -78,7 +78,7 @@
     ; given mouse event at the given location.
     after-mouse-event
 
-    ; KeyEvent : KeyEvent -> Widget
+    ; KeyEvent : KeyEvent -> World
     ; GIVEN: a key event
     ; RETURNS: the state of the world that should follow the
     ; given key event
@@ -225,7 +225,7 @@
               objs)
             t)]))
 
-    ;; world-after-mouse-event : Nat Nat MouseEvent -> World
+    ;; after-mouse-event : Nat Nat MouseEvent -> World
     ;; STRATEGY: Cases on mev
     (define/public (after-mouse-event mx my mev)
       (cond
@@ -266,7 +266,7 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;; We have two classes of Widget<%>s:  Helicopters and Bombs
+;;; We have two classes of Widgets:  Helicopters and Bombs
 
 ;; Helicopters start near the bottom of the screen and rise slowly.
 ;; They are selectable and draggable.
