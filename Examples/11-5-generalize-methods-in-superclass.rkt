@@ -316,7 +316,6 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
 ;; The WidgetFactory% class
 
 ;; accepts key events and adds SWidgetListeners to the world.
