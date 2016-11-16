@@ -2,22 +2,18 @@
 
 (require rackunit)
 (require 2htdp/universe)
-(require 2htdp/image)
-;; (require "extras.rkt")
+; (require 2htdp/image)
 
 (provide 
-  make-world
-  Widget<%>
-  SWidget<%>)
+ container-init
+ Container<%>
+ Widget<%>
+ SWidget<%>)
 
-;; the problem set says we provide StatefulWorld<%>, so we'll provide it,
-;; even though there's no logical necessity to do so.
-(provide StatefulWorld<%>)
+;; A Container is an object of any class that implements Container<%>.
+;; In Widgetworks, there is only one such class.
 
-
-;; The World implements the StatefulWorld<%> interface
-
-(define StatefulWorld<%>
+(define Container<%>
   (interface ()
 
    ; Widget -> Void
@@ -37,8 +33,7 @@
 
     ))
 
-;; Every functional object that lives in the world must implement the
-;; Widget<%> interface.
+;; A Widget is an object of any class that implements Widget<%>
 
 (define Widget<%>
   (interface ()
@@ -55,8 +50,9 @@
     after-button-down
     after-button-up
     after-drag
+    after-move
 
-    ; KeyEvent : KeyEvent -> Widget
+    ; KeyEvent -> Widget
     ; GIVEN: a key event and a time
     ; RETURNS: the state of this object that should follow the
     ; given key event
@@ -69,8 +65,10 @@
     add-to-scene
     ))
 
-;; Every stable (stateful) object that lives in the world must implement the
-;; SWidget<%> interface.
+;; An SWidget is an object of any class that implements the SWidget<%>
+;; interface.
+
+;; A SWidget is like a Widget, but it is stable (stateful).
 
 (define SWidget<%>
   (interface ()
@@ -88,8 +86,9 @@
     after-button-down
     after-button-up
     after-drag
+    after-move
 
-    ; KeyEvent : KeyEvent -> Void
+    ; KeyEvent -> Void
     ; GIVEN: a key event
     ; EFFECT: updates this widget to the state it should have
     ; following the given key event
@@ -102,21 +101,22 @@
     add-to-scene
     ))
 
+; ListOfWidget ListOfStatefulWidget -> Container
+(define (container-init w h)
+  (new WWContainer% [canvas-width w][canvas-height h]))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; note: WWContainer% is NOT provided.  Only Container<%> is provided.
 
-; NonNegInt NonNegInt -> StatefulWorld<%>
-(define (make-world w h)
-  (new WorldState% [canvas-width w][canvas-height h]))
-
-(define WorldState%
-  (class* object% (StatefulWorld<%>)
+(define WWContainer%
+  (class* object% (Container<%>)
 
     (init-field canvas-width)
     (init-field canvas-height)
        
     (init-field [objs empty])  ; ListOfWidget
-    (init-field [sobjs empty])  ; ListOfSWidget
+    (init-field [sobjs empty]) ; ListOfSWidget
 
     (field [EMPTY-CANVAS (empty-scene canvas-width canvas-height)])
 
@@ -127,6 +127,7 @@
     ; EFFECT: runs this world at the given frame rate
     ; RETURNS: the world in its final state of the world
     ; Note: the (begin (send w ...) w) idiom
+    
     (define/public (run rate)
       (big-bang this
         (on-tick
@@ -145,14 +146,18 @@
               (after-mouse-event mx my mev)
               w)))))
 
+    ;; Widget -> Void
     (define/public (add-widget w)
       (set! objs (cons w objs)))
 
-   (define/public (add-stateful-widget w)
+   ;; Widget -> Void
+    (define/public (add-stateful-widget w)
       (set! sobjs (cons w sobjs)))
 
-    ;; (Widget or SWidget -> Void) -> Void
-    (define (process-widgets fn)
+   ;; ((Widget -> Widget) && (SWidget -> Void)) -> Void
+   ;; this means that fn must satisfy both (Widget -> Widget) and
+   ;; (SWidget -> Void) 
+   (define (process-widgets fn)
       (begin
         (set! objs (map fn objs))
         (for-each fn sobjs)))
@@ -167,7 +172,8 @@
 
     ;; to-scene : -> Scene
     ;; Use HOFC foldr on the Widgets and SWidgets in this World
-    ;; Note: the append is inefficient, but clear..
+    ;; Note: the append is inefficient, but clear.  We expect that
+    ;; most of the widgets in the world will be stateful.
       
     (define (to-scene)
       (foldr
@@ -176,14 +182,14 @@
         EMPTY-CANVAS
         (append objs sobjs)))
 
-    ;; after-key-event : KeyEvent -> WorldState
+    ;; after-key-event : KeyEvent -> Void
     ;; STRATEGY: Pass the KeyEvents on to the objects in the world.
 
     (define (after-key-event kev)
       (process-widgets
         (lambda (obj) (send obj after-key-event kev))))
 
-    ;; world-after-mouse-event : Nat Nat MouseEvent -> WorldState
+    ;; after-mouse-event : Nat Nat MouseEvent -> Void
     ;; STRATGY: Cases on mev
     (define (after-mouse-event mx my mev)
       (cond
