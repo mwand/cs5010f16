@@ -29,7 +29,9 @@
     
     ))
 
-;; A Model is an object of any class that implements Model<%>
+;; A Model is an object of any class that implements Model<%>.  Models
+;; will receive signals from the Container, so they must implement the
+;; SWidget<%> interface in order to do so.
 
 (define Model<%>
   (interface (SWidget<%>)
@@ -43,7 +45,7 @@
     execute-command   
 ))
 
-;; PROTOCOL:
+;; CONTROLLER/MODEL PROTOCOL:
 
 ;; As soon as a controller registers with the model, the model sends
 ;; the controller a pair of Signals so the controller will know the
