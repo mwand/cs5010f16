@@ -54,7 +54,7 @@
     ; given mouse event at the given location.
     after-mouse-event
 
-    ; KeyEvent : KeyEvent -> World
+    ; KeyEvent -> World
     ; GIVEN: a key event
     ; RETURNS: the state of the world that should follow the
     ; given key event
