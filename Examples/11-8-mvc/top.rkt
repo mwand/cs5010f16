@@ -10,7 +10,7 @@
 ;; create a container, install a factory, and run.
 
 (define (run rate)
-  (let ((c (container-init 500 400))
+  (let ((c (container-init CANVAS-WIDTH CANVAS-HEIGHT))
         (m (make-model)))
     (begin
       (send c add-stateful-widget m)
