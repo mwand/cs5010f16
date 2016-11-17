@@ -1,5 +1,17 @@
 #lang racket
 
+;; interfaces and constants needed by more than one class.
+
+(provide SWorld<%> Widget<%> SWidget<%> SWidgetListener<%>
+         SWidgetPublisher<%>)  
+(provide CANVAS-WIDTH CANVAS-HEIGHT)
+
+;; CONSTANTS needed by more than one class.
+
+(define CANVAS-WIDTH 400)
+(define CANVAS-HEIGHT 300)
+
+
 ;; INTERFACES
 
 ;; An SWorld is an object of any class that implements SWorld<%>
@@ -135,3 +147,4 @@
     register
 
     ))
+

@@ -355,7 +355,8 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; A DraggableWidget is a (new DraggableWidget% [w Wall]) 
+;; Constructor template for DraggableWidget%:
+;;  (new DraggableWidget% [w Wall]) 
 
 ;; the Ball is now a stateful widget
 
