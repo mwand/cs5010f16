@@ -1,20 +1,18 @@
 #lang racket
 
-; (require "Interfaces.rkt")
+(require "WidgetWorks.rkt")
+(require "Interfaces.rkt")
 (require "Model.rkt")
-(require "World.rkt")
 (require "ControllerFactory.rkt")
 
+;; run with (run 0.5)
+
+;; create a container, install a factory, and run.
 
 (define (run rate)
-  (let* ((m (new Model%))
-         (w (make-world m 400 300)))
+  (let ((c (container-init 500 400))
+        (m (make-model)))
     (begin
-      (send w add-widget
-        (new ControllerFactory% [m m][w w]))
-      (send w run rate))))
-
-    
-        
-
-
+      (send c add-stateful-widget m)
+      (send c add-stateful-widget (make-controller-factory c m))
+      (send c run rate))))

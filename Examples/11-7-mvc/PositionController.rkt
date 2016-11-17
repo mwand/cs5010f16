@@ -9,26 +9,39 @@
 
 (require 2htdp/image)
 (require 2htdp/universe)
-(require "Interfaces.rkt")
+(require "interfaces.rkt")
 
-(provide PositionController%)
+(provide make-position-controller)
 
-;; a PositionController% is a (new PositionController% [model Model<%>])
+;; make-position-controller : Model -> Controller
+;; GIVEN: a model m
+;; RETURNS: A position controller for m
+
+(define (make-position-controller m)
+  (new PositionController% [model m]))
+
+
+;; Constructor template for PositionController%
+;; (new PositionController% [model Model])
 
 (define PositionController%
   (class* object% (Controller<%>)
 
     (init-field model)  ; the model
 
-    ; Nats -- the position of the center of the controller
+    ; Position of the center of the controller
+    ; both of these are NonNegInts.
     (init-field [x 150] [y 100])   
 
+    ; width and height of the controller.  Both PosInts.
     (init-field [width 120][height 50])
 
     (field [half-width  (/ width  2)])
     (field [half-height (/ height 2)])
 
-    ;; the position of the particle
+    ;; controller's cache of the position and velocity of the
+    ;; particle.
+    ;; both Reals.
     (field [particle-x 0])
     (field [particle-v 0])
 
@@ -41,6 +54,7 @@
 
     (super-new)
 
+    ;; at initialization, register this controller with the model
     (send model register this)
     
     ;; Signal -> Void
@@ -55,6 +69,7 @@
     ; after-button-down : Integer Integer -> Void
     ; GIVEN: the location of a button-down event
     ; EFFECT: makes the viewer selected
+    ; The viewer stays selected until a button down somewhere else
     ; STRATEGY: Cases on whether the event is in this object
     (define/public (after-button-down mx my)
       (if (in-this? mx my)
@@ -62,14 +77,14 @@
           (set! selected? true)
           (set! saved-mx (- mx x))
           (set! saved-my (- my y)))
-        3742))
-
+        (set! selected? false)))
+        
     ; after-button-up : Integer Integer -> Void
     ; GIVEN: the (x,y) location of a button-up event
-    ; EFFECT: makes this unselected
-    (define/public (after-button-up mx my)
-      (set! selected? false))
-      
+    ; EFFECT: ignored
+
+    (define/public (after-button-up mx my) 'ignored)
+
 
     ; after-drag : Integer Integer -> Void
     ; GIVEN: the location of a drag event
@@ -77,13 +92,19 @@
     ; If it is selected, move it so that the vector from its position to
     ; the drag event is equal to saved-mx.  Report the new position to
     ; the registered balls.
+
     (define/public (after-drag mx my)
       (if selected?
         (begin
           (set! x (- mx saved-mx))
           (set! y (- my saved-my)))
-        2744))
+        'position-controller-after-drag-value))
 
+    ;; the position controller doesn't respond to mouse move events
+    (define/public (after-move mx my)
+      'position-controller-after-move-value)
+
+    ;; Int Int -> Boolean
     (define (in-this? other-x other-y)
       (and
         (<= (- x half-width) other-x (+ x half-width))
@@ -93,32 +114,32 @@
     ;; RETURNS: a scene like the given one, but with this wall painted
     ;; on it.
     ;; STRATEGY: place the image centered at x y
+
     (define/public (add-to-scene scene)
       (place-image (viewer-image) x y scene))
     
-    (define/public (after-tick) 'viewer2-after-tick-trap)
+    ;; the controller doesn't respond to ticks
+    (define/public (after-tick)
+      'position-controller-after-tick-value)
 
-    ;; send +, - to the model
+    ;; KeyEvent -> Void
+    ;; interpret +,- as commands to the model
+    ;; +/- alter position of the particle
     (define/public (after-key-event kev)
       (if selected?
         (cond
           [(key=? "+" kev)
            (send model execute-command
-             (make-set-position
-               (+ particle-x 5)))]
+             (make-set-position (+ particle-x 5)))]
           [(key=? "-" kev)
            (send model execute-command
-             (make-set-position
-               (- particle-x 5))
+             (make-set-position (- particle-x 5))
              )])
-        2345))
+        'position-controller-after-key-event-value))
 
-
-    (define (current-color)
-      (if selected? "red" "black"))
-
-
-    ;; assemble the image of the viewer
+    ;; -> Image
+    ;; RETURNS: the image of the viewer
+    ;; STRATEGY: assemble the image from the data and rectangle
     (define (viewer-image)
       (let ((the-data-image (data-image)))
         (overlay 
@@ -129,6 +150,7 @@
             "outline"
             (current-color)))))
 
+    ;; -> Image
     (define (data-image)
       (above
         (text "+/- : Change position" 10 "black")
@@ -139,6 +161,9 @@
                 (number->string particle-v))
           12
           "black")))
+
+    (define (current-color)
+      (if selected? "red" "black"))
 
     ))
 

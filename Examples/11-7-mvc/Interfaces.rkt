@@ -1,28 +1,23 @@
 #lang racket
 
-;; new version, based on WidgetWorks
+;; interfaces for MVC example
 
-(provide World<%> SWidget<%> Controller<%> Model<%>)
+(require "WidgetWorks.rkt")
 
-(define World<%>
-  (interface ()
+(provide Controller<%> Model<%>)
 
-    ; SWidget<%> -> Void
-    add-widget                          ; all the widgets are stateful
+;; structs for model command language
+(provide 
+  (struct-out set-position) 
+  (struct-out incr-velocity)
+  (struct-out report-position)
+  (struct-out report-velocity))
 
-    ; PosReal -> Void
-    run
-    ))
+;; A Controller is an object of any class that implements
+;; Controller<%>
 
-(define SWidget<%>
-  (interface ()
-    add-to-scene           ; Scene -> Scene
-    after-tick             ; -> Void
-    after-button-up        ; Nat Nat -> Void
-    after-button-down      ; Nat Nat -> Void
-    after-drag             ; Nat Nat -> Void
-    after-key-event        ; KeyEvent -> Void
-    ))
+;; There will be several such classes, and there may be several
+;; objects of each such class.
 
 (define Controller<%>    
   (interface (SWidget<%>)
@@ -34,13 +29,12 @@
     
     ))
 
+;; A Model is an object of any class that implements Model<%>
+
 (define Model<%>
-  (interface ()
+  (interface (SWidget<%>)
 
-    ;; -> Void
-    after-tick        
-
-    ;; Controller<%> -> Void
+    ;; Controller -> Void
     ;; Registers the given controller to receive signal
     register          
 
@@ -49,28 +43,32 @@
     execute-command   
 ))
 
-;; protocol: 
-;; model sends the controller an initialization signal as soon as it registers.
+;; PROTOCOL:
+
+;; As soon as a controller registers with the model, the model sends
+;; the controller a pair of Signals so the controller will know the
+;; current state of the model.
+
+;; The controller then sends the model commands, which the model is
+;; supposed to execute.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; DATA DEFINITIONS FOR COMMUNICATING WITH MODEL
 
 ;; A Command is one of 
-;; -- (make-set-position n)
+;; -- (make-set-position n)     
 ;; -- (make-incr-velocity dv)
 
 ;; A Signal is one of
 ;; -- (make-report-position n)
 ;; -- (make-report-velocity v)
 
+;; n, v, dv are all Reals.
+
 ;; provide the structs for Command and Signal
 ;; the syntax of provide in #lang racket has more options in it.
-(provide 
-  (struct-out set-position) 
-  (struct-out incr-velocity)
-  (struct-out report-position)
-  (struct-out report-velocity))
+
 
 (define-struct set-position (pos) #:transparent)
 (define-struct incr-velocity (dv) #:transparent)
