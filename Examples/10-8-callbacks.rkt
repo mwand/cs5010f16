@@ -48,7 +48,7 @@
     ; given mouse event at the given location.
     after-mouse-event
 
-    ; KeyEvent : KeyEvent -> Void
+    ; KeyEvent -> Void
     ; GIVEN: a key event
     ; EFFECT: updates this world to the state that should follow the
     ; given key event
@@ -124,7 +124,7 @@
     after-button-up
     after-drag
 
-    ; KeyEvent : KeyEvent -> Void
+    ; KeyEvent -> Void
     ; GIVEN: a key event
     ; EFFECT: updates this widget to the state it should have
     ; following the given key event
@@ -187,7 +187,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-;; initial-world : -> WorldState
+;; initial-world : -> World
 ;; RETURNS: a world with a wall, a ball, and a factory
 
 (define (initial-world)
