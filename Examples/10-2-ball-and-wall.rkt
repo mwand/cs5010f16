@@ -54,7 +54,7 @@
     ; given mouse event at the given location.
     after-mouse-event
 
-    ; KeyEvent : KeyEvent -> World
+    ; KeyEvent -> World
     ; GIVEN: a key event
     ; RETURNS: the state of the world that should follow the
     ; given key event
@@ -85,7 +85,7 @@
     after-button-up
     after-drag
 
-    ; KeyEvent : KeyEvent -> Widget
+    ; KeyEvent -> Widget
     ; GIVEN: a key event and a time
     ; RETURNS: the state of this object that should follow the
     ; given key event

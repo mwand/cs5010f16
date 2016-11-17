@@ -48,7 +48,7 @@
     ; given mouse event at the given location.
     after-mouse-event
 
-    ; KeyEvent : KeyEvent -> Void
+    ; KeyEvent -> Void
     ; GIVEN: a key event
     ; EFFECT: updates this world to the state that should follow the
     ; given key event
@@ -89,7 +89,7 @@
     after-button-up
     after-drag
 
-    ; KeyEvent : KeyEvent -> Widget
+    ; KeyEvent -> Widget
     ; GIVEN: a key event and a time
     ; RETURNS: the state of this object that should follow the
     ; given key event
@@ -124,7 +124,7 @@
     after-button-up
     after-drag
 
-    ; KeyEvent : KeyEvent -> Void
+    ; KeyEvent -> Void
     ; GIVEN: a key event
     ; EFFECT: updates this widget to the state it should have
     ; following the given key event
@@ -187,7 +187,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-;; initial-world : -> WorldState
+;; initial-world : -> World
 ;; RETURNS: a world with a wall, a ball, and a factory
 
 (define (initial-world)
@@ -284,7 +284,7 @@
         EMPTY-CANVAS
         (append objs sobjs)))
 
-    ;; after-key-event : KeyEvent -> World
+    ;; after-key-event : KeyEvent -> Void
     ;; STRATEGY: Pass the KeyEvents on to the objects in the world.
 
     (define/public (after-key-event kev)
