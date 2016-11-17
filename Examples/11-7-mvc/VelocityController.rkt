@@ -170,33 +170,36 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;; for testing, we'll create a model, and see if it responds...
+;;; for testing, we'll create a model and a controller for it.
+;;; We'll send some messages to the controller, and see if the 
+;;; model gets updated appropriately.
 
 (require rackunit)
 (require "extras.rkt")
 (require "Model.rkt")
-(require "Reporter.rkt")
 
 (begin-for-test
 
   (let*
       ((m (make-model))
-       (r (make-reporter m))
        (c (make-velocity-controller m)))
     (begin
       (check-equal? (send m for-test:get-x) 100)
       (check-equal? (send m for-test:get-v) 0)
 
-      ;; send m a make-incr-velocity command
+      ;; send m a make-incr-velocity command directly, and see if it
+      ;; responds. 
       (send m execute-command (make-incr-velocity 2))
       (check-equal? (send m for-test:get-v) 2)
 
       ;; now send the controller "+".  It should send m a
-      ;; make-incr-velocity
+      ;; make-incr-velocity command.  See if that causes the model to
+      ;; respond properly.
       (send c for-test:select)
       (send c after-key-event "+")
       (check-equal? (send m for-test:get-v) 3)
 
+      ;; does m respond to an after-tick message (yes).
       (send m after-tick)
       (check-equal? (send m for-test:get-x) 103)
 

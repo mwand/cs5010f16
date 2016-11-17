@@ -104,10 +104,9 @@
 
 ;;; tests
 
+;; check to see if the model responds to incr-velocity commands (it
+;; does) and to after-tick messages
 
-
-(require "Reporter.rkt")
-;; check to see if the model responds to incr-velocity commands (it does)
 (begin-for-test
 
   (let*
@@ -133,7 +132,7 @@
       )))
 
 ;; m is definitely responding to after-tick messages.  Is it not
-;; getting the after-tick messages from big-bang
+;; getting the after-tick messages from big-bang?
 
 ;; Ans: yes, that's the problem:  In top.rkt, I created the model, but
 ;; never added it to the Container (duh!)
