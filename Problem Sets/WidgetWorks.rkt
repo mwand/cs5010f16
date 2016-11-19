@@ -9,6 +9,10 @@
  Widget<%>
  SWidget<%>)
 
+(define ww-version "Fri Nov 18 22:01:33 2016")
+
+(printf "WidgetWorks.rkt ~a~n" ww-version)
+
 ;; A Container is an object of any class that implements Container<%>.
 ;; In Widgetworks, there is only one such class.
 
@@ -198,6 +202,8 @@
          (world-after-drag mx my)]
         [(mouse=? mev "button-up")
          (world-after-button-up mx my)]
+        [(mouse=? mev "move")
+        (world-after-move mx my)]
         [else this]))
 
     ;; the next few functions are local functions, not in the interface.
@@ -214,6 +220,10 @@
 
     (define (world-after-drag mx my)
       (process-widgets
-        (lambda (obj) (send obj after-drag mx my))))
+       (lambda (obj) (send obj after-drag mx my))))
+
+       (define (world-after-move mx my)
+      (process-widgets
+        (lambda (obj) (send obj after-move mx my))))
 
     ))

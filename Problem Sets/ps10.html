@@ -200,9 +200,17 @@ deliverables are exactly the same, except that:
   <!-- should provide a function called <kbd>make-playground</kbd> -->
   <!-- instead.</li> -->
 
-  <li>The contract for the <kbd>run</kbd> function that you provide
-  should be <kbd>run : PosNum -> Void</kbd> instead of <kbd>run :
-  PosNum -> Metatoy</kbd>.  Note that this change relaxes the previous
+  <li>The specification for the <kbd>run</kbd> function that you
+  provide is now
+
+  <pre>
+run : PosNum -> Void
+GIVEN: a frame rate (in seconds/tick)
+EFFECT: creates a MetaToy with no toys in it, and runs it using WidgetWorks
+at the given frame rate.
+</pre>
+
+ Note that this change relaxes the previous
   contract, since now any value is acceptable as a return value from
   <kbd>run</kbd>.</li>
 
@@ -367,6 +375,6 @@ rules:
 <font size=-1>
 <p align=right>
 <!-- hhmts start -->
-Last modified: Wed Nov 16 13:31:32 Eastern Standard Time 2016 <!-- hhmts end -->
+Last modified: Fri Nov 18 22:14:29 Eastern Standard Time 2016 <!-- hhmts end -->
 </body> </html>
  
