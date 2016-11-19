@@ -120,7 +120,9 @@ controllers, not demonstrated here.</p>
   <li>In the X, Y, or XY controller, the mouse drags the particle via
   smooth drag.  The mouse need not be in the representation of the
   particle; it need only be in the controller. However, in such a
-  drag, the particle must remain strictly inside the wall.</li>
+  drag, the particle must remain strictly inside the wall.  If the
+  particle gets outside the wall, then PerfectBounce.rkt will complain
+  about a contract violation.</li>
 
     <li>You must use the <a href="WidgetWorks.rkt"
   >WidgetWorks.rkt</a> framework, as you did for Problem Set 10.</li> 
@@ -161,5 +163,5 @@ EFFECT: Creates and runs the MVC simulation with the given frame rate.
 <font size=-1>
 <p align=right>
 <!-- hhmts start -->
-Last modified: Thu Nov 17 23:26:27 Eastern Standard Time 2016 <!-- hhmts end -->
+Last modified: Fri Nov 18 22:48:25 Eastern Standard Time 2016 <!-- hhmts end -->
 </body> </html>
