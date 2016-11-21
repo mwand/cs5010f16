@@ -206,8 +206,11 @@ deliverables are exactly the same, except that:
   <pre>
 run : PosNum -> Void
 GIVEN: a frame rate (in seconds/tick)
-EFFECT: creates a MetaToy with no toys in it, and runs it using WidgetWorks
-at the given frame rate.
+EFFECT: This function creates a Container, and places a MetaToy with
+no toys in that Container.  The function may or may not put other
+Widgets and SWidgets in the container, depending on the
+implementation. The function then runs the Container at the given
+frame rate using WidgetWorks.
 </pre>
 
  Note that this change relaxes the previous
@@ -220,7 +223,17 @@ at the given frame rate.
   href="WidgetWorks.rkt" >WidgetWorks.rkt</a> in the directory with
   your solution.  YOU MAY NOT MODIFY WidgetWorks.rkt IN ANY WAY.  WE
   MAY TEST YOUR SOLUTION WITH OUR OWN IMPLEMENTATION OF
-  <kbd>Container<%></kbd>. </p>
+<kbd>Container<%></kbd>. </p>
+
+<p>Hint: in the Week 10 examples, each SBall took the wall as one of
+its init-fields, and registered itself with the wall during its
+initialization.  The contracts in ps09 rule out an analogous
+"self-registration" strategy here.  So you will have to make the
+object that creates the toys subscribe each toy to the relevant
+notification or notifications. Be sure you can explain your
+registration strategy at codewalk. If this hint is mysterious when you
+read it, check back when you try to implement
+<kbd>make-throbber</kbd>, etc.</p>
 
 
   </li>
@@ -375,6 +388,6 @@ rules:
 <font size=-1>
 <p align=right>
 <!-- hhmts start -->
-Last modified: Fri Nov 18 22:14:29 Eastern Standard Time 2016 <!-- hhmts end -->
+Last modified: Sun Nov 20 20:08:42 Eastern Standard Time 2016 <!-- hhmts end -->
 </body> </html>
  
