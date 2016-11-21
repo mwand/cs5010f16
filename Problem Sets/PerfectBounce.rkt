@@ -3,7 +3,7 @@
 (require rackunit)
 (require "extras.rkt")
 
-(define version "Fri Nov 18 22:01:33 2016")
+(define version "Sat Nov 19 15:07:54 2016")
 
 (printf "PerfectBounce.rkt ~a~n" version)
 
@@ -40,22 +40,29 @@
 (define-struct particle (x y vx vy) #:transparent)  
 (define-struct rect (xmin xmax ymin ymax) #:transparent)
 ;; all fields are Real.
-;; We assume xmin < x < xmax, ymin < y < ymax.
+;; We assume xmin < xmax, ymin < ymax.
+;; Furthermore, we assume that the particle is either inside the
+;; rectangle or is at the wall and travelling inward.
 ;; The specifications for the drag operation are supposed to ensure
 ;; this.
 
 (define (particle-inside? p r)
   (let ((px (particle-x p))
         (py (particle-y p))
-;       (vx (particle-vx p))
-;       (vy (particle-vy p))
+        (vx (particle-vx p))
+        (vy (particle-vy p))
         (xmin (rect-xmin r))
         (xmax (rect-xmax r))
         (ymin (rect-ymin r))
         (ymax (rect-ymax r)))
     (and
-     (< xmin px xmax)
-     (< ymin py ymax))))
+     (or (< xmin px xmax)
+         (and (= px xmin) (>= vx 0))
+         (and (= px xmax) (<= vx 0)))
+     (or (< ymin py ymax)
+         (and (= py ymin) (>= vy 0))
+         (and (= py ymax) (<= vy 0))))))
+  
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
