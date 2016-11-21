@@ -245,8 +245,8 @@ read it, check back when you try to implement
 
   <ol><p/>
 
-    <li>The toy consists of a canvas that is 600 pixels high and 500
-    pixels wide.</li>
+    <li>The toy consists of a canvas that is 600 pixels wide and 500
+    pixels high.</li>
 
     <li>When the child types "b", a new block pops up on the screen
     at the location of the last button-down or button-up.  The block appears as a 20x20
@@ -302,7 +302,7 @@ GIVEN: no arguments
 RETURNS: a Container, initially with no blocks, which when run, will
 run in a 600x500 canvas and process the events in the description above.
 
-make-block : NonNegInt NonNegInt ListOfBlock -> SBlock
+make-block : NonNegInt NonNegInt ListOfSBlock -> SBlock
 GIVEN: an x and y position, and a list of blocks
 WHERE: the list of blocks is the list of blocks already on the playground.
 RETURNS: a new block, at the given position, with no teammates
@@ -388,6 +388,6 @@ rules:
 <font size=-1>
 <p align=right>
 <!-- hhmts start -->
-Last modified: Sun Nov 20 20:08:42 Eastern Standard Time 2016 <!-- hhmts end -->
+Last modified: Sun Nov 20 22:46:34 Eastern Standard Time 2016 <!-- hhmts end -->
 </body> </html>
  
