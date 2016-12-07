@@ -7,11 +7,91 @@
 
 (require "datatypes.rkt")
 
+;;; ================================================================
+;;; INTERFACE
+;;; ================================================================
+
 (provide empty-env) ;  : Env
 (provide make-env)  ;  : ListOfName ListOfValue Environment -> Environment
 (provide env-lookup) ; : Env Name -> Value
 
 ;; Information: an environment is a partial map from names to values.
+
+;; Interpretation of interface functions:
+
+;; empty-env    represents the empty environment.
+;;              Looking up any name in the empty environment raises an
+;;              error.
+
+;; env-lookup   looks up the given name in the given environment
+
+;; make-env     extends an environment with a set of new associations
+;;              between names and values.
+
+;; EXAMPLES:
+
+;(define env1 (make-env
+;              (list 'x 'y 'z 'u)
+;              (list  3  4  5  7)
+;              empty-env))
+
+;; defines env1 to be a representation of the partial function
+
+;; {(x,3),(y,4),(z,5),(u,7)}
+
+;(define env2 (make-env
+;                   (list 'v 'y)
+;                   (list  8  9)
+;                   env1))
+
+
+;; defines env2 to be a representation of the partial function that is
+;; just like env1, except that if you ask it about v, you get 8, and if
+;; you ask it about y, you get 9.  That is to say, env2 is a
+;; representation of the partial function
+
+;; {(v,8),(y,9),(x,3),(z,5),(u,7)}
+
+;; Note that the "old value" of y is overrridden.
+
+;; TESTS:
+
+(begin-for-test
+
+  (local
+    ((define env1 (make-env
+              (list 'x 'y 'z 'u)
+              (list  3  4  5  7)
+              empty-env))
+     (define env2 (make-env
+                   (list 'v 'y)
+                   (list  8  9)
+                   env1)))
+
+  (check-error (env-lookup empty-env 'x))
+
+  (check-equal? (env-lookup env1 'x) 3)
+  (check-equal? (env-lookup env1 'y) 4) 
+  (check-equal? (env-lookup env1 'z) 5)
+  (check-equal? (env-lookup env1 'u) 7)
+  (check-error  (env-lookup env1 'v))   ; some other name
+
+
+  (check-equal? (env-lookup env2 'x) 3)
+  (check-equal? (env-lookup env2 'y) 9) 
+  (check-equal? (env-lookup env2 'z) 5)
+  (check-equal? (env-lookup env2 'u) 7)
+  (check-equal? (env-lookup env2 'v) 8)
+  (check-error (env-lookup env2 'w))    ; some other name
+
+  ))
+
+  
+;;; ================================================================
+;;; IMPLEMENTATION
+;;; ================================================================
+
+;;; You shouldn't have to look at the implementation!
 
 ;; We represent an environment by a list of bindings.
 
