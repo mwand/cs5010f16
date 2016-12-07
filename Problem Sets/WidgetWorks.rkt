@@ -129,7 +129,7 @@
     ; GIVEN: a frame rate, in secs/tick
     ; EFFECT: runs this world at the given frame rate
     ; RETURNS: the world in its final state of the world
-    ; Note: the (begin (send w ...) w) idiom
+    ; Note the (begin (send w ...) w) idiom
     
     (define/public (run rate)
       (big-bang this
