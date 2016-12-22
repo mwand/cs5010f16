@@ -5,7 +5,7 @@
          rackunit/log)
 (provide begin-for-test)
 (provide provide rename-out struct-out check-error)
-(provide check-location)
+(provide check-location check-location-actual)
 (provide check-within)
 
 (define extras-version "Wed Sep 14 08:52:19 2016")
@@ -90,39 +90,67 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; check-location : String String -> Void
-;; GIVEN: a 2 digit problem set number NN and the name of the file
-;; being qualified.
-;; EFFECT: throws an error if this file is not a directory of the form
-;; pdp-*./setNN 
-(define (check-location NN correct-file-name)
-  (define path-elements (explode-path (current-directory)))
+;; (check-location NN correct-file-name) : module-level form
+(define-syntax (check-location stx)
+  (syntax-case stx ()
+    [(_ NN correct-file-name)
+     (case (syntax-local-context)
+       [(module)
+        #`(check-location-actual (#%expression NN)
+                                 (#%expression correct-file-name)
+                                 (quote #,(syntax-source stx)))
+        ]
+       [(top-level)
+        (raise-syntax-error #f
+          "`check-location' may only be used inside a module"
+          stx)]
+       [else
+        (raise-syntax-error #f
+          "found a use of `check-location' that is not at the top level"
+          stx)])]))
+
+;; check-location-actual : String String Path -> Void
+;; GIVEN: a 2 digit problem set number NN, the expected name of the file
+;; being qualified, and the actual path to the file
+;; EFFECT: throws an error if this file is not in a directory of the form
+;; pdp-*./setNN or does not have the correct name.
+(define (check-location-actual NN correct-file-name actual-file-path)
+  (define path-elements (explode-path actual-file-path))
   (define path-len (length path-elements))
   (define correct-folder-name (string-append "set" NN))
   (cond
-    [(>= path-len 2) 
-     (define set-folder (path->string (last path-elements)))
-     (define pdp-folder (path->string (list-ref path-elements (- path-len 2))))
+    [(>= path-len 3)
+     (define actual-file-name (path->string
+                               (list-ref path-elements (- path-len 1))))
+     (define set-folder (path->string (list-ref path-elements (- path-len 2))))
+     (define pdp-folder (path->string (list-ref path-elements (- path-len 3))))
      (define set-regexp (regexp correct-folder-name))
      (define pdp-regexp (regexp "pdp-.*"))
-     (match* ((regexp-match? set-regexp set-folder)
+     (match* ((string=? actual-file-name correct-file-name)
+              (regexp-match? set-regexp set-folder)
               (regexp-match? pdp-regexp pdp-folder))
-       [(_ #f)
+       [(_ _ #f)
         (error
          (format
          "File is in folder \"~a/~a\", which does not appear to be a local repo"
          pdp-folder set-folder))]
-       [(#f _)
+       [(_ #f _)
         (error 
          (format 
           "File should be in a folder named ~a, but is in a folder named ~a" 
           correct-folder-name
           set-folder))]
-       [(#t #t)
+       [(#f _ _)
+        (error
+         (format
+          "File should be named ~a, but is named ~a"
+          correct-file-name
+          actual-file-name))]
+       [(#t #t #t)
         (printf
           "~a appears to be in a correctly named folder. Running tests...~n"
           correct-file-name)]
-       [(_ _) (void)])]
+       [(_ _ _) (void)])]
     [else
      (error
       (format
